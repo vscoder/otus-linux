@@ -18,6 +18,7 @@
     - [Create GPT partition table](#create-gpt-partition-table)
     - [Create partitions](#create-partitions-1)
     - [Create filesystems](#create-filesystems)
+- [Additional task](#additional-task)
 
 ## Prepare Vagrantfile
 
@@ -624,3 +625,7 @@ mount | grep /dev/md0
 ```
 
 Main part of the Home Work is finished.
+
+# Additional task
+
+Additional task is described [here](./HARD.md)
