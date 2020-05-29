@@ -1,0 +1,194 @@
+Script started on Fri 29 May 2020 10:42:40 PM UTC
+]0;vagrant@lvm:/vagrant[?1034h[vagrant@lvm vagrant]$ lsblk
+NAME            MAJ:MIN RM SIZE RO TYPE MOUNTPOINT
+sdd               8:48   0   1G  0 disk 
+sdb               8:16   0  10G  0 disk 
+sde               8:64   0   1G  0 disk 
+sdc               8:32   0   2G  0 disk 
+sda               8:0    0  10G  0 disk 
+├─sda2            8:2    0   9G  0 part 
+│ ├─centos-swap 253:1    0   1G  0 lvm  [SWAP]
+│ └─centos-root 253:0    0   8G  0 lvm  /
+└─sda1            8:1    0   1G  0 part /boot
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ lvmdiskscan
+  WARNING: Running as a non-root user. Functionality may be unavailable.
+  /run/lvm/lvmetad.socket: access failed: Permission denied
+  WARNING: Failed to connect to lvmetad. Falling back to device scanning.
+  /dev/mapper/control: open failed: Permission denied
+  Failure to communicate with kernel device-mapper driver.
+  Incompatible libdevmapper 1.02.164-RHEL7 (2019-08-27) and kernel driver (unknown version).
+  0 disks
+  0 partitions
+  0 LVM physical volume whole disks
+  0 LVM physical volumes
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo !!
+sudo lvmdiskscan
+  /dev/sda1 [       1.00 GiB] 
+  /dev/sda2 [      <9.00 GiB] LVM physical volume
+  /dev/sdb  [      10.00 GiB] 
+  /dev/sdc  [       2.00 GiB] 
+  /dev/sdd  [       1.00 GiB] 
+  /dev/sde  [       1.00 GiB] 
+  4 disks
+  1 partition
+  0 LVM physical volume whole disks
+  1 LVM physical volume
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo pvcreate /dev/sdb
+  Physical volume "/dev/sdb" successfully created.
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo vgcreate otus /dev/sdb
+  Volume group "otus" successfully created
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo lvcreate -l+80%FREE -n test otus
+  Logical volume "test" created.
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo vgdisplay otus
+  --- Volume group ---
+  VG Name               otus
+  System ID             
+  Format                lvm2
+  Metadata Areas        1
+  Metadata Sequence No  2
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                1
+  Open LV               0
+  Max PV                0
+  Cur PV                1
+  Act PV                1
+  VG Size               <10.00 GiB
+  PE Size               4.00 MiB
+  Total PE              2559
+  Alloc PE / Size       2047 / <8.00 GiB
+  Free  PE / Size       512 / 2.00 GiB
+  VG UUID               Cbg0WX-CffL-SfWw-9EjU-G9Rl-Xqbe-D9fEZc
+   
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo vgdisplay -v otus | grep 'PV NAME'
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo vgdisplay -v otus
+  --- Volume group ---
+  VG Name               otus
+  System ID             
+  Format                lvm2
+  Metadata Areas        1
+  Metadata Sequence No  2
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                1
+  Open LV               0
+  Max PV                0
+  Cur PV                1
+  Act PV                1
+  VG Size               <10.00 GiB
+  PE Size               4.00 MiB
+  Total PE              2559
+  Alloc PE / Size       2047 / <8.00 GiB
+  Free  PE / Size       512 / 2.00 GiB
+  VG UUID               Cbg0WX-CffL-SfWw-9EjU-G9Rl-Xqbe-D9fEZc
+   
+  --- Logical volume ---
+  LV Path                /dev/otus/test
+  LV Name                test
+  VG Name                otus
+  LV UUID                IKQcc5-X2xf-p3MR-WQO0-6Gw8-xv5q-NfmKt8
+  LV Write Access        read/write
+  LV Creation host, time lvm, 2020-05-29 22:46:35 +0000
+  LV Status              available
+  # open                 0
+  LV Size                <8.00 GiB
+  Current LE             2047
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:2
+   
+  --- Physical volumes ---
+  PV Name               /dev/sdb     
+  PV UUID               klh802-6JyR-LDC0-S3TJ-plKt-6z2t-VJeuFF
+  PV Status             allocatable
+  Total PE / Free PE    2559 / 512
+   
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo vgdisplay -v otus | grep -i 'PV NAME'
+  [01;31m[KPV Name[m[K               /dev/sdb     
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo lvdisplay /dev/otus/test
+  --- Logical volume ---
+  LV Path                /dev/otus/test
+  LV Name                test
+  VG Name                otus
+  LV UUID                IKQcc5-X2xf-p3MR-WQO0-6Gw8-xv5q-NfmKt8
+  LV Write Access        read/write
+  LV Creation host, time lvm, 2020-05-29 22:46:35 +0000
+  LV Status              available
+  # open                 0
+  LV Size                <8.00 GiB
+  Current LE             2047
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:2
+   
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo vgs
+  VG     #PV #LV #SN Attr   VSize   VFree
+  centos   1   2   0 wz--n-  <9.00g    0 
+  otus     1   1   0 wz--n- <10.00g 2.00g
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo lvs
+  LV   VG     Attr       LSize  Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  root centos -wi-ao---- <8.00g                                                    
+  swap centos -wi-ao----  1.00g                                                    
+  test otus   -wi-a----- <8.00g                                                    
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo lvcreate -L100M -n small otus
+  Logical volume "small" created.
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo mkfs.ext4 -L test /dev/otus/test
+mke2fs 1.42.9 (28-Dec-2013)
+Filesystem label=test
+OS type: Linux
+Block size=4096 (log=2)
+Fragment size=4096 (log=2)
+Stride=0 blocks, Stripe width=0 blocks
+524288 inodes, 2096128 blocks
+104806 blocks (5.00%) reserved for the super user
+First data block=0
+Maximum filesystem blocks=2147483648
+64 block groups
+32768 blocks per group, 32768 fragments per group
+8192 inodes per group
+Superblock backups stored on blocks: 
+	32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632
+
+Allocating group tables:  0/64     done                            
+Writing inode tables:  0/64     done                            
+Creating journal (32768 blocks): done
+Writing superblocks and filesystem accounting information:  0/64     done
+
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo { mkdir /data; mount /dev/otus/test /data/; }
+bash: syntax error near unexpected token `}'
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ mount | grep /data
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo { mkdir /data; mount /dev/otus/test /data/ }
+sudo: {: command not found
+
+Usage:
+ mount [-lhV]
+ mount -a [options]
+ mount [options] [--source] <source> | [--target] <directory>
+ mount [options] <source> <directory>
+ mount <operation> <mountpoint> [<target>]
+
+Options:
+ -a, --all               mount all filesystems mentioned in fstab
+ -c, --no-canonicalize   don't canonicalize paths
+ -f, --fake              dry run; skip the mount(2) syscall
+ -F, --fork              fork off for each device (use with -a)
+ -T, --fstab <path>      alternative file to /etc/fstab
+ -h, --help              display this help text and exit
+ -i, --internal-only     don't call the mount.<type> helpers
+ -l, --show-labels       lists all mounts with LABELs
+ -n, --no-mtab           don't write to /etc/mtab
+ -o, --options <list>    comma-separated list of mount options
+ -O, --test-opts <list>  limit the set of filesystems (use with -a)
+ -r, --read-only         mount the filesystem read-only (same as -o ro)
+ -t, --types <list>      limit the set of filesystem types
+     --source <src>      explicitly specifies source (path, label, uuid)
+     --target <target>   explicitly specifies mountpoint
+ -v, --verbose           say what is being done
+ -V, --version           display version information and exit
+ -w, --rw, --re
