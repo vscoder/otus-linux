@@ -19,6 +19,7 @@
     - [Create partitions](#create-partitions-1)
     - [Create filesystems](#create-filesystems)
 - [Additional task](#additional-task)
+- [Two asterisks task](#two-asterisks-task)
 
 ## Prepare Vagrantfile
 
@@ -629,3 +630,7 @@ Main part of the Home Work is finished.
 # Additional task
 
 Additional task is described [here](./HARD.md)
+
+# Two asterisks task
+
+Task woth two asterisks is described [here](./nightmare/NIGHTMARE.md)
