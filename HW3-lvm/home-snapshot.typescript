@@ -1,0 +1,179 @@
+Script started on Sat 30 May 2020 10:54:47 PM UTC
+]0;vagrant@lvm:/vagrant[?1034h[vagrant@lvm vagrant]$ {
+>     sudo lvcreate -n lv_home -L 1G centos;
+>     sudo mkfs.xfs -L home /dev/centos/lv_home;
+>     sudo mount /dev/centos/lv_home /mnt;
+>     sudo cp -aR /home/* /mnt/ && \
+>     sudo rm -rf /home/*;
+>     sudo umount /mnt;
+>     sudo mount /dev/centos/lv_home /home;
+> }
+  Logical volume "lv_home" created.
+meta-data=/dev/centos/lv_home    isize=512    agcount=4, agsize=65536 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=0, sparse=0
+data     =                       bsize=4096   blocks=262144, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0 ftype=1
+log      =internal log           bsize=4096   blocks=2560, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ ls /mnt/[K[K[K[Khome/
+[0m[38;5;27mvagrant[0m
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ mount
+sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,relatime)
+proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
+devtmpfs on /dev type devtmpfs (rw,nosuid,size=102628k,nr_inodes=25657,mode=755)
+securityfs on /sys/kernel/security type securityfs (rw,nosuid,nodev,noexec,relatime)
+tmpfs on /dev/shm type tmpfs (rw,nosuid,nodev)
+devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=000)
+tmpfs on /run type tmpfs (rw,nosuid,nodev,mode=755)
+tmpfs on /sys/fs/cgroup type tmpfs (ro,nosuid,nodev,noexec,mode=755)
+cgroup on /sys/fs/cgroup/systemd type cgroup (rw,nosuid,nodev,noexec,relatime,xattr,release_agent=/usr/lib/systemd/systemd-cgroups-agent,name=systemd)
+pstore on /sys/fs/pstore type pstore (rw,nosuid,nodev,noexec,relatime)
+cgroup on /sys/fs/cgroup/perf_event type cgroup (rw,nosuid,nodev,noexec,relatime,perf_event)
+cgroup on /sys/fs/cgroup/cpu,cpuacct type cgroup (rw,nosuid,nodev,noexec,relatime,cpu,cpuacct)
+cgroup on /sys/fs/cgroup/rdma type cgroup (rw,nosuid,nodev,noexec,relatime,rdma)
+cgroup on /sys/fs/cgroup/devices type cgroup (rw,nosuid,nodev,noexec,relatime,devices)
+cgroup on /sys/fs/cgroup/cpuset type cgroup (rw,nosuid,nodev,noexec,relatime,cpuset)
+cgroup on /sys/fs/cgroup/net_cls,net_prio type cgroup (rw,nosuid,nodev,noexec,relatime,net_cls,net_prio)
+cgroup on /sys/fs/cgroup/memory type cgroup (rw,nosuid,nodev,noexec,relatime,memory)
+cgroup on /sys/fs/cgroup/blkio type cgroup (rw,nosuid,nodev,noexec,relatime,blkio)
+cgroup on /sys/fs/cgroup/hugetlb type cgroup (rw,nosuid,nodev,noexec,relatime,hugetlb)
+cgroup on /sys/fs/cgroup/pids type cgroup (rw,nosuid,nodev,noexec,relatime,pids)
+cgroup on /sys/fs/cgroup/freezer type cgroup (rw,nosuid,nodev,noexec,relatime,freezer)
+configfs on /sys/kernel/config type configfs (rw,relatime)
+/dev/mapper/centos-root on / type xfs (rw,relatime,attr2,inode64,logbufs=8,logbsize=32k,noquota)
+systemd-1 on /proc/sys/fs/binfmt_misc type autofs (rw,relatime,fd=30,pgrp=1,timeout=0,minproto=5,maxproto=5,direct,pipe_ino=21528)
+mqueue on /dev/mqueue type mqueue (rw,relatime)
+debugfs on /sys/kernel/debug type debugfs (rw,relatime)
+hugetlbfs on /dev/hugepages type hugetlbfs (rw,relatime,pagesize=2M)
+/dev/sda1 on /boot type xfs (rw,relatime,attr2,inode64,logbufs=8,logbsize=32k,noquota)
+/dev/mapper/vg_var-lv_var on /var type ext4 (rw,relatime)
+vagrant on /vagrant type vboxsf (rw,nodev,relatime,iocharset=utf8,uid=1000,gid=1000)
+tmpfs on /run/user/1000 type tmpfs (rw,nosuid,nodev,relatime,size=23228k,mode=700,uid=1000,gid=1000)
+/dev/mapper/centos-lv_home on /home type xfs (rw,relatime,attr2,inode64,logbufs=8,logbsize=32k,noquota)
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ blo[Kkid
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo blkid
+/dev/sda1: UUID="1575a298-f38b-4155-8e0e-9e2a0763f286" TYPE="xfs" 
+/dev/sda2: UUID="nzIy2h-0pkG-RgS9-4WZ7-9vht-R3y1-H15Bqh" TYPE="LVM2_member" 
+/dev/sdd: UUID="ZQtlQj-inQ2-1Duw-58zu-ostM-zbFk-DoFRno" TYPE="LVM2_member" 
+/dev/mapper/centos-root: LABEL="smallroot" UUID="fc0bd463-3db2-4233-90db-45f273426c27" TYPE="xfs" 
+/dev/sdc: UUID="4iMlq6-wjU3-qtDX-c8SZ-SSZl-sXVK-kWhatn" TYPE="LVM2_member" 
+/dev/mapper/centos-swap: UUID="71ab47e3-47af-4920-9755-49e64d11e1f3" TYPE="swap" 
+/dev/mapper/vg_var-lv_var_rimage_0: UUID="59f493ce-12bb-471e-b56e-e6b2b849060f" TYPE="ext4" 
+/dev/mapper/vg_var-lv_var_rimage_1: UUID="59f493ce-12bb-471e-b56e-e6b2b849060f" TYPE="ext4" 
+/dev/mapper/vg_var-lv_var: UUID="59f493ce-12bb-471e-b56e-e6b2b849060f" TYPE="ext4" 
+/dev/mapper/centos-lv_home: LABEL="home" UUID="cf0c49f5-5188-447e-80c5-a879482eb791" TYPE="xfs" 
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ echo "`blkid | grep Home | awk '{print $2}'` /home xfs defaults 0 0"
+ /home xfs defaults 0 0
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ echo "`blkid | grep Home | awk '{print $2}'` /home xfs defaults 0 0"[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1P[1P[1P[1P[1@h[1@o[1@m[1@e
+LABEL="home" /home xfs defaults 0 0
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ echo "`blkid | grep home | awk '{print $2}'` /home xfs defaults 0 0"[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Kblkid
+/dev/sda1: UUID="1575a298-f38b-4155-8e0e-9e2a0763f286" TYPE="xfs" 
+/dev/sda2: UUID="nzIy2h-0pkG-RgS9-4WZ7-9vht-R3y1-H15Bqh" TYPE="LVM2_member" 
+/dev/sdd: UUID="ZQtlQj-inQ2-1Duw-58zu-ostM-zbFk-DoFRno" TYPE="LVM2_member" 
+/dev/mapper/centos-root: LABEL="smallroot" UUID="fc0bd463-3db2-4233-90db-45f273426c27" TYPE="xfs" 
+/dev/sdc: UUID="4iMlq6-wjU3-qtDX-c8SZ-SSZl-sXVK-kWhatn" TYPE="LVM2_member" 
+/dev/mapper/centos-swap: UUID="71ab47e3-47af-4920-9755-49e64d11e1f3" TYPE="swap" 
+/dev/mapper/vg_var-lv_var_rimage_0: UUID="59f493ce-12bb-471e-b56e-e6b2b849060f" TYPE="ext4" 
+/dev/mapper/vg_var-lv_var_rimage_1: UUID="59f493ce-12bb-471e-b56e-e6b2b849060f" TYPE="ext4" 
+/dev/mapper/vg_var-lv_var: UUID="59f493ce-12bb-471e-b56e-e6b2b849060f" TYPE="ext4" 
+/dev/mapper/centos-lv_home: LABEL="home" UUID="cf0c49f5-5188-447e-80c5-a879482eb791" TYPE="xfs" 
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ blkidecho "`blkid | grep home | awk '{print $2}'` /home xfs defaults 0 0"[1@:
+LABEL="home" /home xfs defaults 0 0
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ echo "`blkid | grep home: | awk '{print $2}'` /home xfs defaults 0 0"[1P[1@3
+UUID="cf0c49f5-5188-447e-80c5-a879482eb791" /home xfs defaults 0 0
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ echo "`sudo blkid | grep home: | awk '{print $3}'` /home xfs defaults 0 0" | sudo tee --append /etc/fstab
+UUID="cf0c49f5-5188-447e-80c5-a879482eb791" /home xfs defaults 0 0
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ cat /etc/fstab 
+
+#
+# /etc/fstab
+# Created by anaconda on Sat May  9 18:13:26 2020
+#
+# Accessible filesystems, by reference, are maintained under '/dev/disk'
+# See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info
+#
+/dev/mapper/centos-root /                       xfs     defaults        0 0
+UUID=1575a298-f38b-4155-8e0e-9e2a0763f286 /boot                   xfs     defaults        0 0
+/dev/mapper/centos-swap swap                    swap    defaults        0 0
+ /var ext4 defaults 0 0
+ /var ext4 defaults 0 0
+UUID="59f493ce-12bb-471e-b56e-e6b2b849060f" /var ext4 defaults 0 0
+UUID="cf0c49f5-5188-447e-80c5-a879482eb791" /home xfs defaults 0 0
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo touch /home/file{1..20}
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ ls /home
+file1  file10  file11  file12  file13  file14  file15  file16  file17  file18  file19  file2  file20  file3  file4  file5  file6  file7  file8  file9  [0m[38;5;27mvagrant[0m
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ mo[K[Klsblk
+NAME                     MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sdd                        8:48   0    1G  0 disk 
+├─vg_var-lv_var_rimage_1 253:6    0  952M  0 lvm  
+│ └─vg_var-lv_var        253:7    0  952M  0 lvm  /var
+└─vg_var-lv_var_rmeta_1  253:5    0    4M  0 lvm  
+  └─vg_var-lv_var        253:7    0  952M  0 lvm  /var
+sdb                        8:16   0   10G  0 disk 
+sde                        8:64   0    1G  0 disk 
+sdc                        8:32   0    2G  0 disk 
+├─vg_var-lv_var_rimage_0 253:4    0  952M  0 lvm  
+│ └─vg_var-lv_var        253:7    0  952M  0 lvm  /var
+└─vg_var-lv_var_rmeta_0  253:3    0    4M  0 lvm  
+  └─vg_var-lv_var        253:7    0  952M  0 lvm  /var
+sda                        8:0    0   10G  0 disk 
+├─sda2                     8:2    0    9G  0 part 
+│ ├─centos-swap          253:1    0    1G  0 lvm  [SWAP]
+│ ├─centos-lv_home       253:2    0    1G  0 lvm  /home
+│ └─centos-root          253:0    0    6G  0 lvm  /
+└─sda1                     8:1    0    1G  0 part /boot
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo lvcreate -L 100MB -s -n home_snap /dev/centos/lv_home
+  Logical volume "home_snap" created.
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo rm -f /home/file{11..20}
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ ls /home
+file1  file10  file2  file3  file4  file5  file6  file7  file8  file9  [0m[38;5;27mvagrant[0m
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ blkid
+/dev/sda1: UUID="1575a298-f38b-4155-8e0e-9e2a0763f286" TYPE="xfs" 
+/dev/sda2: UUID="nzIy2h-0pkG-RgS9-4WZ7-9vht-R3y1-H15Bqh" TYPE="LVM2_member" 
+/dev/sdd: UUID="ZQtlQj-inQ2-1Duw-58zu-ostM-zbFk-DoFRno" TYPE="LVM2_member" 
+/dev/mapper/centos-root: LABEL="smallroot" UUID="fc0bd463-3db2-4233-90db-45f273426c27" TYPE="xfs" 
+/dev/sdc: UUID="4iMlq6-wjU3-qtDX-c8SZ-SSZl-sXVK-kWhatn" TYPE="LVM2_member" 
+/dev/mapper/centos-swap: UUID="71ab47e3-47af-4920-9755-49e64d11e1f3" TYPE="swap" 
+/dev/mapper/vg_var-lv_var_rimage_0: UUID="59f493ce-12bb-471e-b56e-e6b2b849060f" TYPE="ext4" 
+/dev/mapper/vg_var-lv_var_rimage_1: UUID="59f493ce-12bb-471e-b56e-e6b2b849060f" TYPE="ext4" 
+/dev/mapper/vg_var-lv_var: UUID="59f493ce-12bb-471e-b56e-e6b2b849060f" TYPE="ext4" 
+/dev/mapper/centos-lv_home: LABEL="home" UUID="cf0c49f5-5188-447e-80c5-a879482eb791" TYPE="xfs" 
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ lsblk
+NAME                     MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sdd                        8:48   0    1G  0 disk 
+├─vg_var-lv_var_rimage_1 253:6    0  952M  0 lvm  
+│ └─vg_var-lv_var        253:7    0  952M  0 lvm  /var
+└─vg_var-lv_var_rmeta_1  253:5    0    4M  0 lvm  
+  └─vg_var-lv_var        253:7    0  952M  0 lvm  /var
+sdb                        8:16   0   10G  0 disk 
+sde                        8:64   0    1G  0 disk 
+sdc                        8:32   0    2G  0 disk 
+├─vg_var-lv_var_rimage_0 253:4    0  952M  0 lvm  
+│ └─vg_var-lv_var        253:7    0  952M  0 lvm  /var
+└─vg_var-lv_var_rmeta_0  253:3    0    4M  0 lvm  
+  └─vg_var-lv_var        253:7    0  952M  0 lvm  /var
+sda                        8:0    0   10G  0 disk 
+├─sda2                     8:2    0    9G  0 part 
+│ ├─centos-swap          253:1    0    1G  0 lvm  [SWAP]
+│ ├─centos-lv_home-real  253:8    0    1G  0 lvm  
+│ │ ├─centos-home_snap   253:10   0    1G  0 lvm  
+│ │ └─centos-lv_home     253:2    0    1G  0 lvm  /home
+│ ├─centos-root          253:0    0    6G  0 lvm  /
+│ └─centos-home_snap-cow 253:9    0  100M  0 lvm  
+│   └─centos-home_snap   253:10   0    1G  0 lvm  
+└─sda1                     8:1    0    1G  0 part /boot
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ {
+>     sudo umount /home;
+>     sudo lvconvert --merge /dev/centos/home_snap;
+>     sudo mount /home;
+> }
+  Merging of volume centos/home_snap started.
+  centos/lv_home: Merged: 100.00%
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ ls /home
+file1  file10  file11  file12  file13  file14  file15  file16  file17  file18  file19  file2  file20  file3  file4  file5  file6  file7  file8  file9  [0m[38;5;27mvagrant[0m
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ exit
+
+Script done on Sat 30 May 2020 11:05:15 PM UTC

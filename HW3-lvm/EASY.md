@@ -547,7 +547,7 @@ Now we need to reduce old root size.
 
 Remove old root LV
 ```shell
-sudo lvremove /dev/centos/root
+sudo lvremove -y /dev/centos/root
 ```
 ```log
 Do you really want to remove active logical volume centos/root? [y/n]: y
@@ -556,7 +556,7 @@ Do you really want to remove active logical volume centos/root? [y/n]: y
 
 And create a smaller one (6Gb, not 8=)
 ```shell
-sudo lvcreate -n root -L 6G centos
+sudo lvcreate -y -n root -L 6G centos
 ```
 ```log
   Logical volume "root" created.
@@ -1044,13 +1044,13 @@ Mount `/newvar` to `/mnt/var`
 
 Update fstab (don't forget about `--append` with `tee`)
 ```shell
-echo "`blkid | grep var: | awk '{print $2}'` /var ext4 defaults 0 0" | sudo tee --append /mnt/etc/fstab
+echo "`sudo blkid | grep var: | awk '{print $2}'` /var ext4 defaults 0 0" | sudo tee --append /mnt/etc/fstab
 ```
 ```log
-UUID="99a06239-52fa-4d9a-b4eb-f6def2dc0ec3" /var ext4 defaults 0 0
+UUID="59f493ce-12bb-471e-b56e-e6b2b849060f" /var ext4 defaults 0 0
 ```
 
-Reboot
+Reboot!!!
 
 And check result
 ```shell
@@ -1111,5 +1111,77 @@ Remove temporary LV, VG and PV
 ```
 </p>
 </details>
+
+Done!
+
+## Home snapshots
+
+Move home to separate LV
+```shell
+{
+    sudo lvcreate -n lv_home -L 1G centos;
+    sudo mkfs.xfs -L home /dev/centos/lv_home;
+    sudo mount /dev/centos/lv_home /mnt;
+    sudo cp -aR /home/* /mnt/ && \
+    sudo rm -rf /home/*;
+    sudo umount /mnt;
+    sudo mount /dev/centos/lv_home /home;
+}
+```
+
+Update fstab
+```shell
+echo "`sudo blkid | grep home: | awk '{print $3}'` /home xfs defaults 0 0" | sudo tee --append /etc/fstab
+```
+```log
+UUID="cf0c49f5-5188-447e-80c5-a879482eb791" /home xfs defaults 0 0
+```
+
+## Test home snapshot
+
+Create files
+```shell
+sudo touch /home/file{1..20}
+```
+
+Create snapshot
+```shell
+sudo lvcreate -L 100MB -s -n home_snap /dev/centos/lv_home
+```
+```log
+  Logical volume "home_snap" created.
+```
+and check
+```shell
+ls /home
+```
+```log
+file1  file10  file11  file12  file13  file14  file15  file16  file17  file18  file19  file2  file20  file3  file4  file5  file6  file7  file8  file9  vagrant
+```
+
+Remove files and check
+```shell
+sudo rm -f /home/file{11..20}
+ls /home
+```
+```log
+file1  file10  file2  file3  file4  file5  file6  file7  file8  file9  vagrant
+```
+
+## Restore home from snapshot
+
+```shell
+{
+    sudo umount /home;
+    sudo lvconvert --merge /dev/centos/home_snap;
+    sudo mount /home;
+    ls /home;
+}
+```
+```log
+  Merging of volume centos/home_snap started.
+  centos/lv_home: Merged: 100.00%
+file1  file10  file11  file12  file13  file14  file15  file16  file17  file18  file19  file2  file20  file3  file4  file5  file6  file7  file8  file9  vagrant
+```
 
 Done!
