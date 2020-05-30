@@ -309,4 +309,182 @@ Filesystem              Type  Size  Used Avail Use% Mounted on
 Filesystem            Type  Size  Used Avail Use% Mounted on
 /dev/mapper/otus-test ext4  9.8G  7.8G  1.6G  84% /data
 ]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo lvs /dev/otus/test
-  LV   VG   Attr       LSize   Poo
+  LV   VG   Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  test otus -wi-ao---- <11.12g                                                    
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo lvreduce /dev/otus/test -L 10G
+  WARNING: Reducing active and open logical volume to 10.00 GiB.
+  THIS MAY DESTROY YOUR DATA (filesystem etc.)
+Do you really want to reduce otus/test? [y/n]: y
+  Size of logical volume otus/test changed from <11.12 GiB (2846 extents) to 10.00 GiB (2560 extents).
+  Logical volume otus/test successfully resized.
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo lvs /dev/otus/test
+  LV   VG   Attr       LSize  Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  test otus -wi-ao---- 10.00g                                                    
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ df -h
+Filesystem               Size  Used Avail Use% Mounted on
+devtmpfs                 101M     0  101M   0% /dev
+tmpfs                    114M     0  114M   0% /dev/shm
+tmpfs                    114M  4.5M  109M   4% /run
+tmpfs                    114M     0  114M   0% /sys/fs/cgroup
+/dev/mapper/centos-root  8.0G  1.9G  6.2G  23% /
+/dev/sda1               1014M  169M  846M  17% /boot
+vagrant                  116G   99G   18G  85% /vagrant
+tmpfs                     23M     0   23M   0% /run/user/1000
+/dev/mapper/otus-test    9.8G  7.8G  1.6G  84% /data
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ df -hTh
+Filesystem              Type      Size  Used Avail Use% Mounted on
+devtmpfs                devtmpfs  101M     0  101M   0% /dev
+tmpfs                   tmpfs     114M     0  114M   0% /dev/shm
+tmpfs                   tmpfs     114M  4.5M  109M   4% /run
+tmpfs                   tmpfs     114M     0  114M   0% /sys/fs/cgroup
+/dev/mapper/centos-root xfs       8.0G  1.9G  6.2G  23% /
+/dev/sda1               xfs      1014M  169M  846M  17% /boot
+vagrant                 vboxsf    116G   99G   18G  85% /vagrant
+tmpfs                   tmpfs      23M     0   23M   0% /run/user/1000
+/dev/mapper/otus-test   ext4      9.8G  7.8G  1.6G  84% /data
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ df -Th /data/[K
+Filesystem            Type  Size  Used Avail Use% Mounted on
+/dev/mapper/otus-test ext4  9.8G  7.8G  1.6G  84% /data
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo vcreate -L 500M -s -n test-snap /dev/otus/test
+sudo: vcreate: command not found
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo lvcreate -L 500M -s -n test-snap /dev/otus/test
+  Logical volume "test-snap" created.
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo vgs -o +lv_size,lv_name | grep test
+  otus     2   3   1 wz--n- 11.99g <1.41g  10.00g [01;31m[Ktest[m[K     
+  otus     2   3   1 wz--n- 11.99g <1.41g 500.00m [01;31m[Ktest[m[K-snap
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ 
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ 
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ ## Reduce LV
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ 
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ Redure is impocible on mounted FS. So, let's unmount FS
+> ```shell
+> sudo umount /data/
+> ```
+> and check FS on errors
+> ```shell
+> sudo e2fsck -fy /dev/otus/test
+> ```
+> ```log
+> e2fsck 1.42.9 (28-Dec-2013)
+> Pass 1: Checking inodes, blocks, and sizes
+> Pass 2: Checking directory structure
+> Pass 3: Checking directory connectivity
+> Pass 4: Checking reference counts
+> Pass 5: Checking group summary information
+> test: 12/729088 files (0.0% non-contiguous), 2105907/2914304 blocks
+> ```
+> 
+> Then we need to reduce FS size
+> ```shell
+> sudo resize2fs /dev/otus/test 10G
+> ```
+> ```log
+> resize2fs 1.42.9 (28-Dec-2013)
+> Resizing the filesystem on /dev/otus/test to 2621440 (4k) blocks.
+> The filesystem on /dev/otus/test is now 2621440 blocks long.
+> ```
+> 
+> Mount FS and check result
+> ```shell
+> sudo mount /dev/otus/test /data/
+> df -Th /data/
+> ```
+> ```log
+> Filesystem            Type  Size  Used Avail Use% Mounted on
+> /dev/mapper/otus-test ext4  9.8G  7.8G  1.6G  84% /data
+> ```
+> 
+> And then we can reduce LV size
+> ```shell
+> sudo lvreduce /dev/otus/test -L 10G
+> ```
+> ```log
+>   WARNING: Reducing active and open logical volume to 10.00 GiB.
+>   THIS MAY DESTROY YOUR DATA (filesystem etc.)
+> Do you really want to reduce otus/test? [y/n]: y
+>   Size of logical volume otus/test changed from <11.12 GiB (2846 extents) to 10.00 GiB (2560 extents).
+>   Logical volume otus/test successfully resized.
+> ```
+> 
+> Check LV size after reducing
+> ```shell
+> sudo lvs /dev/otus/test
+> ```
+> ```log
+>   LV   VG   Attr       LSize  Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+>   test otus -wi-ao---- 10.00g
+> ```
+> 
+> ## LVM Snapshot
+> 
+> Snapshot can be created by command `lvcreate` with flag `-s`
+> ```shell
+> sudo lvcreate -L 500M -s -n test-snap /dev/otus/test
+> ```
+> ```log
+>   Logical volume "test-snap" created.
+> ```
+> 
+> Check result
+> ```shell
+> sudo vgs -o +lv_size,lv_name | grep test
+> ```
+> ```log
+>   otus     2   3   1 wz--n- 11.99g <1.41g  10.00g test     
+>   otus     2   3   1 wz--n- 11.99g <1.41g 500.00m test-snap
+> ```
+> ```shell
+> lsblk^C
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ ^C
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ lsblk
+NAME                  MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sdd                     8:48   0    1G  0 disk 
+sdb                     8:16   0   10G  0 disk 
+├─otus-test-real      253:4    0   10G  0 lvm  
+│ ├─otus-test--snap   253:6    0   10G  0 lvm  
+│ └─otus-test         253:2    0   10G  0 lvm  /data
+└─otus-small          253:3    0  100M  0 lvm  
+sde                     8:64   0    1G  0 disk 
+sdc                     8:32   0    2G  0 disk 
+├─otus-test-real      253:4    0   10G  0 lvm  
+│ ├─otus-test--snap   253:6    0   10G  0 lvm  
+│ └─otus-test         253:2    0   10G  0 lvm  /data
+└─otus-test--snap-cow 253:5    0  500M  0 lvm  
+  └─otus-test--snap   253:6    0   10G  0 lvm  
+sda                     8:0    0   10G  0 disk 
+├─sda2                  8:2    0    9G  0 part 
+│ ├─centos-swap       253:1    0    1G  0 lvm  [SWAP]
+│ └─centos-root       253:0    0    8G  0 lvm  /
+└─sda1                  8:1    0    1G  0 part /boot
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ lsblk[Ksudo mkdir /data-snap
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo mount /dev/otus/test-snap /data-snap/
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ ll /data-snap/
+total 8068564
+drwx------ 2 root root      16384 May 29 22:55 [0m[38;5;27mlost+found[0m
+-rw-r--r-- 1 root root 8262189056 May 29 23:05 test.log
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ tail /data-snap/test.log 
+
+
+^C
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ ll /data
+total 8068564
+drwx------ 2 root root      16384 May 29 22:55 [0m[38;5;27mlost+found[0m
+-rw-r--r-- 1 root root 8262189056 May 29 23:05 test.log
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ ll /data-/datah/data /data
+total 7.7G
+drwx------ 2 root root  16K May 29 22:55 [0m[38;5;27mlost+found[0m
+-rw-r--r-- 1 root root 7.7G May 29 23:05 test.log
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo unmount /data-snap
+sudo: unmount: command not found
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo unmount /data-snap[C[C[C[C[C[C[1P
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo rm /data/test.log
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ ll /data
+total 16
+drwx------ 2 root root 16384 May 29 22:55 [0m[38;5;27mlost+found[0m
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ df -Th /data
+Filesystem            Type  Size  Used Avail Use% Mounted on
+/dev/mapper/otus-test ext4  9.8G   36M  9.2G   1% /data
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo sudo vgs -o +lv_size,lv_name | grep test
+  otus     2   3   1 wz--n- 11.99g <1.41g  10.00g [01;31m[Ktest[m[K     
+  otus     2   3   1 wz--n- 11.99g <1.41g 500.00m [01;31m[Ktest[m[K-snap
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagr

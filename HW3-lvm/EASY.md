@@ -320,7 +320,7 @@ Filesystem            Type  Size  Used Avail Use% Mounted on
 
 ## Reduce LV
 
-Redure is impocible on mounted FS. So, let's unmount FS
+Reduce is impossible on mounted FS. So, let's unmount FS
 ```shell
 sudo umount /data/
 ```
@@ -378,3 +378,182 @@ sudo lvs /dev/otus/test
   LV   VG   Attr       LSize  Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
   test otus -wi-ao---- 10.00g
 ```
+
+## LVM Snapshot
+
+### Create snapshot
+
+Snapshot can be created by command `lvcreate` with flag `-s`
+```shell
+sudo lvcreate -L 500M -s -n test-snap /dev/otus/test
+```
+```log
+  Logical volume "test-snap" created.
+```
+
+Check result
+```shell
+sudo vgs -o +lv_size,lv_name | grep test
+```
+```log
+  otus     2   3   1 wz--n- 11.99g <1.41g  10.00g test     
+  otus     2   3   1 wz--n- 11.99g <1.41g 500.00m test-snap
+```
+```shell
+lsblk
+```
+```log
+NAME                  MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sdd                     8:48   0    1G  0 disk 
+sdb                     8:16   0   10G  0 disk 
+├─otus-test-real      253:4    0   10G  0 lvm  
+│ ├─otus-test--snap   253:6    0   10G  0 lvm  
+│ └─otus-test         253:2    0   10G  0 lvm  /data
+└─otus-small          253:3    0  100M  0 lvm  
+sde                     8:64   0    1G  0 disk 
+sdc                     8:32   0    2G  0 disk 
+├─otus-test-real      253:4    0   10G  0 lvm  
+│ ├─otus-test--snap   253:6    0   10G  0 lvm  
+│ └─otus-test         253:2    0   10G  0 lvm  /data
+└─otus-test--snap-cow 253:5    0  500M  0 lvm  
+  └─otus-test--snap   253:6    0   10G  0 lvm  
+sda                     8:0    0   10G  0 disk 
+├─sda2                  8:2    0    9G  0 part 
+│ ├─centos-swap       253:1    0    1G  0 lvm  [SWAP]
+│ └─centos-root       253:0    0    8G  0 lvm  /
+└─sda1                  8:1    0    1G  0 part /boot
+```
+
+### Mount snapshot
+
+Mount snapshot to `/data-snap`
+```shell
+sudo mkdir /data-snap
+sudo mount /dev/otus/test-snap /data-snap/
+ll /data-snap/
+```
+```log
+total 8068564
+drwx------ 2 root root      16384 May 29 22:55 lost+found
+-rw-r--r-- 1 root root 8262189056 May 29 23:05 test.log
+```
+
+Unmount snapshot
+```shell
+sudo umount /data-snap
+```
+
+### Revert to snapshot
+
+Remove `test.log` from original disk
+```shell
+sudo rm /data/test.log
+ll /data
+```
+```log
+total 16
+drwx------ 2 root root 16384 May 29 22:55 lost+found
+```
+
+And do some checks
+```shell
+df -Th /data
+```
+```log
+Filesystem            Type  Size  Used Avail Use% Mounted on
+/dev/mapper/otus-test ext4  9.8G   36M  9.2G   1% /data
+```
+```shell
+sudo pvscan
+```
+```log
+  PV /dev/sda2   VG centos          lvm2 [<9.00 GiB / 0    free]
+  PV /dev/sdb    VG otus            lvm2 [<10.00 GiB / 0    free]
+  PV /dev/sdc    VG otus            lvm2 [<2.00 GiB / <1.41 GiB free]
+  Total: 3 [<20.99 GiB] / in use: 3 [<20.99 GiB] / in no VG: 0 [0   ]
+```
+```shell
+sudo lvscan
+```
+```log
+  ACTIVE            '/dev/centos/swap' [1.00 GiB] inherit
+  ACTIVE            '/dev/centos/root' [<8.00 GiB] inherit
+  ACTIVE   Original '/dev/otus/test' [10.00 GiB] inherit
+  ACTIVE            '/dev/otus/small' [100.00 MiB] inherit
+  ACTIVE   Snapshot '/dev/otus/test-snap' [500.00 MiB] inherit
+```
+```shell
+sudo vgdisplay otus
+```
+```log
+  --- Volume group ---
+  VG Name               otus
+  System ID             
+  Format                lvm2
+  Metadata Areas        2
+  Metadata Sequence No  8
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                3
+  Open LV               1
+  Max PV                0
+  Cur PV                2
+  Act PV                2
+  VG Size               11.99 GiB
+  PE Size               4.00 MiB
+  Total PE              3070
+  Alloc PE / Size       2710 / <10.59 GiB
+  Free  PE / Size       360 / <1.41 GiB
+  VG UUID               Cbg0WX-CffL-SfWw-9EjU-G9Rl-Xqbe-D9fEZc
+```
+
+Do revert!
+```shell
+sudo umount /data
+sudo lvconvert --merge /dev/otus/test-snap
+```
+```log
+  Merging of volume otus/test-snap started.
+  otus/test: Merged: 99.94%
+  otus/test: Merged: 100.00%
+```
+and check result
+```shell
+sudo mount /dev/otus/test /data
+ll /data
+```
+```log
+total 8068564
+drwx------ 2 root root      16384 May 29 22:55 lost+found
+-rw-r--r-- 1 root root 8262189056 May 29 23:05 test.log
+```
+
+Check Free PE
+```shell
+sudo vgdisplay otus
+```
+```log
+  --- Volume group ---
+  VG Name               otus
+  System ID             
+  Format                lvm2
+  Metadata Areas        2
+  Metadata Sequence No  11
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                2
+  Open LV               1
+  Max PV                0
+  Cur PV                2
+  Act PV                2
+  VG Size               11.99 GiB
+  PE Size               4.00 MiB
+  Total PE              3070
+  Alloc PE / Size       2585 / <10.10 GiB
+  Free  PE / Size       485 / 1.89 GiB
+  VG UUID               Cbg0WX-CffL-SfWw-9EjU-G9Rl-Xqbe-D9fEZc
+```
+
+## LVM Mirroring
