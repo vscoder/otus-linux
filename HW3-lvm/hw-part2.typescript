@@ -1,0 +1,60 @@
+Script started on Sat 30 May 2020 10:01:47 PM UTC
+]0;vagrant@lvm:/vagrant[?1034h[vagrant@lvm vagrant]$ lsb[K[K[Kuname -a
+Linux lvm 5.6.11-1.el7.elrepo.x86_64 #1 SMP Mon May 4 19:40:21 EDT 2020 x86_64 x86_64 x86_64 GNU/Linux
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ lsblk
+NAME                     MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sdd                        8:48   0    1G  0 disk 
+├─vg_var-lv_var_rimage_1 253:6    0  952M  0 lvm  
+│ └─vg_var-lv_var        253:7    0  952M  0 lvm  /var
+└─vg_var-lv_var_rmeta_1  253:5    0    4M  0 lvm  
+  └─vg_var-lv_var        253:7    0  952M  0 lvm  /var
+sdb                        8:16   0   10G  0 disk 
+└─vg_root-lv_root        253:2    0   10G  0 lvm  
+sde                        8:64   0    1G  0 disk 
+sdc                        8:32   0    2G  0 disk 
+├─vg_var-lv_var_rimage_0 253:4    0  952M  0 lvm  
+│ └─vg_var-lv_var        253:7    0  952M  0 lvm  /var
+└─vg_var-lv_var_rmeta_0  253:3    0    4M  0 lvm  
+  └─vg_var-lv_var        253:7    0  952M  0 lvm  /var
+sda                        8:0    0   10G  0 disk 
+├─sda2                     8:2    0    9G  0 part 
+│ ├─centos-swap          253:1    0    1G  0 lvm  [SWAP]
+│ └─centos-root          253:0    0    6G  0 lvm  /
+└─sda1                     8:1    0    1G  0 part /boot
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ df -h
+Filesystem                 Size  Used Avail Use% Mounted on
+devtmpfs                   101M     0  101M   0% /dev
+tmpfs                      114M     0  114M   0% /dev/shm
+tmpfs                      114M  4.5M  109M   4% /run
+tmpfs                      114M     0  114M   0% /sys/fs/cgroup
+/dev/mapper/centos-root    6.0G  1.8G  4.3G  29% /
+/dev/sda1                 1014M  129M  886M  13% /boot
+/dev/mapper/vg_var-lv_var  922M  167M  692M  20% /var
+vagrant                    116G  100G   17G  86% /vagrant
+tmpfs                       23M     0   23M   0% /run/user/1000
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ {
+>     sudo lvremove /dev/vg_root/lv_root;
+>     sudo vgremove /dev/vg_root;
+>     sudo pvremove /dev/sdb;
+> }
+Do you really want to remove active logical volume vg_root/lv_root? [y/n]: ^C  Interrupted...
+  Logical volume vg_root/lv_root not removed.
+Do you really want to remove volume group "vg_root" containing 1 logical volumes? [y/n]: ^C  Interrupted...
+  Volume group "vg_root" not removed
+  PV /dev/sdb is used by VG vg_root so please use vgreduce first.
+  (If you are certain you need pvremove, then confirm by using --force twice.)
+  /dev/sdb: physical volume label not removed.
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ ^C
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ ^C
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ ^C
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ {
+>     sudo lvremove -y /dev/vg_root/lv_root;
+>     sudo vgremove -y /dev/vg_root;
+>     sudo pvremove -y /dev/sdb;
+> }
+  Logical volume "lv_root" successfully removed
+  Volume group "vg_root" successfully removed
+  Labels on physical volume "/dev/sdb" successfully wiped.
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ exit
+
+Script done on Sat 30 May 2020 10:06:38 PM UTC

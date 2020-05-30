@@ -951,3 +951,165 @@ intel-06-55-04: caveat is disabled in configuration
 </p>
 </details>
 
+## Move /var to mirrored LV
+
+Install rsync
+```shell
+sudo yum install -y rsync
+```
+
+Prepare new LV for `/var` and mount it to `/newvar`
+```shell
+{
+    sudo pvcreate /dev/sdc /dev/sdd;
+    sudo vgcreate vg_var /dev/sdc /dev/sdd;
+    sudo lvcreate -L 950M -m1 -n lv_var vg_var;
+    sudo mkfs.ext4 /dev/vg_var/lv_var;
+    sudo mkdir /newvar;
+    sudo mount /dev/vg_var/lv_var /newvar;
+}
+```
+<details><summary>output</summary>
+<p>
+
+```log
+  Physical volume "/dev/sdc" successfully created.
+  Physical volume "/dev/sdd" successfully created.
+  Volume group "vg_var" successfully created
+  Rounding up size to full physical extent 952.00 MiB
+  Logical volume "lv_var" created.
+mke2fs 1.42.9 (28-Dec-2013)
+Filesystem label=
+OS type: Linux
+Block size=4096 (log=2)
+Fragment size=4096 (log=2)
+Stride=0 blocks, Stripe width=0 blocks
+60928 inodes, 243712 blocks
+12185 blocks (5.00%) reserved for the super user
+First data block=0
+Maximum filesystem blocks=249561088
+8 block groups
+32768 blocks per group, 32768 fragments per group
+7616 inodes per group
+Superblock backups stored on blocks: 
+        32768, 98304, 163840, 229376
+
+Allocating group tables: done                            
+Writing inode tables: done                            
+Creating journal (4096 blocks): done
+Writing superblocks and filesystem accounting information: done
+```
+</p>
+</details>
+
+Copy data from old `/var` to `/newvar`
+```shell
+sudo rsync -avHPSAX /mnt/var/ /newvar
+```
+<details><summary>output</summary>
+<p>
+
+```log
+spool/postfix/saved/
+spool/postfix/trace/
+tmp/
+tmp/systemd-private-7d9a8c16611d40c3b7e92526e1e6ab00-chronyd.service-wo2FBv/
+tmp/systemd-private-7d9a8c16611d40c3b7e92526e1e6ab00-chronyd.service-wo2FBv/tmp/
+tmp/systemd-private-d7c729bc1b294c35ba9c1cfd7b7328ef-chronyd.service-bMRqND/
+tmp/systemd-private-d7c729bc1b294c35ba9c1cfd7b7328ef-chronyd.service-bMRqND/tmp/
+tmp/yum-root-IiYUxB/
+tmp/yum-root-IiYUxB/elrepo-release-7.0-3.el7.elrepo.noarch.rpm
+          8,656 100%   15.65kB/s    0:00:00 (xfr#1484, to-chk=0/4823)
+yp/
+
+sent 164,049,213 bytes  received 305,164 bytes  109,569,584.67 bytes/sec
+total size is 163,533,993  speedup is 1.00
+```
+</p>
+</details>
+
+Make backup of `/var`
+```shell
+sudo mkdir /tmp/oldvar && sudo mv /mnt/var/* /tmp/oldvar
+```
+
+
+Mount `/newvar` to `/mnt/var`
+```shell
+{
+    sudo umount /newvar;
+    sudo mount /dev/vg_var/lv_var /mnt/var;
+}
+```
+
+Update fstab (don't forget about `--append` with `tee`)
+```shell
+echo "`blkid | grep var: | awk '{print $2}'` /var ext4 defaults 0 0" | sudo tee --append /mnt/etc/fstab
+```
+```log
+UUID="99a06239-52fa-4d9a-b4eb-f6def2dc0ec3" /var ext4 defaults 0 0
+```
+
+Reboot
+
+And check result
+```shell
+lsblk
+```
+```log
+NAME                     MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sdd                        8:48   0    1G  0 disk 
+├─vg_var-lv_var_rimage_1 253:6    0  952M  0 lvm  
+│ └─vg_var-lv_var        253:7    0  952M  0 lvm  /var
+└─vg_var-lv_var_rmeta_1  253:5    0    4M  0 lvm  
+  └─vg_var-lv_var        253:7    0  952M  0 lvm  /var
+sdb                        8:16   0   10G  0 disk 
+└─vg_root-lv_root        253:2    0   10G  0 lvm  
+sde                        8:64   0    1G  0 disk 
+sdc                        8:32   0    2G  0 disk 
+├─vg_var-lv_var_rimage_0 253:4    0  952M  0 lvm  
+│ └─vg_var-lv_var        253:7    0  952M  0 lvm  /var
+└─vg_var-lv_var_rmeta_0  253:3    0    4M  0 lvm  
+  └─vg_var-lv_var        253:7    0  952M  0 lvm  /var
+sda                        8:0    0   10G  0 disk 
+├─sda2                     8:2    0    9G  0 part 
+│ ├─centos-swap          253:1    0    1G  0 lvm  [SWAP]
+│ └─centos-root          253:0    0    6G  0 lvm  /
+└─sda1                     8:1    0    1G  0 part /boot
+```
+```shell
+df -h
+```
+```log
+Filesystem                 Size  Used Avail Use% Mounted on
+devtmpfs                   101M     0  101M   0% /dev
+tmpfs                      114M     0  114M   0% /dev/shm
+tmpfs                      114M  4.5M  109M   4% /run
+tmpfs                      114M     0  114M   0% /sys/fs/cgroup
+/dev/mapper/centos-root    6.0G  1.8G  4.3G  29% /
+/dev/sda1                 1014M  129M  886M  13% /boot
+/dev/mapper/vg_var-lv_var  922M  167M  692M  20% /var
+vagrant                    116G  100G   17G  86% /vagrant
+tmpfs                       23M     0   23M   0% /run/user/1000
+```
+
+Remove temporary LV, VG and PV
+```shell
+{
+    sudo lvremove -y /dev/vg_root/lv_root;
+    sudo vgremove -y /dev/vg_root;
+    sudo pvremove -y /dev/sdb;
+}
+```
+<details><summary>output</summary>
+<p>
+
+```log
+  Logical volume "lv_root" successfully removed
+  Volume group "vg_root" successfully removed
+  Labels on physical volume "/dev/sdb" successfully wiped.
+```
+</p>
+</details>
+
+Done!
