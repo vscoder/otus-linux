@@ -924,4 +924,56 @@ drwx------ 2 root root      16384 May 29 22:55 [0m[38;5;27mlost+found[0m
 	[ -n|--name String ]
 	[ -p|--permission rw|r ]
 	[ -r|--readahead auto|none|Number ]
-	[ -W|
+	[ -W|--wipesignatures y|n ]
+	[ -Z|--zero y|n ]
+	[    --addtag Tag ]
+	[    --alloc contiguous|cling|cling_by_tags|normal|anywhere|inherit ]
+	[    --ignoremonitoring ]
+	[    --metadataprofile String ]
+	[    --minor Number ]
+	[    --monitor y|n ]
+	[    --nosync ]
+	[    --noudevsync ]
+	[    --reportformat basic|json ]
+
+  Common options for lvm:
+	[ -d|--debug ]
+	[ -h|--help ]
+	[ -q|--quiet ]
+	[ -v|--verbose ]
+	[ -y|--yes ]
+	[ -t|--test ]
+	[    --commandprofile String ]
+	[    --config String ]
+	[    --driverloaded y|n ]
+	[    --lockopt String ]
+	[    --longhelp ]
+	[    --profile String ]
+	[    --version ]
+
+  Use --longhelp to show all options and advanced commands.
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ lsblk
+NAME                  MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sdd                     8:48   0    1G  0 disk 
+├─vg0-mirror_rmeta_0  253:4    0    4M  0 lvm  
+│ └─vg0-mirror        253:8    0  816M  0 lvm  
+└─vg0-mirror_rimage_0 253:5    0  816M  0 lvm  
+  └─vg0-mirror        253:8    0  816M  0 lvm  
+sdb                     8:16   0   10G  0 disk 
+├─otus-test           253:2    0   10G  0 lvm  /data
+└─otus-small          253:3    0  100M  0 lvm  
+sde                     8:64   0    1G  0 disk 
+├─vg0-mirror_rmeta_1  253:6    0    4M  0 lvm  
+│ └─vg0-mirror        253:8    0  816M  0 lvm  
+└─vg0-mirror_rimage_1 253:7    0  816M  0 lvm  
+  └─vg0-mirror        253:8    0  816M  0 lvm  
+sdc                     8:32   0    2G  0 disk 
+└─otus-test           253:2    0   10G  0 lvm  /data
+sda                     8:0    0   10G  0 disk 
+├─sda2                  8:2    0    9G  0 part 
+│ ├─centos-swap       253:1    0    1G  0 lvm  [SWAP]
+│ └─centos-root       253:0    0    8G  0 lvm  /
+└─sda1                  8:1    0    1G  0 part /boot
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ exit
+
+Script done on Sat 30 May 2020 11:45:02 AM UTC
