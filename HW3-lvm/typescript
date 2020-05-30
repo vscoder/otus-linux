@@ -487,4 +487,441 @@ Filesystem            Type  Size  Used Avail Use% Mounted on
 ]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo sudo vgs -o +lv_size,lv_name | grep test
   otus     2   3   1 wz--n- 11.99g <1.41g  10.00g [01;31m[Ktest[m[K     
   otus     2   3   1 wz--n- 11.99g <1.41g 500.00m [01;31m[Ktest[m[K-snap
-]0;vagrant@lvm:/vagrant[vagrant@lvm vagr
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ vgssvgsuvgsdvgsovgs vgs
+  VG     #PV #LV #SN Attr   VSize  VFree 
+  centos   1   2   0 wz--n- <9.00g     0 
+  otus     2   3   1 wz--n- 11.99g <1.41g
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo vgs[K[K[Kpvscan
+  PV /dev/sda2   VG centos          lvm2 [<9.00 GiB / 0    free]
+  PV /dev/sdb    VG otus            lvm2 [<10.00 GiB / 0    free]
+  PV /dev/sdc    VG otus            lvm2 [<2.00 GiB / <1.41 GiB free]
+  Total: 3 [<20.99 GiB] / in use: 3 [<20.99 GiB] / in no VG: 0 [0   ]
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo vgscan
+  Reading volume groups from cache.
+  Found volume group "centos" using metadata type lvm2
+  Found volume group "otus" using metadata type lvm2
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo lvscan
+  ACTIVE            '/dev/centos/swap' [1.00 GiB] inherit
+  ACTIVE            '/dev/centos/root' [<8.00 GiB] inherit
+  ACTIVE   Original '/dev/otus/test' [10.00 GiB] inherit
+  ACTIVE            '/dev/otus/small' [100.00 MiB] inherit
+  ACTIVE   Snapshot '/dev/otus/test-snap' [500.00 MiB] inherit
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo vginfo
+sudo: vginfo: command not found
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo vginfo[K[K[K[K[K[K[K[K[K[K[Kvg
+vgcfgbackup    vgchange       vgconvert      vgdisplay      vgextend       vgimportclone  vgmknodes      vgremove       vgs            vgsplit
+vgcfgrestore   vgck           vgcreate       vgexport       vgimport       vgmerge        vgreduce       vgrename       vgscan         
+[vagrant@lvm vagrant]$ vgdisplay [1@s[1@u[1@d[1@o[1@ 
+  --- Volume group ---
+  VG Name               centos
+  System ID             
+  Format                lvm2
+  Metadata Areas        1
+  Metadata Sequence No  3
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                2
+  Open LV               2
+  Max PV                0
+  Cur PV                1
+  Act PV                1
+  VG Size               <9.00 GiB
+  PE Size               4.00 MiB
+  Total PE              2303
+  Alloc PE / Size       2303 / <9.00 GiB
+  Free  PE / Size       0 / 0   
+  VG UUID               FjzkH3-wcuJ-Ev1b-EJ4d-eIrS-i24m-9Qh8Sn
+   
+  --- Volume group ---
+  VG Name               otus
+  System ID             
+  Format                lvm2
+  Metadata Areas        2
+  Metadata Sequence No  8
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                3
+  Open LV               1
+  Max PV                0
+  Cur PV                2
+  Act PV                2
+  VG Size               11.99 GiB
+  PE Size               4.00 MiB
+  Total PE              3070
+  Alloc PE / Size       2710 / <10.59 GiB
+  Free  PE / Size       360 / <1.41 GiB
+  VG UUID               Cbg0WX-CffL-SfWw-9EjU-G9Rl-Xqbe-D9fEZc
+   
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo vgdisplay otus
+  --- Volume group ---
+  VG Name               otus
+  System ID             
+  Format                lvm2
+  Metadata Areas        2
+  Metadata Sequence No  8
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                3
+  Open LV               1
+  Max PV                0
+  Cur PV                2
+  Act PV                2
+  VG Size               11.99 GiB
+  PE Size               4.00 MiB
+  Total PE              3070
+  Alloc PE / Size       2710 / <10.59 GiB
+  Free  PE / Size       360 / <1.41 GiB
+  VG UUID               Cbg0WX-CffL-SfWw-9EjU-G9Rl-Xqbe-D9fEZc
+   
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo umount /data
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo lvconvert --merge /dev/otus/test-snap
+  Merging of volume otus/test-snap started.
+  otus/test: Merged: 99.94%
+  otus/test: Merged: 100.00%
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo mount /dev/otus/test /data
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ ll /data
+total 8068564
+drwx------ 2 root root      16384 May 29 22:55 [0m[38;5;27mlost+found[0m
+-rw-r--r-- 1 root root 8262189056 May 29 23:05 test.log
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo vgdisplay otus
+  --- Volume group ---
+  VG Name               otus
+  System ID             
+  Format                lvm2
+  Metadata Areas        2
+  Metadata Sequence No  11
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                2
+  Open LV               1
+  Max PV                0
+  Cur PV                2
+  Act PV                2
+  VG Size               11.99 GiB
+  PE Size               4.00 MiB
+  Total PE              3070
+  Alloc PE / Size       2585 / <10.10 GiB
+  Free  PE / Size       485 / 1.89 GiB
+  VG UUID               Cbg0WX-CffL-SfWw-9EjU-G9Rl-Xqbe-D9fEZc
+   
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo pvcreate /dev/sd{d,e}
+  Physical volume "/dev/sdd" successfully created.
+  Physical volume "/dev/sde" successfully created.
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo vgcreate vg0 /dev/sd{d,e}
+  Volume group "vg0" successfully created
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo lvcreate -l+80%FREE -m1 -n mirror vg0
+  Logical volume "mirror" created.
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo lvs
+  LV     VG     Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  root   centos -wi-ao----  <8.00g                                                    
+  swap   centos -wi-ao----   1.00g                                                    
+  small  otus   -wi-a----- 100.00m                                                    
+  test   otus   -wi-ao----  10.00g                                                    
+  mirror vg0    rwi-a-r--- 816.00m                                    100.00          
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo lvdisplay
+  --- Logical volume ---
+  LV Path                /dev/vg0/mirror
+  LV Name                mirror
+  VG Name                vg0
+  LV UUID                AuFN60-Jf0k-GXHr-zI4e-ym4w-Wi20-KaIo1A
+  LV Write Access        read/write
+  LV Creation host, time lvm, 2020-05-30 11:38:42 +0000
+  LV Status              available
+  # open                 0
+  LV Size                816.00 MiB
+  Current LE             204
+  Mirrored volumes       2
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:8
+   
+  --- Logical volume ---
+  LV Path                /dev/centos/swap
+  LV Name                swap
+  VG Name                centos
+  LV UUID                mKlwWC-QYGP-jLha-K0D8-xNAO-yHCn-EtScZ8
+  LV Write Access        read/write
+  LV Creation host, time localhost, 2020-05-09 18:13:25 +0000
+  LV Status              available
+  # open                 2
+  LV Size                1.00 GiB
+  Current LE             256
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:1
+   
+  --- Logical volume ---
+  LV Path                /dev/centos/root
+  LV Name                root
+  VG Name                centos
+  LV UUID                opTAm5-DX8u-b4fA-Ue0z-QW8o-3Qwx-uibTxV
+  LV Write Access        read/write
+  LV Creation host, time localhost, 2020-05-09 18:13:25 +0000
+  LV Status              available
+  # open                 1
+  LV Size                <8.00 GiB
+  Current LE             2047
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:0
+   
+  --- Logical volume ---
+  LV Path                /dev/otus/test
+  LV Name                test
+  VG Name                otus
+  LV UUID                IKQcc5-X2xf-p3MR-WQO0-6Gw8-xv5q-NfmKt8
+  LV Write Access        read/write
+  LV Creation host, time lvm, 2020-05-29 22:46:35 +0000
+  LV Status              available
+  # open                 1
+  LV Size                10.00 GiB
+  Current LE             2560
+  Segments               3
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:2
+   
+  --- Logical volume ---
+  LV Path                /dev/otus/small
+  LV Name                small
+  VG Name                otus
+  LV UUID                Id0P8c-y0Uc-fkSm-RuLH-IbGM-axmJ-SqnrKF
+  LV Write Access        read/write
+  LV Creation host, time lvm, 2020-05-29 22:54:10 +0000
+  LV Status              available
+  # open                 0
+  LV Size                100.00 MiB
+  Current LE             25
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:3
+   
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ 
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ 
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo lvdisplay /dev/vg0/mirror
+  --- Logical volume ---
+  LV Path                /dev/vg0/mirror
+  LV Name                mirror
+  VG Name                vg0
+  LV UUID                AuFN60-Jf0k-GXHr-zI4e-ym4w-Wi20-KaIo1A
+  LV Write Access        read/write
+  LV Creation host, time lvm, 2020-05-30 11:38:42 +0000
+  LV Status              available
+  # open                 0
+  LV Size                816.00 MiB
+  Current LE             204
+  Mirrored volumes       2
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:8
+   
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo lvdisplay /dev/vg0/mirror[C[C[C[C[C[C[C[C[C[C[C[C[C[K[Kvgdisplay vg0
+  --- Volume group ---
+  VG Name               vg0
+  System ID             
+  Format                lvm2
+  Metadata Areas        2
+  Metadata Sequence No  3
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                1
+  Open LV               0
+  Max PV                0
+  Cur PV                2
+  Act PV                2
+  VG Size               1.99 GiB
+  PE Size               4.00 MiB
+  Total PE              510
+  Alloc PE / Size       410 / 1.60 GiB
+  Free  PE / Size       100 / 400.00 MiB
+  VG UUID               vrlj1W-ev8Z-5AbG-BkxZ-Rh6s-0cv2-JgSasi
+   
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ cgs[K[K[Ksudo vgs
+  VG     #PV #LV #SN Attr   VSize  VFree  
+  centos   1   2   0 wz--n- <9.00g      0 
+  otus     2   2   0 wz--n- 11.99g   1.89g
+  vg0      2   1   0 wz--n-  1.99g 400.00m
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo pvs
+  PV         VG     Fmt  Attr PSize    PFree  
+  /dev/sda2  centos lvm2 a--    <9.00g      0 
+  /dev/sdb   otus   lvm2 a--   <10.00g      0 
+  /dev/sdc   otus   lvm2 a--    <2.00g   1.89g
+  /dev/sdd   vg0    lvm2 a--  1020.00m 200.00m
+  /dev/sde   vg0    lvm2 a--  1020.00m 200.00m
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ lvcreate --help
+  WARNING: Running as a non-root user. Functionality may be unavailable.
+  /run/lvm/lvmetad.socket: access failed: Permission denied
+  WARNING: Failed to connect to lvmetad. Falling back to device scanning.
+  lvcreate - Create a logical volume
+
+  Create a linear LV.
+  lvcreate -L|--size Size[m|UNIT] VG
+	[ -l|--extents Number[PERCENT] ]
+	[    --type linear ]
+	[ COMMON_OPTIONS ]
+	[ PV ... ]
+
+  Create a striped LV (infers --type striped).
+  lvcreate -i|--stripes Number -L|--size Size[m|UNIT] VG
+	[ -l|--extents Number[PERCENT] ]
+	[ -I|--stripesize Size[k|UNIT] ]
+	[ COMMON_OPTIONS ]
+	[ PV ... ]
+
+  Create a raid1 or mirror LV (infers --type raid1|mirror).
+  lvcreate -m|--mirrors Number -L|--size Size[m|UNIT] VG
+	[ -l|--extents Number[PERCENT] ]
+	[ -R|--regionsize Size[m|UNIT] ]
+	[    --mirrorlog core|disk ]
+	[    --minrecoveryrate Size[k|UNIT] ]
+	[    --maxrecoveryrate Size[k|UNIT] ]
+	[ COMMON_OPTIONS ]
+	[ PV ... ]
+
+  Create a raid LV (a specific raid level must be used, e.g. raid1).
+  lvcreate --type raid -L|--size Size[m|UNIT] VG
+	[ -l|--extents Number[PERCENT] ]
+	[ -m|--mirrors Number ]
+	[ -i|--stripes Number ]
+	[ -I|--stripesize Size[k|UNIT] ]
+	[ -R|--regionsize Size[m|UNIT] ]
+	[    --minrecoveryrate Size[k|UNIT] ]
+	[    --maxrecoveryrate Size[k|UNIT] ]
+	[ COMMON_OPTIONS ]
+	[ PV ... ]
+
+  Create a raid10 LV.
+  lvcreate -m|--mirrors Number -i|--stripes Number -L|--size Size[m|UNIT] VG
+	[ -l|--extents Number[PERCENT] ]
+	[ -I|--stripesize Size[k|UNIT] ]
+	[ -R|--regionsize Size[m|UNIT] ]
+	[    --minrecoveryrate Size[k|UNIT] ]
+	[    --maxrecoveryrate Size[k|UNIT] ]
+	[ COMMON_OPTIONS ]
+	[ PV ... ]
+
+  Create a COW snapshot LV of an origin LV.
+  lvcreate -s|--snapshot -L|--size Size[m|UNIT] LV
+	[ -l|--extents Number[PERCENT] ]
+	[ -i|--stripes Number ]
+	[ -I|--stripesize Size[k|UNIT] ]
+	[ -c|--chunksize Size[k|UNIT] ]
+	[    --type snapshot ]
+	[ COMMON_OPTIONS ]
+	[ PV ... ]
+
+  Create a thin pool.
+  lvcreate --type thin-pool -L|--size Size[m|UNIT] VG
+	[ -l|--extents Number[PERCENT] ]
+	[ -c|--chunksize Size[k|UNIT] ]
+	[ -i|--stripes Number ]
+	[ -I|--stripesize Size[k|UNIT] ]
+	[    --thinpool LV_new ]
+	[    --poolmetadatasize Size[m|UNIT] ]
+	[    --poolmetadataspare y|n ]
+	[    --discards passdown|nopassdown|ignore ]
+	[    --errorwhenfull y|n ]
+	[ COMMON_OPTIONS ]
+	[ PV ... ]
+
+  Create a cache pool.
+  lvcreate --type cache-pool -L|--size Size[m|UNIT] VG
+	[ -l|--extents Number[PERCENT] ]
+	[ -H|--cache ]
+	[ -c|--chunksize Size[k|UNIT] ]
+	[    --poolmetadatasize Size[m|UNIT] ]
+	[    --poolmetadataspare y|n ]
+	[    --cachemode writethrough|writeback|passthrough ]
+	[    --cachepolicy String ]
+	[    --cachesettings String ]
+	[    --cachemetadataformat auto|1|2 ]
+	[ COMMON_OPTIONS ]
+	[ PV ... ]
+
+  Create a thin LV in a thin pool (infers --type thin).
+  lvcreate -V|--virtualsize Size[m|UNIT] --thinpool LV_thinpool VG
+	[ -T|--thin ]
+	[    --type thin ]
+	[    --discards passdown|nopassdown|ignore ]
+	[    --errorwhenfull y|n ]
+	[ COMMON_OPTIONS ]
+
+  Create a thin LV that is a snapshot of an existing thin LV 
+  (infers --type thin).
+  lvcreate -s|--snapshot LV_thin
+	[    --type thin ]
+	[    --discards passdown|nopassdown|ignore ]
+	[    --errorwhenfull y|n ]
+	[ COMMON_OPTIONS ]
+
+  Create a thin LV that is a snapshot of an external origin LV.
+  lvcreate --type thin --thinpool LV_thinpool LV
+	[ -T|--thin ]
+	[ -c|--chunksize Size[k|UNIT] ]
+	[    --poolmetadatasize Size[m|UNIT] ]
+	[    --poolmetadataspare y|n ]
+	[    --discards passdown|nopassdown|ignore ]
+	[    --errorwhenfull y|n ]
+	[ COMMON_OPTIONS ]
+
+  Create a thin LV, first creating a thin pool for it, 
+  where the new thin pool is named by the --thinpool arg.
+  lvcreate --type thin -V|--virtualsize Size[m|UNIT] -L|--size Size[m|UNIT] --thinpool LV_new
+	[ -l|--extents Number[PERCENT] ]
+	[ -T|--thin ]
+	[ -c|--chunksize Size[k|UNIT] ]
+	[ -i|--stripes Number ]
+	[ -I|--stripesize Size[k|UNIT] ]
+	[    --poolmetadatasize Size[m|UNIT] ]
+	[    --poolmetadataspare y|n ]
+	[    --discards passdown|nopassdown|ignore ]
+	[    --errorwhenfull y|n ]
+	[ COMMON_OPTIONS ]
+	[ PV ... ]
+
+  Create a cache LV, first creating a new origin LV, 
+  then combining it with the existing cache pool named 
+  by the --cachepool arg.
+  lvcreate --type cache -L|--size Size[m|UNIT] --cachepool LV_cachepool VG
+	[ -l|--extents Number[PERCENT] ]
+	[ -H|--cache ]
+	[ -c|--chunksize Size[k|UNIT] ]
+	[ -i|--stripes Number ]
+	[ -I|--stripesize Size[k|UNIT] ]
+	[    --poolmetadatasize Size[m|UNIT] ]
+	[    --poolmetadataspare y|n ]
+	[    --cachemode writethrough|writeback|passthrough ]
+	[    --cachepolicy String ]
+	[    --cachesettings String ]
+	[    --cachemetadataformat auto|1|2 ]
+	[ COMMON_OPTIONS ]
+	[ PV ... ]
+
+  Common options for command:
+	[ -a|--activate y|n|ay ]
+	[ -A|--autobackup y|n ]
+	[ -C|--contiguous y|n ]
+	[ -M|--persistent y|n ]
+	[ -j|--major Number ]
+	[ -k|--setactivationskip y|n ]
+	[ -K|--ignoreactivationskip ]
+	[ -n|--name String ]
+	[ -p|--permission rw|r ]
+	[ -r|--readahead auto|none|Number ]
+	[ -W|

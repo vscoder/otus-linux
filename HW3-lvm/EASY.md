@@ -557,3 +557,41 @@ sudo vgdisplay otus
 ```
 
 ## LVM Mirroring
+
+Create PVs on `/dev/sdd` and `/dev/sde`
+```shell
+sudo pvcreate /dev/sd{d,e}
+```
+```log
+  Physical volume "/dev/sdd" successfully created.
+  Physical volume "/dev/sde" successfully created.
+```
+
+Create VG `vg0`
+```shell
+sudo vgcreate vg0 /dev/sd{d,e}
+```
+```log
+  Volume group "vg0" successfully created
+```
+
+Create LV named `mirror` (`-m1` is mirrors count)
+```shell
+sudo lvcreate -l+80%FREE -m1 -n mirror vg0
+```
+```log
+  Logical volume "mirror" created.
+```
+
+Check result
+```shell
+sudo lvs
+```
+```log
+  LV     VG     Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  root   centos -wi-ao----  <8.00g                                                    
+  swap   centos -wi-ao----   1.00g                                                    
+  small  otus   -wi-a----- 100.00m                                                    
+  test   otus   -wi-ao----  10.00g                                                    
+  mirror vg0    rwi-a-r--- 816.00m                                    100.00
+```
