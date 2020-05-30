@@ -316,3 +316,65 @@ df -Th /data
 Filesystem            Type  Size  Used Avail Use% Mounted on
 /dev/mapper/otus-test ext4   11G  7.8G  2.6G  76% /data
 ```
+
+
+## Reduce LV
+
+Redure is impocible on mounted FS. So, let's unmount FS
+```shell
+sudo umount /data/
+```
+and check FS on errors
+```shell
+sudo e2fsck -fy /dev/otus/test
+```
+```log
+e2fsck 1.42.9 (28-Dec-2013)
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+test: 12/729088 files (0.0% non-contiguous), 2105907/2914304 blocks
+```
+
+Then we need to reduce FS size
+```shell
+sudo resize2fs /dev/otus/test 10G
+```
+```log
+resize2fs 1.42.9 (28-Dec-2013)
+Resizing the filesystem on /dev/otus/test to 2621440 (4k) blocks.
+The filesystem on /dev/otus/test is now 2621440 blocks long.
+```
+
+Mount FS and check result
+```shell
+sudo mount /dev/otus/test /data/
+df -Th /data/
+```
+```log
+Filesystem            Type  Size  Used Avail Use% Mounted on
+/dev/mapper/otus-test ext4  9.8G  7.8G  1.6G  84% /data
+```
+
+And then we can reduce LV size
+```shell
+sudo lvreduce /dev/otus/test -L 10G
+```
+```log
+  WARNING: Reducing active and open logical volume to 10.00 GiB.
+  THIS MAY DESTROY YOUR DATA (filesystem etc.)
+Do you really want to reduce otus/test? [y/n]: y
+  Size of logical volume otus/test changed from <11.12 GiB (2846 extents) to 10.00 GiB (2560 extents).
+  Logical volume otus/test successfully resized.
+```
+
+Check LV size after reducing
+```shell
+sudo lvs /dev/otus/test
+```
+```log
+  LV   VG   Attr       LSize  Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  test otus -wi-ao---- 10.00g
+```

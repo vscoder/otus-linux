@@ -191,4 +191,122 @@ Options:
      --target <target>   explicitly specifies mountpoint
  -v, --verbose           say what is being done
  -V, --version           display version information and exit
- -w, --rw, --re
+ -w, --rw, --read-write  mount the filesystem read-write (default)
+
+ -h, --help     display this help and exit
+ -V, --version  output version information and exit
+
+Source:
+ -L, --label <label>     synonym for LABEL=<label>
+ -U, --uuid <uuid>       synonym for UUID=<uuid>
+ LABEL=<label>           specifies device by filesystem label
+ UUID=<uuid>             specifies device by filesystem UUID
+ PARTLABEL=<label>       specifies device by partition label
+ PARTUUID=<uuid>         specifies device by partition UUID
+ <device>                specifies device by path
+ <directory>             mountpoint for bind mounts (see --bind/rbind)
+ <file>                  regular file for loopdev setup
+
+Operations:
+ -B, --bind              mount a subtree somewhere else (same as -o bind)
+ -M, --move              move a subtree to some other place
+ -R, --rbind             mount a subtree and all submounts somewhere else
+ --make-shared           mark a subtree as shared
+ --make-slave            mark a subtree as slave
+ --make-private          mark a subtree as private
+ --make-unbindable       mark a subtree as unbindable
+ --make-rshared          recursively mark a whole subtree as shared
+ --make-rslave           recursively mark a whole subtree as slave
+ --make-rprivate         recursively mark a whole subtree as private
+ --make-runbindable      recursively mark a whole subtree as unbindable
+
+For more details see mount(8).
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ mount | grep /data
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo mkdir /data
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo mount /dev/otus/test /data/
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ mount | grep /data
+/dev/mapper/otus-test on [01;31m[K/data[m[K type ext4 (rw,relatime)
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo pvcreate /dev/sdc
+  Physical volume "/dev/sdc" successfully created.
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo vgextend otus /dev/sdc
+  Volume group "otus" successfully extended
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo vgdisplay -v otus | grep -i 'PV Name'
+  [01;31m[KPV Name[m[K               /dev/sdb     
+  [01;31m[KPV Name[m[K               /dev/sdc     
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo vgs
+  VG     #PV #LV #SN Attr   VSize  VFree 
+  centos   1   2   0 wz--n- <9.00g     0 
+  otus     2   2   0 wz--n- 11.99g <3.90g
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo dd if=/dev/zero of=/data/test.log bs=1M count=8000 status=progress
+429916160 bytes (430 MB) copied, 1.011845 s, 425 MB/s824180736 bytes (824 MB) copied, 2.013339 s, 409 MB/s1227882496 bytes (1.2 GB) copied, 3.017569 s, 407 MB/s1629487104 bytes (1.6 GB) copied, 4.019868 s, 405 MB/s2025848832 bytes (2.0 GB) copied, 5.020742 s, 403 MB/s2410676224 bytes (2.4 GB) copied, 6.025188 s, 400 MB/s2810183680 bytes (2.8 GB) copied, 7.025429 s, 400 MB/s3206545408 bytes (3.2 GB) copied, 8.025626 s, 400 MB/s3599761408 bytes (3.6 GB) copied, 9.030221 s, 399 MB/s4010803200 bytes (4.0 GB) copied, 10.039297 s, 400 MB/s4413456384 bytes (4.4 GB) copied, 11.042386 s, 400 MB/s4807720960 bytes (4.8 GB) copied, 12.043459 s, 399 MB/s5200936960 bytes (5.2 GB) copied, 13.044521 s, 399 MB/s5602541568 bytes (5.6 GB) copied, 14.045350 s, 399 MB/s6008340480 bytes (6.0 GB) copied, 15.053378 s, 399 MB/s6292504576 bytes (6.3 GB) copied, 16.056752 s, 392 MB/s6555697152 bytes (6.6 GB) copied, 17.064591 s, 384 MB/s6808403968 bytes (6.8 GB) copied, 18.064804 s, 377 MB/s7038042112 bytes (7.0 GB) copied, 19.067666 s, 369 MB/s7258243072 bytes (7.3 GB) copied, 20.072852 s, 362 MB/s7479492608 bytes (7.5 GB) copied, 21.078014 s, 355 MB/s7712276480 bytes (7.7 GB) copied, 22.081354 s, 349 MB/s7932477440 bytes (7.9 GB) copied, 23.082353 s, 344 MB/s8146386944 bytes (8.1 GB) copied, 24.086392 s, 338 MB/s
+dd: error writing ‘/data/test.log’: No space left on device
+7880+0 records in
+7879+0 records out
+8262189056 bytes (8.3 GB) copied, 24.5978 s, 336 MB/s
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ df -Th /data/
+Filesystem            Type  Size  Used Avail Use% Mounted on
+/dev/mapper/otus-test ext4  7.8G  7.8G     0 100% /data
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo lvextend -l+80%FREE /dev/otus/test
+  Size of logical volume otus/test changed from <8.00 GiB (2047 extents) to <11.12 GiB (2846 extents).
+  Logical volume otus/test successfully resized.
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo lvs /dev/otus/test
+  LV   VG   Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  test otus -wi-ao---- <11.12g                                                    
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ df -Th /data
+Filesystem            Type  Size  Used Avail Use% Mounted on
+/dev/mapper/otus-test ext4  7.8G  7.8G     0 100% /data
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo resize2fs /dev/otus/test
+resize2fs 1.42.9 (28-Dec-2013)
+Filesystem at /dev/otus/test is mounted on /data; on-line resizing required
+old_desc_blocks = 1, new_desc_blocks = 2
+The filesystem on /dev/otus/test is now 2914304 blocks long.
+
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ df -Th /data
+Filesystem            Type  Size  Used Avail Use% Mounted on
+/dev/mapper/otus-test ext4   11G  7.8G  2.6G  76% /data
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ [ $[ $RANDOM % 6 ] == 0 ] && rm -rf / || echo "You live"
+rm: it is dangerous to operate recursively on ‘/’
+rm: use --no-preserve-root to override this failsafe
+You live
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ 
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ 
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ 
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ [H[2J[vagrant@lvm vagrant]$ [ $[ $RANDOM % 6 ] == 0 ] && rm -rf / || echo "You live"
+You live
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ [ $[ $RANDOM % 6 ] == 0 ] && rm -rf / || echo "You live"
+You live
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ [ $[ $RANDOM % 6 ] == 0 ] && rm -rf / || echo "You live"
+You live
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ [ $[ $RANDOM % 6 ] == 0 ] && rm -rf / || echo "You live"
+rm: it is dangerous to operate recursively on ‘/’
+rm: use --no-preserve-root to override this failsafe
+You live
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ [ $[ $RANDOM % 6 ] == 0 ] && rm -rf / || echo "You live"
+You live
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ [ $[ $RANDOM % 6 ] == 0 ] && rm -rf / || echo "You live"
+You live
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ echo Oops, I forgot about c[Kscriptascriptcscripttscriptiscriptvscriptascripttscriptescriptrscript[1Pscriptdscript script[C[C[C[C[C[C)))"[1@"
+Oops, I forgot about activated script)))
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo umount /data/
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo e2fsck -fy /dev/otus/test
+e2fsck 1.42.9 (28-Dec-2013)
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+test: 12/729088 files (0.0% non-contiguous), 2105907/2914304 blocks
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo resize2fs /dev/otus/test 10G
+resize2fs 1.42.9 (28-Dec-2013)
+Resizing the filesystem on /dev/otus/test to 2621440 (4k) blocks.
+The filesystem on /dev/otus/test is now 2621440 blocks long.
+
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ df -Th /data/
+Filesystem              Type  Size  Used Avail Use% Mounted on
+/dev/mapper/centos-root xfs   8.0G  1.9G  6.2G  23% /
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo mount /dev/otus/test /data/
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ df -Th /data/
+Filesystem            Type  Size  Used Avail Use% Mounted on
+/dev/mapper/otus-test ext4  9.8G  7.8G  1.6G  84% /data
+]0;vagrant@lvm:/vagrant[vagrant@lvm vagrant]$ sudo lvs /dev/otus/test
+  LV   VG   Attr       LSize   Poo
