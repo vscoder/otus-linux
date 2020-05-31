@@ -276,7 +276,7 @@ Create large text file on `/btrfs/compressed`. About test data: http://mattmahon
 {
     cd /btrfs
     sudo wget http://mattmahoney.net/dc/enwik8.zip
-    sudo unzip enwik0.zip
+    sudo unzip enwik8.zip
     ll enwik8*
 }
 ```
