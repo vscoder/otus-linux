@@ -7,3 +7,7 @@
 ## HW Easy
 
 [EASY.md](./EASY.md)
+
+## ZFS or BTRFS
+
+[HARDCORE.md](./HARDCORE.md)

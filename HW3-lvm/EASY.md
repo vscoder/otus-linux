@@ -229,7 +229,7 @@ and set default boot entry
 grub2-set-default 0
 ```
 
-Reboot
+**Reboot!!!** Don't forget to reboot the VM!
 
 Ensure VM rebooted with new root
 ```shell
@@ -483,7 +483,7 @@ echo "`sudo blkid | grep var: | awk '{print $2}'` /var ext4 defaults 0 0" | sudo
 UUID="59f493ce-12bb-471e-b56e-e6b2b849060f" /var ext4 defaults 0 0
 ```
 
-Reboot!!!
+**Reboot!!!** Don't forget to reboot the VM!
 
 And check result
 ```shell
