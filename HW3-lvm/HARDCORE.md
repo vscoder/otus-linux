@@ -251,7 +251,7 @@ gzip -9n < compsize.8 > /usr/share/man/man8/compsize.8.gz
 
 ### Play with compression
 
-Make subvolume compressed with `lzo` algorhytm
+Make subvolume compressed with `lzo` algorithm
 ```shell
 sudo btrfs property set /btrfs/compressed compression lzo
 sudo btrfs property get /btrfs/compressed
@@ -310,7 +310,7 @@ lzo         68%       65M          95M          95M
 
 ---
 
-## Compare compression alhorytms
+## Compare compression algorithms
 
 Create one more subvolume named `subvol`
 ```shell
@@ -322,7 +322,7 @@ Create subvolume '/btrfs/subvol1'
 
 ---
 
-Create 4 directories with corresponding compression alhorytms
+Create 4 directories with corresponding compression algorithms
 - uncompressed
 - zlib
 - lzo
