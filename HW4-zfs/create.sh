@@ -2,9 +2,6 @@
 
 set -ex
 
-echo Ensure module is mounted
-sudo /sbin/modprobe zfs
-
 echo Create zfs pool named zpool with cache
 sudo zpool create zpool sdb cache sdc
 sudo zpool status

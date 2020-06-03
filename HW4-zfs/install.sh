@@ -10,3 +10,6 @@ sudo gpg --quiet --with-fingerprint /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
 
 echo "Install (it can take a long time on weak machine)"
 sudo yum install -y zfs
+
+echo "Ensure zfs kernel module is mounted"
+sudo /sbin/modprobe zfs
