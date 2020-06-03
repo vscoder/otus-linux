@@ -6,4 +6,4 @@
 
 ## Determine pool settings
 
-[POOLSETTINGS.md][./POOLSETTINGS.md]
+[POOLSETTINGS.md](./POOLSETTINGS.md)
