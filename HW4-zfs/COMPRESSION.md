@@ -22,7 +22,7 @@ sudo yum install -y zfs
 
 All these steps are described in [install.sh](./install.sh) and which can be executed via
 ```shell
-cat install.sh | vagrant ssh -c "cat - | bash "
+cat install.sh | vagrant ssh -c "bash"
 ```
 
 ## Create ZFS and volumes
@@ -102,7 +102,7 @@ sudo zfs list | grep zpool/ | awk '{ print $1 }' | xargs -I{} sudo zfs destroy {
 
 All these steps are described in [create.sh](./create.sh) and which can be executed via
 ```shell
-cat create.sh | vagrant ssh -c "cat - | bash "
+cat create.sh | vagrant ssh -c "bash"
 ```
 
 ## Test compression ratio
@@ -169,5 +169,5 @@ The best are `gzip` and `gzip-{6..9}`. But they may be not the fastest ;)
 
 All these steps are described in [test-compression.sh](./test-compression.sh) and which can be executed via
 ```shell
-cat test-compression.sh | vagrant ssh -c "cat - | bash "
+cat test-compression.sh | vagrant ssh -c "bash"
 ```
