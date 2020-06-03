@@ -9,4 +9,3 @@ tar xvzf zfsdisk.img.tar.gz
 echo "Import zpool from files"
 sudo zpool import -d ~/zpoolexport otus
 sudo zpool list
-
