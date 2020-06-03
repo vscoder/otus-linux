@@ -103,7 +103,7 @@ All above steps are described in [pool.sh](./pool.sh) and which can be executed 
 cat pool.sh | vagrant ssh -c "bash"
 ```
 
-## Analize
+## Analyze
 
 Pool size (`480M`)
 ```shell
