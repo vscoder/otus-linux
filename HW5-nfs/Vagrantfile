@@ -19,12 +19,12 @@ MACHINES = {
               # provision scripts
               :provision_scripts => [
                 { :path => "./scripts/0-whoami.sh" },
-                { :path => "./scripts/1-firewall.sh", :args => "server" }
+                { :path => "./scripts/1-server.sh", :args => "server" }
               ],
             },
   :"nfs-client" => {
               # VM box
-              :box_name => "vscoder/centos-7-5",
+              :box_name => "centos/7",
               # VM CPU count
               :cpus => 4,
               # VM RAM size (Mb)
@@ -40,7 +40,7 @@ MACHINES = {
               # provision scripts
               :provision_scripts => [
                 { :path => "./scripts/0-whoami.sh" },
-                { :path => "./scripts/1-firewall.sh", :args => "client" }
+                { :path => "./scripts/1-client.sh", :args => "client" }
               ],
             }
 }
