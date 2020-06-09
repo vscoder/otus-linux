@@ -7,6 +7,7 @@
     - [rw init sysroot](#rw-init-sysroot)
   - [Rename root VG](#rename-root-vg)
     - [Run via script](#run-via-script)
+  - [Custom initrd module](#custom-initrd-module)
 
 ## LogIn without password
 
@@ -170,3 +171,121 @@ Connection to 127.0.0.1 closed.
 Done!
 
 > Note: VM hangs after `reboot` or `shutdown -r now` at end of script. It's solved by run `vagrant reload` after script completed to work.
+
+
+## Custom initrd module
+
+First recreate VM
+
+Do on host
+```shell
+vagrant destroy
+vagrant up
+```
+
+Module's scripts must be stored at `/usr/lib/dracut/modules.d/`. So let's place our script there.
+
+Create directory `01test` and download `module-setup.sh`
+```shell
+sudo mkdir -p /usr/lib/dracut/modules.d/01test
+curl --silent https://gist.githubusercontent.com/lalbrekht/e51b2580b47bb5a150bd1a002f16ae85/raw/80060b7b300e193c187bbcda4d8fdf0e1c066af9/gistfile1.txt | sudo tee /usr/lib/dracut/modules.d/01test/module-setup.sh
+sudo chmod +x /usr/lib/dracut/modules.d/01test/module-setup.sh
+```
+<details><summary>output</summary>
+<p>
+
+```shell
+#!/bin/bash
+
+check() {
+    return 0
+}
+
+depends() {
+    return 0
+}
+
+install() {
+    inst_hook cleanup 00 "${moddir}/test.sh"
+}
+```
+</p>
+</details>
+
+
+Download module script `test.sh`
+```shell
+curl --silent https://gist.githubusercontent.com/lalbrekht/ac45d7a6c6856baea348e64fac43faf0/raw/69598efd5c603df310097b52019dc979e2cb342d/gistfile1.txt | sudo tee /usr/lib/dracut/modules.d/01test/module-setup.sh
+sudo chmod +x /usr/lib/dracut/modules.d/01test/module-setup.sh
+```
+<details><summary>output</summary>
+<p>
+
+```shell
+#!/bin/bash
+
+exec 0<>/dev/console 1<>/dev/console 2<>/dev/console
+cat <<'msgend'
+
+Hello! You are in dracut module!
+
+ ___________________
+< I'm dracut module >
+ -------------------
+   \
+    \
+        .--.
+       |o_o |
+       |:_/ |
+      //   \ \
+     (|     | )
+    /'\_   _/`\
+    \___)=(___/
+msgend
+sleep 10
+echo " continuing...."
+```
+</p>
+</details>
+
+Regenerate `initrd`
+```shell
+# sudo mkinitrd -f -v /boot/initramfs-$(uname -r).img $(uname -r)
+# or
+sudo dracut -f -v
+```
+```log
+Executing: /sbin/dracut -f -v
+```
+
+Ensure module is installed
+```shell
+sudo lsinitrd -m /boot/initramfs-$(uname -r).img | grep test
+```
+```log
+test
+```
+
+Remove grub boot options `rghb` and `quiet` from kernel cmdline
+```shell
+sudo sed -i.old 's/ rhgb quiet//g' /etc/default/grub
+sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+```
+<details><summary>output</summary>
+<p>
+
+```log
+Generating grub configuration file ...
+Found linux image: /boot/vmlinuz-5.6.11-1.el7.elrepo.x86_64
+Found initrd image: /boot/initramfs-5.6.11-1.el7.elrepo.x86_64.img
+Found linux image: /boot/vmlinuz-3.10.0-1127.el7.x86_64
+Found initrd image: /boot/initramfs-3.10.0-1127.el7.x86_64.img
+Found linux image: /boot/vmlinuz-0-rescue-db529269582b41d89d3f9aed34b3ff97
+Found initrd image: /boot/initramfs-0-rescue-db529269582b41d89d3f9aed34b3ff97.img
+done
+```
+</p>
+</details>
+
+Reboot and see:
+![](./assets/dracut-tux.png)
