@@ -33,6 +33,15 @@ and stop boot brocess on grub boot menu.
 
 ![](./assets/grub-init-rw.png)
 
+> Here we run `/bin/sh` instead of default init process.
+> So result of command `echo $$` is `1` - it's a PID of `/bin/sh` process.
+> 
+> ![](./assets/grub-init-pid1.png)
+> 
+> It's a bit tricky method.s
+> 
+> The main difference with `rd.break` mothod: we're getting access into a root FS right away.
+
 ### rd.break
 
 1. Select grub menu item by arrows up/down and press `e` to edit it.
@@ -53,6 +62,11 @@ and stop boot brocess on grub boot menu.
    ![](./assets/grub-rd-break-password.png)
 6. Then exit chroot, reboot and try to login as root with new password
    ![](./assets/grub-rd-break-login-as-root.png)
+
+> This method is described in official [documentation](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system_administrators_guide/sec-Terminal_Menu_Editing_During_Boot#proc-Resetting_the_Root_Password_Using_rd.break) as recommended to reset a root password without the Installation Disk.
+> It just drops us to a shell at the end of initrd execution and before to take a control to the linux kernel.
+> 
+> The main difference with `init=/bin/sh` method: we're getting in to a initrd environment and root FS is mounted at `/sysroot` directory.
 
 ### rw init sysroot
 
