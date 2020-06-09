@@ -64,7 +64,7 @@ and stop boot brocess on grub boot menu.
    ![](./assets/grub-rd-break-login-as-root.png)
 
 > This method is described in official [documentation](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system_administrators_guide/sec-Terminal_Menu_Editing_During_Boot#proc-Resetting_the_Root_Password_Using_rd.break) as recommended to reset a root password without the Installation Disk.
-> It just drops us to a shell at the end of initrd execution and before to take a control to the linux kernel.
+> It just drops us to a shell at the end of initrd execution and before to take a control to the linux kernel. See [dracut cmdline documentation](https://man7.org/linux/man-pages/man7/dracut.cmdline.7.html) for details.
 > 
 > The main difference with `init=/bin/sh` method: we're getting in to a initrd environment and root FS is mounted at `/sysroot` directory.
 
