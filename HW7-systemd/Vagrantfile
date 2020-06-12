@@ -14,13 +14,16 @@ MACHINES = {
               :provision_files => [
                 { :source => "./logmon/logmon.sh", :destination => "logmon.sh" },
                 { :source => "./logmon/logmon", :destination => "logmon" },
-                { :source => "./logmon/logmon.service", :destination => "logmon.service" }
+                { :source => "./logmon/logmon.service", :destination => "logmon.service" },
+                { :source => "./spawn-fcgi/spawn-fcgi", :destination => "spawn-fcgi" },
+                { :source => "./spawn-fcgi/spawn-fcgi.service", :destination => "spawn-fcgi.service" }
               ],
               # provision scripts
               :provision_scripts => [
                 { :path => "./scripts/0-whoami.sh" },
                 { :path => "./scripts/1-prepare.sh" },
-                { :path => "./scripts/2-install-logmon.sh" }
+                { :path => "./scripts/2-install-logmon.sh" },
+                { :path => "./scripts/3-spawn-fcgi-service.sh" }
               ],
             }
 }
