@@ -3,19 +3,25 @@
 This service periodically (by default every 30 seconds) look journald logs for line matching pattern (default is `testmsg`). If such line is founded, then write it to log file (default is `/tmp/logmon.log`)
 
 - [Log monitoring service](#log-monitoring-service)
+  - [Provisioning](#provisioning)
   - [Requirements](#requirements)
   - [Installation](#installation)
   - [Check](#check)
-  - [Provisioning](#provisioning)
   - [Logmon service description](#logmon-service-description)
     - [Configuration](#configuration)
     - [Systemd unit-file](#systemd-unit-file)
+
+## Provisioning
+
+After `vagrant up` service is automatically installed and configured with Vagrant provisioner, so it isn't need to execute Intallation step manually
+
 
 ## Requirements
 
 `jq` must be installed. It's available on CentOS from from EPEL repository.
 
-Tested only on CentOS 7
+> NOTE: Tested on CentOS 7 only
+
 
 ## Installation
 
@@ -47,6 +53,7 @@ sudo systemctl enable logmon.service
 sudo systemctl start logmon.service
 ```
 
+
 ## Check
 
 Pass configured pattern to syslog
@@ -59,9 +66,6 @@ Check created log file
 cat /tmp/logmon.log
 ```
 
-## Provisioning
-
-After `vagrant up` service is automatically installed and configured with Vagrant provisioner, so it isn't need to execute these commands manually
 
 ## Logmon service description
 
@@ -69,7 +73,7 @@ After `vagrant up` service is automatically installed and configured with Vagran
 
 ### Configuration
 
-Script can be configured with Environment Variables, stored it `/etc/sysconfig/logmon`
+Script can be configured with Environment Variables, stored in `/etc/sysconfig/logmon`
 
 ```shell
 # Filename to log pattern matches to
