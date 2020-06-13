@@ -86,8 +86,6 @@ PATTERN=${PATTERN:-testmsg}
 
 ### Systemd unit-file
 
-Good article https://medium.com/@benmorel/creating-a-linux-service-with-systemd-611b5c8b91d6
-
 [logmon.service](./logmon/logmon.service)
 
 Systemd runs `logmon.sh` service as user `logmon`.

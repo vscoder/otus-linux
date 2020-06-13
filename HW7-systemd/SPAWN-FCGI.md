@@ -154,7 +154,7 @@ After=syslog.target
 # Type of process running
 Type=forking
 # For type forking it's need to set PID file location
-# %p is service name in this case
+# %p is the service name in this case
 PIDFile=/var/run/%p.pid
 # Set process name for logs
 SyslogIdentifier=%p

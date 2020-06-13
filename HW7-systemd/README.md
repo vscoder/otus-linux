@@ -1,5 +1,11 @@
 # Home work 7: SystemD
 
+## Useful articles
+
+- [Service types](https://wiki.archlinux.org/index.php/Systemd_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)#%D0%A2%D0%B8%D0%BF%D1%8B_%D1%81%D0%BB%D1%83%D0%B6%D0%B1)
+- [Simple unit file](https://medium.com/@benmorel/creating-a-linux-service-with-systemd-611b5c8b91d6)
+- [Multiple instances single unit](https://www.stevenrombauts.be/2019/01/run-multiple-instances-of-the-same-systemd-unit/)
+
 ## Tasks
 
 Выполнить следующие задания и подготовить развёртывание результата выполнения с использованием Vagrant и Vagrant shell provisioner (или Ansible, на Ваше усмотрение):
@@ -24,4 +30,8 @@ Do the tasks and deploy results with Vagrant and Vagrand Shell Provosioner (or w
 
 ## Task 3: httpd multiple instances
 
+[Multiple instances of httpd](HTTPD.md)
+
 ## Task 4: ★ Atlassian Jira demo unit-file
+
+TODO: Sometimes later))
