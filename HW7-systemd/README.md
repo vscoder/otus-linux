@@ -35,3 +35,11 @@ Do the tasks and deploy results with Vagrant and Vagrand Shell Provosioner (or w
 ## Task 4: ★ Atlassian Jira demo unit-file
 
 TODO: Sometimes later))
+
+
+## How to run
+
+All tasks have Vagrant provisioning scripts. So it's enough to run:
+```shell
+vagrant up
+```
