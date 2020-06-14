@@ -22,7 +22,7 @@ There must be a period in email. There must be possible to run only one instance
 
 ## Implementation
 
-[script.sh](./files/script.sh)
+[parser100.sh](./files/parser100.sh)
 
 The script parses nginx's access.log for 100 lines at a time and send statistics on email.
 
