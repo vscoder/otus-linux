@@ -3,7 +3,7 @@
 # analyze nginx's access.log and send results to email
 ###
 
-set -eo pipefail
+set -exo pipefail
 
 # Set default values for variables
 RECIPIENT='root'
@@ -38,7 +38,8 @@ terminate() {
 
 # Send statistics to email
 send_email() {
-  cat $MSGBODY_FILE | mail -s 'access.log stats' $RECIPIENT
+  cat $1 | wc -l
+  cat $1 | mailx -v -s 'access.log stats' $RECIPIENT
 }
 
 # Parse arguments

@@ -11,11 +11,18 @@ MACHINES = {
               # forwarded ports
               :forwarded_port => [],
               # provision files
-              :provision_files => [],
+              :provision_files => [
+                { :source => "./files/parser-last.sh", :destination => "parser-last.sh" },
+                { :source => "./files/nla", :destination => "nla" },
+                { :source => "./files/nla.service", :destination => "nla.service" },
+                { :source => "./files/nla.timer", :destination => "nla.timer" },
+                { :source => "./files/access.log", :destination => "access.log" }
+              ],
               # provision scripts
               :provision_scripts => [
                 { :path => "./scripts/0-whoami.sh" },
-                { :path => "./scripts/1-prepare.sh" }
+                { :path => "./scripts/1-prepare.sh" },
+                { :path => "./scripts/2-install.sh" }
               ],
             }
 }

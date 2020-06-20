@@ -94,3 +94,13 @@ mail
 ```
 
 It's possible to set from which line start parsing. For this you need to set `FROM_LINE=` variable value in state file (default `/var/spool/nginx_log_analyzer/state.env`)
+
+### How to deploy
+
+Script are deploying automatically with vagrant provisioning mechanism. 
+
+[Provision script](./scripts/2-install.sh):
+- creates systemd oneshot [service](./files/nla.service) which runs [logs analyzer](./files/parser-last.sh)
+- creates systemd [timer](./giles/../files/nla.timer) to run service once a hour
+- creates [config](./files/nla) to pass arguments to script
+- copy log [example](./files/access.log)
