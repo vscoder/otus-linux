@@ -1,4 +1,4 @@
-# Home Work 8: bash
+# HomeWork 8: bash
 
 ## Task
 

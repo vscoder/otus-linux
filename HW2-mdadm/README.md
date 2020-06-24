@@ -1,6 +1,6 @@
-# mdadm
+# HomeWork 2: mdadm
 
-- [mdadm](#mdadm)
+- [HomeWork 2: mdadm](#homework-2-mdadm)
   - [Prepare Vagrantfile](#prepare-vagrantfile)
   - [Raid10](#raid10)
     - [Zero superblocks](#zero-superblocks)

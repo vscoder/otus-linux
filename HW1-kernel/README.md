@@ -1,4 +1,4 @@
-# HW-1 Linux kernel update
+# HomeWork 1: Linux kernel update
 
 ## Instruction
 

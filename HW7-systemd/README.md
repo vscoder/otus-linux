@@ -1,4 +1,4 @@
-# Home work 7: SystemD
+# HomeWork 7: SystemD
 
 ## Useful articles
 

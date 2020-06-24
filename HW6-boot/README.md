@@ -1,4 +1,4 @@
-# Home work 6: boot process
+# HomeWork 6: boot process
 
 ## Main tasks
 
