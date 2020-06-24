@@ -1,0 +1,248 @@
+Загрузка модуля "fastestmirror"
+Config time: 0.005
+rpmdb time: 0.000
+Enabling base-source repository
+Enabling extras-source repository
+Enabling updates-source repository
+Настройка набора пакетов
+Loading mirror speeds from cached hostfile
+ * base: mirror.corbina.net
+ * elrepo: mirror.yandex.ru
+ * extras: mirror.corbina.net
+ * updates: mirror.corbina.net
+pkgsack time: 0.011
+Checking for new repos for mirrors
+repo time: 0.000
+Getting requirements for rpmbuild/SPECS/nginx.spec
+ REQ:  systemd
+ --> Already installed : systemd-219-73.el7_8.5.x86_64
+ REQ:  openssl-devel >= 1.0.2
+ --> 1:openssl-devel-1.0.2k-19.el7.x86_64
+Obs Init time: 0.067
+ REQ:  zlib-devel
+ --> Already installed : zlib-devel-1.2.7-18.el7.x86_64
+ REQ:  pcre-devel
+ --> pcre-devel-8.32-17.el7.x86_64
+--> Проверка сценария
+---> Пакет openssl-devel.x86_64 1:1.0.2k-19.el7 помечен для установки
+Проверка зависимостей для openssl-devel.x86_64 1:1.0.2k-19.el7 - u
+поиск ('openssl-libs(x86-64)', 'EQ', ('1', '1.0.2k', '19.el7')) требуется для openssl-devel.x86_64 1:1.0.2k-19.el7 - u
+поиск ('zlib-devel(x86-64)', None, (None, None, None)) требуется для openssl-devel.x86_64 1:1.0.2k-19.el7 - u
+поиск ('pkgconfig', None, (None, None, None)) требуется для openssl-devel.x86_64 1:1.0.2k-19.el7 - u
+поиск ('krb5-devel(x86-64)', None, (None, None, None)) требуется для openssl-devel.x86_64 1:1.0.2k-19.el7 - u
+поиск ('/usr/bin/pkg-config', None, (None, None, None)) требуется для openssl-devel.x86_64 1:1.0.2k-19.el7 - u
+поиск ('libssl.so.10()(64bit)', None, (None, None, None)) требуется для openssl-devel.x86_64 1:1.0.2k-19.el7 - u
+поиск ('libcrypto.so.10()(64bit)', None, (None, None, None)) требуется для openssl-devel.x86_64 1:1.0.2k-19.el7 - u
+1:openssl-devel-1.0.2k-19.el7.x86_64 требуется: krb5-devel(x86-64)
+--> Обработка зависимостей: krb5-devel(x86-64) пакета: 1:openssl-devel-1.0.2k-19.el7.x86_64
+Поиск набора пакетов для зависимости: krb5-devel(x86-64)
+Построение объекта обновлений
+up:simple updates time: 0.004
+up:obs time: 0.001
+up:condense time: 0.000
+updates time: 0.081
+TSINFO: Отмечен krb5-devel-1.15.1-46.el7.x86_64 чтобы установить 1:openssl-devel-1.0.2k-19.el7.x86_64
+---> Пакет pcre-devel.x86_64 0:8.32-17.el7 помечен для установки
+Проверка зависимостей для pcre-devel.x86_64 0:8.32-17.el7 - u
+поиск ('pcre(x86-64)', 'EQ', ('0', '8.32', '17.el7')) требуется для pcre-devel.x86_64 0:8.32-17.el7 - u
+поиск ('/usr/bin/pkg-config', None, (None, None, None)) требуется для pcre-devel.x86_64 0:8.32-17.el7 - u
+поиск ('/bin/sh', None, (None, None, None)) требуется для pcre-devel.x86_64 0:8.32-17.el7 - u
+поиск ('libpcreposix.so.0()(64bit)', None, (None, None, None)) требуется для pcre-devel.x86_64 0:8.32-17.el7 - u
+поиск ('libpcrecpp.so.0()(64bit)', None, (None, None, None)) требуется для pcre-devel.x86_64 0:8.32-17.el7 - u
+поиск ('libpcre32.so.0()(64bit)', None, (None, None, None)) требуется для pcre-devel.x86_64 0:8.32-17.el7 - u
+поиск ('libpcre16.so.0()(64bit)', None, (None, None, None)) требуется для pcre-devel.x86_64 0:8.32-17.el7 - u
+поиск ('libpcre.so.1()(64bit)', None, (None, None, None)) требуется для pcre-devel.x86_64 0:8.32-17.el7 - u
+--> Проверка сценария
+---> Пакет krb5-devel.x86_64 0:1.15.1-46.el7 помечен для установки
+Проверка зависимостей для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+поиск ('libkadm5(x86-64)', 'EQ', ('0', '1.15.1', '46.el7')) требуется для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+поиск ('krb5-libs(x86-64)', 'EQ', ('0', '1.15.1', '46.el7')) требуется для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+поиск ('rtld(GNU_HASH)', None, (None, None, None)) требуется для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+поиск ('libverto-devel', None, (None, None, None)) требуется для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+поиск ('libselinux-devel', None, (None, None, None)) требуется для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+поиск ('libkrb5.so.3(krb5_3_MIT)(64bit)', None, (None, None, None)) требуется для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+поиск ('libgssapi_krb5.so.2(gssapi_krb5_2_MIT)(64bit)', None, (None, None, None)) требуется для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+поиск ('libcom_err-devel', None, (None, None, None)) требуется для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+поиск ('libc.so.6(GLIBC_2.15)(64bit)', None, (None, None, None)) требуется для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+поиск ('keyutils-libs-devel', None, (None, None, None)) требуется для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+поиск ('/usr/bin/pkg-config', None, (None, None, None)) требуется для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+поиск ('/bin/sh', None, (None, None, None)) требуется для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+поиск ('libselinux.so.1()(64bit)', None, (None, None, None)) требуется для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+поиск ('libresolv.so.2()(64bit)', None, (None, None, None)) требуется для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+поиск ('libkrb5support.so.0()(64bit)', None, (None, None, None)) требуется для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+поиск ('libkrb5.so.3()(64bit)', None, (None, None, None)) требуется для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+поиск ('libkrad.so.0()(64bit)', None, (None, None, None)) требуется для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+поиск ('libkeyutils.so.1()(64bit)', None, (None, None, None)) требуется для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+поиск ('libkdb5.so.8()(64bit)', None, (None, None, None)) требуется для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+поиск ('libk5crypto.so.3()(64bit)', None, (None, None, None)) требуется для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+поиск ('libgssrpc.so.4()(64bit)', None, (None, None, None)) требуется для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+поиск ('libgssapi_krb5.so.2()(64bit)', None, (None, None, None)) требуется для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+поиск ('libdl.so.2()(64bit)', None, (None, None, None)) требуется для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+поиск ('libcom_err.so.2()(64bit)', None, (None, None, None)) требуется для krb5-devel.x86_64 0:1.15.1-46.el7 - u
+krb5-devel-1.15.1-46.el7.x86_64 требуется: libkadm5(x86-64) = 1.15.1-46.el7
+--> Обработка зависимостей: libkadm5(x86-64) = 1.15.1-46.el7 пакета: krb5-devel-1.15.1-46.el7.x86_64
+Поиск набора пакетов для зависимости: libkadm5(x86-64)
+TSINFO: Отмечен libkadm5-1.15.1-46.el7.x86_64 чтобы установить krb5-devel-1.15.1-46.el7.x86_64
+krb5-devel-1.15.1-46.el7.x86_64 требуется: libverto-devel
+--> Обработка зависимостей: libverto-devel пакета: krb5-devel-1.15.1-46.el7.x86_64
+Поиск набора пакетов для зависимости: libverto-devel
+TSINFO: Отмечен libverto-devel-0.2.5-4.el7.x86_64 чтобы установить krb5-devel-1.15.1-46.el7.x86_64
+krb5-devel-1.15.1-46.el7.x86_64 требуется: libselinux-devel
+--> Обработка зависимостей: libselinux-devel пакета: krb5-devel-1.15.1-46.el7.x86_64
+Поиск набора пакетов для зависимости: libselinux-devel
+TSINFO: Отмечен libselinux-devel-2.5-15.el7.x86_64 чтобы установить krb5-devel-1.15.1-46.el7.x86_64
+krb5-devel-1.15.1-46.el7.x86_64 требуется: libcom_err-devel
+--> Обработка зависимостей: libcom_err-devel пакета: krb5-devel-1.15.1-46.el7.x86_64
+Поиск набора пакетов для зависимости: libcom_err-devel
+TSINFO: Отмечен libcom_err-devel-1.42.9-17.el7.x86_64 чтобы установить krb5-devel-1.15.1-46.el7.x86_64
+krb5-devel-1.15.1-46.el7.x86_64 требуется: keyutils-libs-devel
+--> Обработка зависимостей: keyutils-libs-devel пакета: krb5-devel-1.15.1-46.el7.x86_64
+Поиск набора пакетов для зависимости: keyutils-libs-devel
+TSINFO: Отмечен keyutils-libs-devel-1.5.8-3.el7.x86_64 чтобы установить krb5-devel-1.15.1-46.el7.x86_64
+--> Проверка сценария
+---> Пакет keyutils-libs-devel.x86_64 0:1.5.8-3.el7 помечен для установки
+Проверка зависимостей для keyutils-libs-devel.x86_64 0:1.5.8-3.el7 - u
+поиск ('keyutils-libs', 'EQ', ('0', '1.5.8', '3.el7')) требуется для keyutils-libs-devel.x86_64 0:1.5.8-3.el7 - u
+поиск ('libkeyutils.so.1()(64bit)', None, (None, None, None)) требуется для keyutils-libs-devel.x86_64 0:1.5.8-3.el7 - u
+---> Пакет libcom_err-devel.x86_64 0:1.42.9-17.el7 помечен для установки
+Проверка зависимостей для libcom_err-devel.x86_64 0:1.42.9-17.el7 - u
+поиск ('libcom_err(x86-64)', 'EQ', ('0', '1.42.9', '17.el7')) требуется для libcom_err-devel.x86_64 0:1.42.9-17.el7 - u
+поиск ('pkgconfig', None, (None, None, None)) требуется для libcom_err-devel.x86_64 0:1.42.9-17.el7 - u
+поиск ('/usr/bin/pkg-config', None, (None, None, None)) требуется для libcom_err-devel.x86_64 0:1.42.9-17.el7 - u
+поиск ('/bin/sh', None, (None, None, None)) требуется для libcom_err-devel.x86_64 0:1.42.9-17.el7 - u
+поиск ('libcom_err.so.2()(64bit)', None, (None, None, None)) требуется для libcom_err-devel.x86_64 0:1.42.9-17.el7 - u
+---> Пакет libkadm5.x86_64 0:1.15.1-46.el7 помечен для установки
+Проверка зависимостей для libkadm5.x86_64 0:1.15.1-46.el7 - u
+поиск ('krb5-libs(x86-64)', 'EQ', ('0', '1.15.1', '46.el7')) требуется для libkadm5.x86_64 0:1.15.1-46.el7 - u
+поиск ('rtld(GNU_HASH)', None, (None, None, None)) требуется для libkadm5.x86_64 0:1.15.1-46.el7 - u
+поиск ('libkrb5support.so.0(krb5support_0_MIT)(64bit)', None, (None, None, None)) требуется для libkadm5.x86_64 0:1.15.1-46.el7 - u
+поиск ('libkrb5.so.3(krb5_3_MIT)(64bit)', None, (None, None, None)) требуется для libkadm5.x86_64 0:1.15.1-46.el7 - u
+поиск ('libkdb5.so.8(kdb5_8_MIT)(64bit)', None, (None, None, None)) требуется для libkadm5.x86_64 0:1.15.1-46.el7 - u
+поиск ('libk5crypto.so.3(k5crypto_3_MIT)(64bit)', None, (None, None, None)) требуется для libkadm5.x86_64 0:1.15.1-46.el7 - u
+поиск ('libgssrpc.so.4(gssrpc_4_MIT)(64bit)', None, (None, None, None)) требуется для libkadm5.x86_64 0:1.15.1-46.el7 - u
+поиск ('libgssapi_krb5.so.2(gssapi_krb5_2_MIT)(64bit)', None, (None, None, None)) требуется для libkadm5.x86_64 0:1.15.1-46.el7 - u
+поиск ('libc.so.6(GLIBC_2.14)(64bit)', None, (None, None, None)) требуется для libkadm5.x86_64 0:1.15.1-46.el7 - u
+поиск ('/sbin/ldconfig', None, (None, None, None)) требуется для libkadm5.x86_64 0:1.15.1-46.el7 - u
+поиск ('/sbin/ldconfig', None, (None, None, None)) требуется для libkadm5.x86_64 0:1.15.1-46.el7 - u
+поиск ('libresolv.so.2()(64bit)', None, (None, None, None)) требуется для libkadm5.x86_64 0:1.15.1-46.el7 - u
+поиск ('libkrb5support.so.0()(64bit)', None, (None, None, None)) требуется для libkadm5.x86_64 0:1.15.1-46.el7 - u
+поиск ('libkrb5.so.3()(64bit)', None, (None, None, None)) требуется для libkadm5.x86_64 0:1.15.1-46.el7 - u
+поиск ('libkeyutils.so.1()(64bit)', None, (None, None, None)) требуется для libkadm5.x86_64 0:1.15.1-46.el7 - u
+поиск ('libkdb5.so.8()(64bit)', None, (None, None, None)) требуется для libkadm5.x86_64 0:1.15.1-46.el7 - u
+поиск ('libk5crypto.so.3()(64bit)', None, (None, None, None)) требуется для libkadm5.x86_64 0:1.15.1-46.el7 - u
+поиск ('libgssrpc.so.4()(64bit)', None, (None, None, None)) требуется для libkadm5.x86_64 0:1.15.1-46.el7 - u
+поиск ('libgssapi_krb5.so.2()(64bit)', None, (None, None, None)) требуется для libkadm5.x86_64 0:1.15.1-46.el7 - u
+поиск ('libcom_err.so.2()(64bit)', None, (None, None, None)) требуется для libkadm5.x86_64 0:1.15.1-46.el7 - u
+---> Пакет libselinux-devel.x86_64 0:2.5-15.el7 помечен для установки
+Проверка зависимостей для libselinux-devel.x86_64 0:2.5-15.el7 - u
+поиск ('libselinux(x86-64)', 'EQ', ('0', '2.5', '15.el7')) требуется для libselinux-devel.x86_64 0:2.5-15.el7 - u
+поиск ('libsepol-devel(x86-64)', 'GE', ('0', '2.5', '10')) требуется для libselinux-devel.x86_64 0:2.5-15.el7 - u
+поиск ('pkgconfig(libsepol)', None, (None, None, None)) требуется для libselinux-devel.x86_64 0:2.5-15.el7 - u
+поиск ('pkgconfig(libpcre)', None, (None, None, None)) требуется для libselinux-devel.x86_64 0:2.5-15.el7 - u
+поиск ('/usr/bin/pkg-config', None, (None, None, None)) требуется для libselinux-devel.x86_64 0:2.5-15.el7 - u
+поиск ('libselinux.so.1()(64bit)', None, (None, None, None)) требуется для libselinux-devel.x86_64 0:2.5-15.el7 - u
+libselinux-devel-2.5-15.el7.x86_64 требуется: libsepol-devel(x86-64) >= 2.5-10
+--> Обработка зависимостей: libsepol-devel(x86-64) >= 2.5-10 пакета: libselinux-devel-2.5-15.el7.x86_64
+Поиск набора пакетов для зависимости: libsepol-devel(x86-64)
+TSINFO: Отмечен libsepol-devel-2.5-10.el7.x86_64 чтобы установить libselinux-devel-2.5-15.el7.x86_64
+libselinux-devel-2.5-15.el7.x86_64 требуется: pkgconfig(libsepol)
+--> Обработка зависимостей: pkgconfig(libsepol) пакета: libselinux-devel-2.5-15.el7.x86_64
+Быстро подобран пакет libsepol-devel-2.5-10.el7.x86_64 в качестве требуемого для pkgconfig(libsepol)
+---> Пакет libverto-devel.x86_64 0:0.2.5-4.el7 помечен для установки
+Проверка зависимостей для libverto-devel.x86_64 0:0.2.5-4.el7 - u
+поиск ('libverto(x86-64)', 'EQ', ('0', '0.2.5', '4.el7')) требуется для libverto-devel.x86_64 0:0.2.5-4.el7 - u
+поиск ('pkgconfig', None, (None, None, None)) требуется для libverto-devel.x86_64 0:0.2.5-4.el7 - u
+поиск ('/usr/bin/pkg-config', None, (None, None, None)) требуется для libverto-devel.x86_64 0:0.2.5-4.el7 - u
+поиск ('libverto.so.1()(64bit)', None, (None, None, None)) требуется для libverto-devel.x86_64 0:0.2.5-4.el7 - u
+--> Проверка сценария
+---> Пакет libsepol-devel.x86_64 0:2.5-10.el7 помечен для установки
+Проверка зависимостей для libsepol-devel.x86_64 0:2.5-10.el7 - u
+поиск ('libsepol(x86-64)', 'EQ', ('0', '2.5', '10.el7')) требуется для libsepol-devel.x86_64 0:2.5-10.el7 - u
+поиск ('/usr/bin/pkg-config', None, (None, None, None)) требуется для libsepol-devel.x86_64 0:2.5-10.el7 - u
+поиск ('libsepol.so.1()(64bit)', None, (None, None, None)) требуется для libsepol-devel.x86_64 0:2.5-10.el7 - u
+--> Проверка зависимостей окончена
+Завершение процесса разрешения зависимостей
+Depsolve time: 0.521
+
+Зависимости определены
+
+================================================================================
+ Package                   Архитектура  Версия                 Репозиторий 
+                                                                          Размер
+================================================================================
+Установка:
+ openssl-devel             x86_64       1:1.0.2k-19.el7        base       1.5 M
+ pcre-devel                x86_64       8.32-17.el7            base       480 k
+Установка зависимостей:
+ keyutils-libs-devel       x86_64       1.5.8-3.el7            base        37 k
+ krb5-devel                x86_64       1.15.1-46.el7          base       272 k
+ libcom_err-devel          x86_64       1.42.9-17.el7          base        32 k
+ libkadm5                  x86_64       1.15.1-46.el7          base       179 k
+ libselinux-devel          x86_64       2.5-15.el7             base       187 k
+ libsepol-devel            x86_64       2.5-10.el7             base        77 k
+ libverto-devel            x86_64       0.2.5-4.el7            base        12 k
+
+Итого за операцию
+================================================================================
+Установить  2 пакета (+7 зависимых)
+
+Объем загрузки: 2.8 M
+Объем изменений: 5.9 M
+Downloading packages:
+--------------------------------------------------------------------------------
+Общий размер                                       2.9 MB/s | 2.8 MB  00:00     
+Член: krb5-devel.x86_64 0:1.15.1-46.el7 - u
+Добавление пакета krb5-devel-1.15.1-46.el7.x86_64 в режиме u
+Член: libselinux-devel.x86_64 0:2.5-15.el7 - u
+Добавление пакета libselinux-devel-2.5-15.el7.x86_64 в режиме u
+Член: keyutils-libs-devel.x86_64 0:1.5.8-3.el7 - u
+Добавление пакета keyutils-libs-devel-1.5.8-3.el7.x86_64 в режиме u
+Член: libverto-devel.x86_64 0:0.2.5-4.el7 - u
+Добавление пакета libverto-devel-0.2.5-4.el7.x86_64 в режиме u
+Член: pcre-devel.x86_64 0:8.32-17.el7 - u
+Добавление пакета pcre-devel-8.32-17.el7.x86_64 в режиме u
+Член: openssl-devel.x86_64 1:1.0.2k-19.el7 - u
+Добавление пакета 1:openssl-devel-1.0.2k-19.el7.x86_64 в режиме u
+Член: libkadm5.x86_64 0:1.15.1-46.el7 - u
+Добавление пакета libkadm5-1.15.1-46.el7.x86_64 в режиме u
+Член: libcom_err-devel.x86_64 0:1.42.9-17.el7 - u
+Добавление пакета libcom_err-devel-1.42.9-17.el7.x86_64 в режиме u
+Член: libsepol-devel.x86_64 0:2.5-10.el7 - u
+Добавление пакета libsepol-devel-2.5-10.el7.x86_64 в режиме u
+Running transaction check
+Transaction check time: 0.013
+Running transaction test
+Transaction test succeeded
+Transaction test time: 0.040
+Running transaction
+  Установка   : libsepol-devel-2.5-10.el7.x86_64                            1/9 
+  Установка   : libcom_err-devel-1.42.9-17.el7.x86_64                       2/9 
+  Установка   : libkadm5-1.15.1-46.el7.x86_64                               3/9 
+  Установка   : pcre-devel-8.32-17.el7.x86_64                               4/9 
+  Установка   : libselinux-devel-2.5-15.el7.x86_64                          5/9 
+  Установка   : libverto-devel-0.2.5-4.el7.x86_64                           6/9 
+  Установка   : keyutils-libs-devel-1.5.8-3.el7.x86_64                      7/9 
+  Установка   : krb5-devel-1.15.1-46.el7.x86_64                             8/9 
+  Установка   : 1:openssl-devel-1.0.2k-19.el7.x86_64                        9/9 
+  Проверка    : krb5-devel-1.15.1-46.el7.x86_64                             1/9 
+  Проверка    : libselinux-devel-2.5-15.el7.x86_64                          2/9 
+  Проверка    : keyutils-libs-devel-1.5.8-3.el7.x86_64                      3/9 
+  Проверка    : libverto-devel-0.2.5-4.el7.x86_64                           4/9 
+  Проверка    : pcre-devel-8.32-17.el7.x86_64                               5/9 
+  Проверка    : 1:openssl-devel-1.0.2k-19.el7.x86_64                        6/9 
+  Проверка    : libkadm5-1.15.1-46.el7.x86_64                               7/9 
+  Проверка    : libcom_err-devel-1.42.9-17.el7.x86_64                       8/9 
+  Проверка    : libsepol-devel-2.5-10.el7.x86_64                            9/9 
+VerifyTransaction time: 0.112
+Transaction time: 1.113
+
+Установлено:
+  openssl-devel.x86_64 1:1.0.2k-19.el7      pcre-devel.x86_64 0:8.32-17.el7     
+
+Установлены зависимости:
+  keyutils-libs-devel.x86_64 0:1.5.8-3.el7  krb5-devel.x86_64 0:1.15.1-46.el7  
+  libcom_err-devel.x86_64 0:1.42.9-17.el7   libkadm5.x86_64 0:1.15.1-46.el7    
+  libselinux-devel.x86_64 0:2.5-15.el7      libsepol-devel.x86_64 0:2.5-10.el7 
+  libverto-devel.x86_64 0:0.2.5-4.el7      
+
+Выполнено!
