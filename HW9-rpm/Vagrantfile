@@ -15,7 +15,8 @@ MACHINES = {
               # provision scripts
               :provision_scripts => [
                 { :path => "./provision/0-whoami.sh" },
-                { :path => "./provision/1-nginx.sh" }
+                { :path => "./provision/1-nginx.sh" },
+                { :path => "./provision/2-repo.sh" }
               ],
             }
 }

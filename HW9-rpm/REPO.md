@@ -124,7 +124,7 @@ otus  otus-linux  2
 
 Reinstall nginx from repo
 ```shell
-sudo yum reinstall nginx --disablerepo="*" --enablerepo=otus
+sudo yum reinstall -y nginx --disablerepo="*" --enablerepo=otus
 ```
 [output](./log/../logs/nginx-reinstall.log)
 
@@ -144,3 +144,7 @@ nginx.x86_64                                  1:1.18.0-1.el7.ngx                
 Доступные пакеты
 percona-release.noarch                        0.1-6                                     otus
 ```
+
+## Provision
+
+There is vagrant [provision script](./provision/2-repo.sh)
