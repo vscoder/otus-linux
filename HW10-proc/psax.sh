@@ -9,10 +9,18 @@ PSAX_PROC="/proc"
 ##
 # Functions
 ##
+# Run on script termination
+terminate() {
+    echo "Script is terminated"
+    exit $?
+}
+
+# Print formatted line
 write_line() {
     printf "%5s %-10s %-7s %5s %s\n" "$1" "$2" "$3" "$4" "$5"
 }
 
+# Get TTY dev
 get_tty() {
     PID="$1"
     RESULT=""
@@ -24,6 +32,7 @@ get_tty() {
     echo "$RESULT"
 }
 
+# Get STAT
 get_state() {
     PID="$1"
     # Get status
@@ -34,6 +43,11 @@ get_state() {
         RESULT="${RESULT}<"
     elif [ $STATE_NICE -gt 0 ]; then
         RESULT="${RESULT}N"
+    fi
+    # Is process a session leader?
+    STATE_SESSION_ID=$(cut -d" " -f6 "${PSAX_PROC}/${PID}/stat")
+    if [ $STATE_SESSION_ID -eq $PID ]; then
+        RESULT="${RESULT}s"
     fi
     # Get threads
     STATE_THREADS=$(cut -d" " -f20 "${PSAX_PROC}/${PID}/stat")
@@ -49,6 +63,7 @@ get_state() {
     echo "$RESULT"
 }
 
+# Get TIME
 get_time() {
     PID="$1"
     # https://straypixels.net/getting-the-cpu-time-of-a-process-in-bash-is-difficult/
@@ -59,12 +74,16 @@ get_time() {
     echo "$RESULT"
 }
 
+# Get CMDLINE
 get_cmdline() {
     PID="$1"
     RESULT=$(cat "${PSAX_PROC}/${PID}/cmdline" | tr "\0" " ")
     test -z "$RESULT" && RESULT="[$(cat "${PSAX_PROC}/${PID}/comm")]"
     echo "$RESULT"
 }
+
+# Set custom handler for sigals INT TERM
+trap 'terminate' INT TERM
 
 # Write header
 write_line PID TTY STAT TIME COMMAND
