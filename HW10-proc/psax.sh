@@ -3,6 +3,8 @@
 # Display info about running processes based on infromation from /proc
 ##
 
+set -eu
+
 # Set working directory
 PSAX_PROC="/proc"
 

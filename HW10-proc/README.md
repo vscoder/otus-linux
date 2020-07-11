@@ -38,4 +38,10 @@ Tasks to choose:
 
 ## implementation
 
-[ps ax](./PSAX.md)
+1. `ps ax` implementation
+   - [psax.sh](./psax.sh) - script
+   - [PSAX.md](./PSAX.md) - description
+2. Not implemented yet.
+3. Done for `1.`
+4. Not implemented yet.
+5. Test process described in [IONICE.md](./IONICE.md)
