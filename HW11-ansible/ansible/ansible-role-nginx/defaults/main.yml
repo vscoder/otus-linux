@@ -1,0 +1,7 @@
+---
+nginx_become: yes
+
+nginx_version: 1.19.1
+
+nginx_site_name: example.com
+nginx_site_listen: 8080
