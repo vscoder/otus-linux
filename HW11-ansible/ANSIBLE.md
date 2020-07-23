@@ -201,7 +201,7 @@ Successfully installed MarkupSafe-1.1.1 PyYAML-5.3.1 ansible-2.9.10 arrow-0.15.7
 
 Go to role directory and run molecule tests
 ```shell
-cd ansible/ansible-role-nginx
+cd roles/ansible-role-nginx
 molecule test
 ```
 <details><summary>output</summary>

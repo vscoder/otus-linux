@@ -2,6 +2,6 @@ server {
     listen {{ nginx_site_listen }};
     server_name {{ nginx_site_name }};
     location / {
-        return 200 "{{ ansible_managed }}  ^_^";
+        return 200 "{{ ansible_hostname }}  ^_^\n";
     }
 }

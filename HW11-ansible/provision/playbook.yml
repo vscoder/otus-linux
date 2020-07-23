@@ -1,7 +1,0 @@
----
-- name: Install and configure nginx
-  hosts: all
-  tasks:
-    - name: Debug
-      debug:
-        var: ansible_hostname
