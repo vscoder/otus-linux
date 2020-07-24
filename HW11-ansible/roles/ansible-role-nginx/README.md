@@ -13,6 +13,8 @@ Role Variables
 
 See [defaults/main.yml](./defaults/main.yml)
 
+Note: in `vars/` are placed platform-specific variables. Do not override by hands.
+
 Dependencies
 ------------
 
@@ -24,6 +26,10 @@ Example Playbook
 ```
 - name: Install and configure nginx
   hosts: all
+  vars:
+    nginx_version: 1.19.1
+    nginx_site_name: example.net
+    nginx_site_listen: 8081
   roles:
     - ansible-role-nginx
 ```
