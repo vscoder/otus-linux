@@ -1,0 +1,6 @@
+---
+- name: Provision vagrant instance
+  hosts: all
+  become: yes
+  roles:
+    - ansible-role-aaa

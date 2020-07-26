@@ -1,0 +1,13 @@
+---
+- name: Ensure gnecessary groups are present
+  group:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ aaa_groups }}"
+
+- name: Add users
+  user:
+    name: "{{ item.name }}"
+    groups: "{{ item.groups }}"
+    state: present
+  loop: "{{ aaa_users }}"

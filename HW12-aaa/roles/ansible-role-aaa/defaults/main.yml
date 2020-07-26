@@ -1,0 +1,11 @@
+---
+aaa_groups:
+  - admin
+
+aaa_users:
+  - name: testuser
+    groups:
+      - users
+  - name: testadmin
+    groups:
+      - admin
