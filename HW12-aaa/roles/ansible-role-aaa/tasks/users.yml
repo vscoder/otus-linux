@@ -1,7 +1,7 @@
 ---
-- name: Ensure gnecessary groups are present
+- name: Ensure necessary groups are present
   group:
-    name: "{{ item }}"
+    name: "{{ item.name }}"
     state: present
   loop: "{{ aaa_groups }}"
 
@@ -10,4 +10,12 @@
     name: "{{ item.name }}"
     groups: "{{ item.groups }}"
     state: present
+  loop: "{{ aaa_users }}"
+
+- name: Add authorized keys
+  authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ item.key }}"
+    state: present
+  when: item.key is defined
   loop: "{{ aaa_users }}"

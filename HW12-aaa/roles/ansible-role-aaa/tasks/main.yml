@@ -4,4 +4,7 @@
   tags:
     - aaa_users
 
-- name: 
+- name: Configure pam_time
+  import_tasks: pam_time.yml
+  tags:
+    - aaa_pam_time
