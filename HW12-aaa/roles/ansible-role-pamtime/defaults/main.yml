@@ -8,12 +8,8 @@ aaa_groups:
 aaa_pam_time:
   - servces: "*"
     ttys: "*"
-    users: "testuser"
-    times: "Wk0900-1800"
-  - servces: "*"
-    ttys: "*"
-    users: "testadmin"
-    times: "Al0000-1800"
+    users: "*"
+    times: "Al0000-2400"
 
 aaa_users:
   - name: testuser

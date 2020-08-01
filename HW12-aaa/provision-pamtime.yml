@@ -1,6 +1,16 @@
 ---
 - name: Provision vagrant instance
   hosts: all
+  vars:
+    aaa_pam_time:
+      - servces: "*"
+        ttys: "*"
+        users: "testuser"
+        times: "Wk0900-1800"
+      - servces: "*"
+        ttys: "*"
+        users: "testadmin"
+        times: "Al0000-2400"
 
   pre_tasks:
     - name: Generate public ssh key from vagrant private key file
