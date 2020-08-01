@@ -1,7 +1,7 @@
-pamtime
+Role Name
 =========
 
-Restrict ssh login for defined users an weekend or non-work hours using PAM module `pam_time`. It isn't work with group names, only user names accepted.
+Restrict acces via ssh for anyone exept `admin` group members in weekend
 
 Requirements
 ------------
