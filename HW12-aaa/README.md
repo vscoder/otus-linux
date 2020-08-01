@@ -20,3 +20,9 @@
 
 ## Implmentation
 
+
+
+## Problems
+
+Problem: `pam_time` module isn't work with groupnames except usernames
+Solution: use other module, ex. `pam_exec`

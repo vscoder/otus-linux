@@ -12,7 +12,7 @@
         aaa_public_key: "{{ public_key.stdout }}"
 
   roles:
-    - name: ansible-role-aaa
+    - name: ansible-role-pamtime
       become: yes
 
   post_tasks:

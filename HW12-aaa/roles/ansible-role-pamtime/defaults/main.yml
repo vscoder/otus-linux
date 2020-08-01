@@ -1,9 +1,19 @@
 ---
 aaa_groups:
   - name: admin
-    login_time: Al0000-2400
+    # login_time: Al0000-2400
   - name: users
-    login_time: Wk0900-1800
+    # login_time: Wk0900-1800
+
+aaa_pam_time:
+  - servces: "*"
+    ttys: "*"
+    users: "testuser"
+    times: "Wk0900-1800"
+  - servces: "*"
+    ttys: "*"
+    users: "testadmin"
+    times: "Al0000-1800"
 
 aaa_users:
   - name: testuser
