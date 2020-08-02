@@ -32,3 +32,7 @@
     - name: Show docker info
       debug:
         var: docker_info.stdout
+
+    - name: Ensure user vagrant can restart docker service
+      shell: systemctl restart docker.service
+      changed_when: false

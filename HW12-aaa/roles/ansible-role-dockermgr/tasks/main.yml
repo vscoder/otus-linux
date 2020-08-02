@@ -10,3 +10,9 @@
   when: dockermgr_service | bool
   tags:
     - dockermgr_service
+
+- name: Provide polkit rules
+  include_tasks: polkit.yml
+  when: dockermgr_polkit | bool
+  tags:
+    - dockermgr_polkit
