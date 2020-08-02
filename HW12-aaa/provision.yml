@@ -6,6 +6,7 @@
     - name: Generate public ssh key from vagrant private key file
       connection: local
       shell: "ssh-keygen -y -f ./.vagrant/machines/{{ ansible_hostname }}/virtualbox/private_key"
+      changed_when: false
       register: public_key
     - name: Set public key value
       set_fact:
@@ -14,6 +15,8 @@
   roles:
     - name: ansible-role-pamexec
       become: yes
+    - name: ansible-role-dockermgr
+      become: yes
 
   post_tasks:
     - debug:
@@ -21,3 +24,11 @@
           To connect to host, run:
           ssh -i ./.vagrant/machines/{{ ansible_hostname }}/virtualbox/private_key -p {{ ansible_ssh_port }} {{ item.name }}@{{ ansible_ssh_host }}
       loop: "{{ pamexec_users }}"
+
+    - name: Ensure user vagrant can run docker command
+      shell: docker info
+      changed_when: false
+      register: docker_info
+    - name: Show docker info
+      debug:
+        var: docker_info.stdout

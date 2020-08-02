@@ -1,0 +1,10 @@
+---
+# Install docker
+dockermgr_install: yes
+
+# Configure service
+dockermgr_service: yes
+
+# List of users who can manage docker
+dockermgr_managers:
+  - vagrant
