@@ -1,7 +1,7 @@
 # Describe VMs
 MACHINES = {
   # VM name "kernel update"
-  :"hw12-aaa" => {
+  :"hw13-selinux" => {
               # VM box
               :box_name => "vscoder/centos-7-5",
               # VM CPU count
