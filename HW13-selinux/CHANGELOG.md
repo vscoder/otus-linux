@@ -2,6 +2,14 @@
 
 - Start HW
 - Create `README.md`, `Makefile`, `requirements.txt`, `Vagrantfile`
+- Add [Makefile](./Makefile) targets
+  - `create:`
+  - `converge:`
+  - `verify:`
+  - `destroy:`
+  - `test:`
+  - `clean: destroy`
+
 - Rename instance name in `Vagrantfile`
 - Create `provision/` with samble provisioning bash script
 - Copy `roles/ansible-role-nginx` from _HW11-ansible_
