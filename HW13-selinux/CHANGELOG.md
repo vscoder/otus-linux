@@ -1,3 +1,9 @@
+## 2020-08-06
+
+- Update `./roles/ansible-role-nginx/tasks/selinux.yml`. Add selinux policy and mode configuration.
+- Rename `./roles/ansible-role-nginx/molecule/deocker-testinfra` to `./roles/ansible-role-nginx/molecule/docker-testinfra`
+- Add tests to `./roles/ansible-role-nginx/molecule/default/tests/test_default.py`
+
 ## 2020-08-04
 
 - Start HW
