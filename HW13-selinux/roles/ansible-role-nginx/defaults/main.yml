@@ -3,8 +3,11 @@
 # SELinux enforcement
 ###
 nginx_selinux: yes
-# Set selinux mode
+# Set selinux policy and mode
+nginx_selinux_policy: targeted
 nginx_selinux_mode: permissive
+# Reboot if required
+nginx_selinux_reboot: yes
 
 # Become root privileges on each task
 nginx_become: yes
