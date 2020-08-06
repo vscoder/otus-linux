@@ -48,3 +48,12 @@ https://github.com/mbfx/otus-linux-adm/tree/master/selinux_dns_problems
 - 1 балл: для задания 2 обоснованно(!) выбран один из способов решения.
 
 ## Implementation
+
+## TODO
+
+- [ ] Set selinux mode `enforcement`
+- [ ] Test nginx on port `8080`
+- [ ] Describe and test 3 different ways
+   - [ ] `setsebool` switch;
+   - [ ] add an alternative port to existing `type`;
+   - [ ] develop and install `selinux module`;
