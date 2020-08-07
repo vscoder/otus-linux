@@ -1,3 +1,11 @@
+## 2020-08-07
+
+- Update `molecule/default/molecule.yml` expose nginx ports
+- Update `molecule/default/converge.yml` set values for
+  - `nginx_selinux_mode`
+  - `nginx_site_listen`
+  - Add `post_tasks` with nginx availability checks
+
 ## 2020-08-06
 
 - Update `./roles/ansible-role-nginx/tasks/selinux.yml`. Add selinux policy and mode configuration.
