@@ -2,6 +2,7 @@
 
 - Add role `ansible-role-selinux` to enable selinux and install management and diagnostic utilites
 - Apply role `ansible-role-selinux` before configure nginx with `roles/ansible-role-nginx/molecule/default/converge.yml`
+- Set for nginx listen port `8080` and pass them with molecule vagrant platforms
 
 ## 2020-08-07
 
