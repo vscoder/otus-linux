@@ -1,13 +1,9 @@
 ---
-- name: Set selinux policy and mode
-  selinux:
-    policy: "{{ nginx_selinux_policy }}"
-    state: "{{ nginx_selinux_mode }}"
-  register: selinux_result
-
-- debug:
-    var: selinux_result
-
-- name: Reboot if required
-  reboot:
-  when: nginx_selinux_reboot | bool and selinux_result.reboot_required
+- name: Enable selinux boolean httpd_can_network_connect
+  seboolean:
+    name: httpd_can_network_connect
+    state: yes
+    persistent: yes
+  when: nginx_selinux_seboolean | bool
+  notify:
+    - Restart nginx

@@ -10,10 +10,9 @@
   tags:
     - nginx_configure
 
-- import_tasks: "selinux.yml"
-  when: nginx_selinux
+- include_tasks: "selinux.yml"
   tags:
-    - nginx_configure
+    - nginx_selinux
 
 - include_tasks: "service.yml"
   tags:

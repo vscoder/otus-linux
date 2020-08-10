@@ -9,6 +9,9 @@ nginx_selinux_mode: permissive
 # Reboot if required
 nginx_selinux_reboot: yes
 
+# Use seboolean to allow alternative ports
+nginx_selinux_seboolean: no
+
 # Become root privileges on each task
 nginx_become: yes
 
