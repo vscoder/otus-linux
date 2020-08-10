@@ -4,6 +4,7 @@
 - Apply role `ansible-role-selinux` before configure nginx with `roles/ansible-role-nginx/molecule/default/converge.yml`
 - Set for nginx listen port `8080` and pass them with molecule vagrant platforms
 - Enable seboolean flag `httpd_can_network_connect` with ansible-role-nginx
+- Add handler `Restart nginx` in `roles/ansible-role-nginx/handlers/main.yml`
 
 ## 2020-08-07
 

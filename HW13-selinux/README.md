@@ -49,6 +49,26 @@ https://github.com/mbfx/otus-linux-adm/tree/master/selinux_dns_problems
 
 ## Documentation
 
+### utils
+
+Package `setools-console`:
+- `sesearch`
+- `seinfo`
+- `findcon`
+- `getsebool`
+- `setsebool`
+Package `policycoreutils-python`:
+- `audit2allow`
+- `audit2why`
+Package `policycoreutils-newrole`:
+- `newrole`
+Package `selinux-policy-mls`:
+- `selinux-policy-mls`
+
+### contexts
+
+Selinux contexts are at `/etc/selinux/targeted/contexts/files`
+
 ### sebool
 
 - `sebool` flag https://wiki.centos.org/TipsAndTricks/SelinuxBooleans
@@ -379,12 +399,6 @@ zoneminder_run_sudo --> off
 </p>
 </details>
 
-Package `policycoreutils` must be installed to manipulete selinux boolean flags
-
-For `seamnage` command there is need `policycoreutils-python-utils` package for CentOS 8 or `policycoreutils-python` for CentOS 7
-
-For `sesearch` is need to install package `setools-console`
-
 Get process's selinux info
 ```shell
 ps auxZ | grep nginx
@@ -394,7 +408,9 @@ system_u:system_r:httpd_t:s0    root     22573  0.0  0.7  41416  3508 ?        S
 system_u:system_r:httpd_t:s0    nginx    22774  0.0  1.0  74464  5184 ?        S    21:42   0:00 nginx: worker process
 ```
 
-Get flag info
+Google says to use selinux boolean flag `httpd_can_network_connect`.
+
+Get flag `httpd_can_network_connect` info
 ```shell
 semanage boolean --list | grep httpd_can_network_connect\ 
 ```
@@ -402,10 +418,76 @@ semanage boolean --list | grep httpd_can_network_connect\
 httpd_can_network_connect      (выкл.,выкл.)  Allow httpd to can network connect
 ```
 
-What does a boolean change?
+What allows the selinux boolean `httpd_can_network_connect`?
+```shell
+sesearch -A -b httpd_can_network_connect
 ```
-sesearch -b abrt_anon_write -AC
+<details><summary>output</summary>
+<p>
 
+```log
+Found 31 semantic av rules:
+   allow httpd_sys_script_t httpd_sys_script_t : tcp_socket { ioctl read write create getattr setattr lock append bind connect listen accept getopt setopt shutdown } ; 
+   allow httpd_sys_script_t port_type : udp_socket recv_msg ; 
+   allow httpd_sys_script_t port_type : udp_socket send_msg ; 
+   allow httpd_suexec_t httpd_suexec_t : udp_socket { ioctl read write create getattr setattr lock append bind connect getopt setopt shutdown } ; 
+   allow httpd_suexec_t node_t : node { udp_recv recvfrom } ; 
+   allow httpd_suexec_t node_t : node { udp_send sendto } ; 
+   allow httpd_suexec_t node_t : node { tcp_recv tcp_send recvfrom sendto } ; 
+   allow httpd_suexec_t netif_t : netif { udp_recv ingress } ; 
+   allow httpd_suexec_t netif_t : netif { udp_send egress } ; 
+   allow httpd_suexec_t netif_t : netif { tcp_recv tcp_send ingress egress } ; 
+   allow httpd_sys_script_t httpd_sys_script_t : udp_socket { ioctl read write create getattr setattr lock append bind connect getopt setopt shutdown } ; 
+   allow httpd_suexec_t port_type : udp_socket recv_msg ; 
+   allow httpd_suexec_t port_type : udp_socket send_msg ; 
+   allow httpd_sys_script_t client_packet_type : packet recv ; 
+   allow httpd_sys_script_t client_packet_type : packet send ; 
+   allow httpd_suexec_t port_type : tcp_socket name_connect ; 
+   allow httpd_suexec_t port_type : tcp_socket { recv_msg send_msg } ; 
+   allow httpd_suexec_t client_packet_type : packet recv ; 
+   allow httpd_suexec_t client_packet_type : packet send ; 
+   allow httpd_t port_type : tcp_socket name_connect ; 
+   allow httpd_sys_script_t netif_t : netif { udp_recv ingress } ; 
+   allow httpd_sys_script_t netif_t : netif { udp_send egress } ; 
+   allow httpd_sys_script_t netif_t : netif { tcp_recv tcp_send ingress egress } ; 
+   allow httpd_sys_script_t node_t : tcp_socket node_bind ; 
+   allow httpd_suexec_t httpd_suexec_t : tcp_socket { ioctl read write create getattr setattr lock append bind connect listen accept getopt setopt shutdown } ; 
+   allow httpd_sys_script_t node_t : udp_socket node_bind ; 
+   allow httpd_sys_script_t node_t : node { udp_recv recvfrom } ; 
+   allow httpd_sys_script_t node_t : node { udp_send sendto } ; 
+   allow httpd_sys_script_t node_t : node { tcp_recv tcp_send recvfrom sendto } ; 
+   allow httpd_sys_script_t port_type : tcp_socket name_connect ; 
+   allow httpd_sys_script_t port_type : tcp_socket { recv_msg send_msg } ;
+```
+</p>
+</details>
+
+Enable seboolean `httpd_can_network_connect`
+```shell
+setsebool -P httpd_can_network_connect on
+```
+
+NOTE: It isn't work with `unreserved_port_t` selinux type (domain), ex.: `8088`.
+
+NOTE: It isn't necessary for port `8080` because on port `8080` nginx already works without any manipulations with selinux.
+
+Get port `8080` type:
+```shell
+semanage port --list | grep 8080
+```
+```log
+http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010
+```
+
+List allowed rules for `http_cache_port_t`
+```shell
+sesearch -t http_cache_port_t -s httpd_t -Ad
+```
+```log
+Found 2 semantic av rules:
+   allow httpd_t http_cache_port_t : tcp_socket name_bind ; 
+   allow httpd_t http_cache_port_t : tcp_socket name_connect ;
+```
 
 ## Implementation
 
