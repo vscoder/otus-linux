@@ -1,3 +1,8 @@
+## 2020-08-10
+
+- Add role `ansible-role-selinux` to enable selinux and install management and diagnostic utilites
+- Apply role `ansible-role-selinux` before configure nginx with `roles/ansible-role-nginx/molecule/default/converge.yml`
+
 ## 2020-08-07
 
 - Update `molecule/default/molecule.yml` expose nginx ports

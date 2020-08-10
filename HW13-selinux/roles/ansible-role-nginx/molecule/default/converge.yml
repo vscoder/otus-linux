@@ -3,10 +3,14 @@
   hosts: all
   become: yes
   vars:
-    nginx_selinux_mode: enforcing
+    selinux_mode: enforcing
     #nginx_selinux_mode: permissive
-    nginx_site_listen: 8088
+    nginx_selinux_seboolean: yes
+    nginx_site_listen: 8080
   tasks:
+    - name: "Include ansible-role-selinux"
+      include_role:
+        name: "ansible-role-selinux"
     - name: "Include ansible-role-nginx"
       include_role:
         name: "ansible-role-nginx"
