@@ -313,6 +313,8 @@ systemctl status nginx
 
 After reboot result is the same!
 
+TODO: authomatization with ansible!
+
 
 ### Update existing type
 
