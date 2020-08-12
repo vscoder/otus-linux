@@ -5,8 +5,8 @@
   vars:
     selinux_mode: enforcing
     #nginx_selinux_mode: permissive
-    nginx_selinux_seboolean: yes
-    nginx_site_listen: 8080
+    nginx_selinux_seboolean: no
+    nginx_site_listen: 8081
   tasks:
     - name: "Include ansible-role-selinux"
       include_role:
@@ -21,6 +21,6 @@
       delegate_to: localhost
       become: no
       loop:
-        - 8081
         - 8082
         - 8083
+        - 8084

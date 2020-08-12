@@ -10,23 +10,23 @@ platforms:
     memory: 512
     interfaces:
       - network_name: forwarded_port
-        guest: 8080
-        host: 8081
+        guest: 8081
+        host: 8082
   - name: centos-7
     box: centos/7
     cpus: 2
     memory: 512
     interfaces:
       - network_name: forwarded_port
-        guest: 8080
-        host: 8082
+        guest: 8081
+        host: 8083
   - name: centos-8
     box: centos/8
     cpus: 2
     interfaces:
       - network_name: forwarded_port
-        guest: 8080
-        host: 8083
+        guest: 8081
+        host: 8084
     memory: 512
 provisioner:
   name: ansible

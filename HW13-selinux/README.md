@@ -49,6 +49,12 @@ https://github.com/mbfx/otus-linux-adm/tree/master/selinux_dns_problems
 
 ## Documentation
 
+### links
+
+- MUST READ! https://www.nginx.com/blog/using-nginx-plus-with-selinux/
+- Nice article about SELinux and Networking: https://wiki.gentoo.org/wiki/SELinux/Networking
+- RedHat 7 guide https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/selinux_users_and_administrators_guide/sect-security-enhanced_linux-troubleshooting-fixing_problems
+
 ### utils
 
 Package `setools-console`:
@@ -69,335 +75,7 @@ Package `selinux-policy-mls`:
 
 Selinux contexts are at `/etc/selinux/targeted/contexts/files`
 
-### sebool
-
-- `sebool` flag https://wiki.centos.org/TipsAndTricks/SelinuxBooleans
-
-Show all flags: `getsebool -a`
-<details><summary>CentOS8 output</summary>
-<p>
-
-```log
-authlogin_radius --> off
-authlogin_yubikey --> off
-awstats_purge_apache_log_files --> off
-boinc_execmem --> on
-cdrecord_read_content --> off
-cluster_can_network_connect --> off
-cluster_manage_all_files --> off
-cluster_use_execmem --> off
-cobbler_anon_write --> off
-cobbler_can_network_connect --> off
-cobbler_use_cifs --> off
-cobbler_use_nfs --> off
-collectd_tcp_network_connect --> off
-colord_use_nfs --> off
-condor_tcp_network_connect --> off
-conman_can_network --> off
-conman_use_nfs --> off
-cron_can_relabel --> off
-cron_system_cronjob_use_shares --> off
-cron_userdomain_transition --> on
-cups_execmem --> off
-cvs_read_shadow --> off
-daemons_dump_core --> off
-daemons_enable_cluster_mode --> off
-daemons_use_tcp_wrapper --> off
-daemons_use_tty --> off
-dbadm_exec_content --> on
-dbadm_manage_user_files --> off
-dbadm_read_user_files --> off
-deny_execmem --> off
-deny_ptrace --> off
-dhcpc_exec_iptables --> off
-dhcpd_use_ldap --> off
-domain_can_mmap_files --> off
-domain_can_write_kmsg --> off
-domain_fd_use --> on
-domain_kernel_load_modules --> off
-entropyd_use_audio --> on
-exim_can_connect_db --> off
-exim_manage_user_files --> off
-exim_read_user_files --> off
-fcron_crond --> off
-fenced_can_network_connect --> off
-fenced_can_ssh --> off
-fips_mode --> on
-ftpd_anon_write --> off
-ftpd_connect_all_unreserved --> off
-ftpd_connect_db --> off
-ftpd_full_access --> off
-ftpd_use_cifs --> off
-ftpd_use_fusefs --> off
-ftpd_use_nfs --> off
-ftpd_use_passive_mode --> off
-git_cgi_enable_homedirs --> off
-git_cgi_use_cifs --> off
-git_cgi_use_nfs --> off
-git_session_bind_all_unreserved_ports --> off
-git_session_users --> off
-git_system_enable_homedirs --> off
-git_system_use_cifs --> off
-git_system_use_nfs --> off
-gitosis_can_sendmail --> off
-glance_api_can_network --> off
-glance_use_execmem --> off
-glance_use_fusefs --> off
-global_ssp --> off
-gluster_anon_write --> off
-gluster_export_all_ro --> off
-gluster_export_all_rw --> on
-gluster_use_execmem --> off
-gpg_web_anon_write --> off
-gssd_read_tmp --> on
-guest_exec_content --> on
-haproxy_connect_any --> off
-httpd_anon_write --> off
-httpd_builtin_scripting --> on
-httpd_can_check_spam --> off
-httpd_can_connect_ftp --> off
-httpd_can_connect_ldap --> off
-httpd_can_connect_mythtv --> off
-httpd_can_connect_zabbix --> off
-httpd_can_network_connect --> off
-httpd_can_network_connect_cobbler --> off
-httpd_can_network_connect_db --> off
-httpd_can_network_memcache --> off
-httpd_can_network_relay --> off
-httpd_can_sendmail --> off
-httpd_dbus_avahi --> off
-httpd_dbus_sssd --> off
-httpd_dontaudit_search_dirs --> off
-httpd_enable_cgi --> on
-httpd_enable_ftp_server --> off
-httpd_enable_homedirs --> off
-httpd_execmem --> off
-httpd_graceful_shutdown --> off
-httpd_manage_ipa --> off
-httpd_mod_auth_ntlm_winbind --> off
-httpd_mod_auth_pam --> off
-httpd_read_user_content --> off
-httpd_run_ipa --> off
-httpd_run_preupgrade --> off
-httpd_run_stickshift --> off
-httpd_serve_cobbler_files --> off
-httpd_setrlimit --> off
-httpd_ssi_exec --> off
-httpd_sys_script_anon_write --> off
-httpd_tmp_exec --> off
-httpd_tty_comm --> off
-httpd_unified --> off
-httpd_use_cifs --> off
-httpd_use_fusefs --> off
-httpd_use_gpg --> off
-httpd_use_nfs --> off
-httpd_use_openstack --> off
-httpd_use_sasl --> off
-httpd_verify_dns --> off
-icecast_use_any_tcp_ports --> off
-irc_use_any_tcp_ports --> off
-irssi_use_full_network --> off
-kdumpgui_run_bootloader --> off
-keepalived_connect_any --> off
-kerberos_enabled --> on
-ksmtuned_use_cifs --> off
-ksmtuned_use_nfs --> off
-logadm_exec_content --> on
-logging_syslogd_can_sendmail --> off
-logging_syslogd_run_nagios_plugins --> off
-logging_syslogd_use_tty --> on
-login_console_enabled --> on
-logrotate_read_inside_containers --> off
-logrotate_use_nfs --> off
-logwatch_can_network_connect_mail --> off
-lsmd_plugin_connect_any --> off
-mailman_use_fusefs --> off
-mcelog_client --> off
-mcelog_exec_scripts --> on
-mcelog_foreground --> off
-mcelog_server --> off
-minidlna_read_generic_user_content --> off
-mmap_low_allowed --> off
-mock_enable_homedirs --> off
-mount_anyfile --> on
-mozilla_plugin_bind_unreserved_ports --> off
-mozilla_plugin_can_network_connect --> on
-mozilla_plugin_use_bluejeans --> off
-mozilla_plugin_use_gps --> off
-mozilla_plugin_use_spice --> off
-mozilla_read_content --> off
-mpd_enable_homedirs --> off
-mpd_use_cifs --> off
-mpd_use_nfs --> off
-mplayer_execstack --> off
-mysql_connect_any --> off
-mysql_connect_http --> off
-nagios_run_pnp4nagios --> off
-nagios_run_sudo --> off
-nagios_use_nfs --> off
-named_tcp_bind_http_port --> off
-named_write_master_zones --> on
-neutron_can_network --> off
-nfs_export_all_ro --> on
-nfs_export_all_rw --> on
-nfsd_anon_write --> off
-nis_enabled --> off
-nscd_use_shm --> on
-openshift_use_nfs --> off
-openvpn_can_network_connect --> on
-openvpn_enable_homedirs --> on
-openvpn_run_unconfined --> off
-pcp_bind_all_unreserved_ports --> off
-pcp_read_generic_logs --> off
-pdns_can_network_connect_db --> off
-piranha_lvs_can_network_connect --> off
-polipo_connect_all_unreserved --> off
-polipo_session_bind_all_unreserved_ports --> off
-polipo_session_users --> off
-polipo_use_cifs --> off
-polipo_use_nfs --> off
-polyinstantiation_enabled --> off
-postfix_local_write_mail_spool --> on
-postgresql_can_rsync --> off
-postgresql_selinux_transmit_client_label --> off
-postgresql_selinux_unconfined_dbadm --> on
-postgresql_selinux_users_ddl --> on
-pppd_can_insmod --> off
-pppd_for_user --> off
-privoxy_connect_any --> on
-prosody_bind_http_port --> off
-puppetagent_manage_all_files --> off
-puppetmaster_use_db --> off
-racoon_read_shadow --> off
-radius_use_jit --> off
-redis_enable_notify --> off
-rpcd_use_fusefs --> off
-rsync_anon_write --> off
-rsync_client --> off
-rsync_export_all_ro --> off
-rsync_full_access --> off
-samba_create_home_dirs --> off
-samba_domain_controller --> off
-samba_enable_home_dirs --> off
-samba_export_all_ro --> off
-samba_export_all_rw --> off
-samba_load_libgfapi --> off
-samba_portmapper --> off
-samba_run_unconfined --> off
-samba_share_fusefs --> off
-samba_share_nfs --> off
-sanlock_enable_home_dirs --> off
-sanlock_use_fusefs --> off
-sanlock_use_nfs --> off
-sanlock_use_samba --> off
-saslauthd_read_shadow --> off
-secadm_exec_content --> on
-secure_mode --> off
-secure_mode_insmod --> off
-secure_mode_policyload --> off
-selinuxuser_direct_dri_enabled --> on
-selinuxuser_execheap --> off
-selinuxuser_execmod --> on
-selinuxuser_execstack --> on
-selinuxuser_mysql_connect_enabled --> off
-selinuxuser_ping --> on
-selinuxuser_postgresql_connect_enabled --> off
-selinuxuser_rw_noexattrfile --> on
-selinuxuser_share_music --> off
-selinuxuser_tcp_server --> off
-selinuxuser_udp_server --> off
-selinuxuser_use_ssh_chroot --> off
-sge_domain_can_network_connect --> off
-sge_use_nfs --> off
-smartmon_3ware --> off
-smbd_anon_write --> off
-spamassassin_can_network --> off
-spamd_enable_home_dirs --> on
-spamd_update_can_network --> off
-squid_connect_any --> on
-squid_use_tproxy --> off
-ssh_chroot_rw_homedirs --> off
-ssh_keysign --> off
-ssh_sysadm_login --> off
-ssh_use_tcpd --> off
-sslh_can_bind_any_port --> off
-sslh_can_connect_any_port --> off
-staff_exec_content --> on
-staff_use_svirt --> off
-swift_can_network --> off
-sysadm_exec_content --> on
-telepathy_connect_all_ports --> off
-telepathy_tcp_connect_generic_network_ports --> on
-tftp_anon_write --> off
-tftp_home_dir --> off
-tmpreaper_use_cifs --> off
-tmpreaper_use_nfs --> off
-tmpreaper_use_samba --> off
-tomcat_can_network_connect_db --> off
-tomcat_read_rpm_db --> off
-tomcat_use_execmem --> off
-tor_bind_all_unreserved_ports --> off
-tor_can_network_relay --> off
-tor_can_onion_services --> off
-unconfined_chrome_sandbox_transition --> on
-unconfined_login --> on
-unconfined_mozilla_plugin_transition --> on
-unprivuser_use_svirt --> off
-use_ecryptfs_home_dirs --> off
-use_fusefs_home_dirs --> off
-use_lpd_server --> off
-use_nfs_home_dirs --> off
-use_samba_home_dirs --> off
-use_virtualbox --> off
-user_exec_content --> on
-varnishd_connect_any --> off
-virt_read_qemu_ga_data --> off
-virt_rw_qemu_ga_data --> off
-virt_sandbox_share_apache_content --> off
-virt_sandbox_use_all_caps --> on
-virt_sandbox_use_audit --> on
-virt_sandbox_use_fusefs --> off
-virt_sandbox_use_mknod --> off
-virt_sandbox_use_netlink --> off
-virt_sandbox_use_sys_admin --> off
-virt_transition_userdomain --> off
-virt_use_comm --> off
-virt_use_execmem --> off
-virt_use_fusefs --> off
-virt_use_glusterd --> off
-virt_use_nfs --> off
-virt_use_pcscd --> off
-virt_use_rawip --> off
-virt_use_samba --> off
-virt_use_sanlock --> off
-virt_use_usb --> on
-virt_use_xserver --> off
-webadm_manage_user_files --> off
-webadm_read_user_files --> off
-wine_mmap_zero_ignore --> off
-xdm_bind_vnc_tcp_port --> off
-xdm_exec_bootloader --> off
-xdm_sysadm_login --> off
-xdm_write_home --> off
-xen_use_nfs --> off
-xend_run_blktap --> on
-xend_run_qemu --> on
-xguest_connect_network --> on
-xguest_exec_content --> on
-xguest_mount_media --> on
-xguest_use_bluetooth --> on
-xserver_clients_write_xshm --> off
-xserver_execmem --> off
-xserver_object_manager --> off
-zabbix_can_network --> off
-zabbix_run_sudo --> off
-zarafa_setrlimit --> off
-zebra_write_config --> off
-zoneminder_anon_write --> off
-zoneminder_run_sudo --> off
-```
-</p>
-</details>
+### nginx selinux experiments
 
 Get process's selinux info
 ```shell
@@ -407,8 +85,301 @@ ps auxZ | grep nginx
 system_u:system_r:httpd_t:s0    root     22573  0.0  0.7  41416  3508 ?        Ss   21:42   0:00 nginx: master process /usr/sbin/nginx -c /etc/nginx/nginx.conf
 system_u:system_r:httpd_t:s0    nginx    22774  0.0  1.0  74464  5184 ?        S    21:42   0:00 nginx: worker process
 ```
+nginx selinux type is `httpd_t`. It's a **source** type.
 
-Google says to use selinux boolean flag `httpd_can_network_connect`.
+NOTE: some useful options of `sesearch` utility
+```shell
+EXPRESSIONS:
+  -s NAME, --source=NAME    rules with type/attribute NAME as source
+  -t NAME, --target=NAME    rules with type/attribute NAME as target
+  -p P1[,P2,...], --perm=P1[,P2...]
+                            rules with the specified permission
+  -b NAME, --bool=NAME      conditional rules with NAME in the expression
+RULE_TYPES:
+  -A, --allow               allow rules
+OPTIONS:
+  -d, --direct
+```
+
+Check allowed nginx **target** types:
+```shell
+sesearch -s httpd_t -Ad
+```
+Output is supressed because it's very big.
+
+
+Check which context uses tcp port `8080` (why is nginx already working on port 8080 without any selinux configuration changes)
+```shell
+semanage port --list | grep 8080
+```
+```log
+http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010
+```
+
+Check nginx allow bind and connect to ports `http_cache_port_t`
+```shell
+sesearch -s httpd_t -t http_cache_port_t -Ad
+```
+```log
+Found 2 semantic av rules:
+   allow httpd_t http_cache_port_t : tcp_socket name_bind ; 
+   allow httpd_t http_cache_port_t : tcp_socket name_connect ;
+```
+
+Which target types nginx has **name_bind** permission
+```shell
+sesearch -s httpd_t -p name_bind -Ad
+```
+```log
+Found 12 semantic av rules:
+   allow httpd_t puppet_port_t : tcp_socket name_bind ; 
+   allow httpd_t jboss_management_port_t : tcp_socket name_bind ; 
+   allow httpd_t jboss_messaging_port_t : tcp_socket name_bind ; 
+   allow httpd_t http_cache_port_t : tcp_socket name_bind ; 
+   allow httpd_t ntop_port_t : tcp_socket name_bind ; 
+   allow httpd_t http_port_t : udp_socket name_bind ; 
+   allow httpd_t http_port_t : tcp_socket name_bind ; 
+   allow httpd_t ephemeral_port_type : tcp_socket name_bind ; 
+   allow httpd_t ephemeral_port_type : udp_socket name_bind ; 
+   allow httpd_t ftp_port_t : tcp_socket name_bind ; 
+   allow httpd_t commplex_main_port_t : tcp_socket name_bind ; 
+   allow httpd_t preupgrade_port_t : tcp_socket name_bind ;
+```
+
+Which target types nginx has **name_connect** permission
+```shell
+sesearch -s httpd_t -p name_connect -Ad
+```
+```log
+Found 28 semantic av rules:
+   allow httpd_t gopher_port_t : tcp_socket name_connect ; 
+   allow httpd_t zabbix_port_t : tcp_socket name_connect ; 
+   allow httpd_t squid_port_t : tcp_socket name_connect ; 
+   allow httpd_t ephemeral_port_type : tcp_socket name_connect ; 
+   allow httpd_t ephemeral_port_type : tcp_socket name_connect ; 
+   allow httpd_t ephemeral_port_type : tcp_socket name_connect ; 
+   allow httpd_t smtp_port_t : tcp_socket name_connect ; 
+   allow httpd_t osapi_compute_port_t : tcp_socket name_connect ; 
+   allow httpd_t mongod_port_t : tcp_socket name_connect ; 
+   allow httpd_t pop_port_t : tcp_socket name_connect ; 
+   allow httpd_t ftp_port_t : tcp_socket name_connect ; 
+   allow httpd_t ftp_port_t : tcp_socket name_connect ; 
+   allow httpd_t http_cache_port_t : tcp_socket name_connect ; 
+   allow httpd_t port_type : tcp_socket name_connect ; 
+   allow httpd_t ocsp_port_t : tcp_socket name_connect ; 
+   allow httpd_t kerberos_port_t : tcp_socket name_connect ; 
+   allow httpd_t mysqld_port_t : tcp_socket name_connect ; 
+   allow httpd_t mssql_port_t : tcp_socket name_connect ; 
+   allow httpd_t postgresql_port_t : tcp_socket name_connect ; 
+   allow httpd_t mythtv_port_t : tcp_socket name_connect ; 
+   allow httpd_t oracle_port_t : tcp_socket name_connect ; 
+   allow httpd_t cobbler_port_t : tcp_socket name_connect ; 
+   allow httpd_t memcache_port_t : tcp_socket name_connect ; 
+   allow httpd_t memcache_port_t : tcp_socket name_connect ; 
+   allow httpd_t gds_db_port_t : tcp_socket name_connect ; 
+   allow httpd_t ldap_port_t : tcp_socket name_connect ; 
+   allow httpd_t http_port_t : tcp_socket name_connect ; 
+   allow httpd_t http_port_t : tcp_socket name_connect ;
+```
+
+The difference between `name_bind` and `name_connect` permissions is:
+> When an application is connecting to a port, the name_connect permission is checked. However, when an application binds to the port, the name_bind permission is checked.
+
+Get all ports nginx is allowed to name_bind to
+```shell
+sesearch -s httpd_t -p name_bind -Ad | awk '$2=/httpd_t/ {print $3}' | xargs -I{} sh -c "semanage port --list | grep {}"
+```
+```log
+puppet_port_t                  tcp      8140
+jboss_management_port_t        tcp      4447, 4712, 7600, 9123, 9990, 9999, 18001
+jboss_management_port_t        udp      4712, 9123
+jboss_messaging_port_t         tcp      5445, 5455
+http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010
+http_cache_port_t              udp      3130
+ntop_port_t                    tcp      3000-3001
+ntop_port_t                    udp      3000-3001
+http_port_t                    tcp      80, 81, 443, 488, 8008, 8009, 8443, 9000
+pegasus_http_port_t            tcp      5988
+http_port_t                    tcp      80, 81, 443, 488, 8008, 8009, 8443, 9000
+pegasus_http_port_t            tcp      5988
+ftp_port_t                     tcp      21, 989, 990
+ftp_port_t                     udp      989, 990
+tftp_port_t                    udp      69
+commplex_main_port_t           tcp      5000
+commplex_main_port_t           udp      5000
+preupgrade_port_t              tcp      8099
+```
+
+If we want to have correct experiments then we need to listen tcp port not from list above. For example port `8081` which is:
+```shell
+semanage port --list | grep 8081
+```
+```log
+transproxy_port_t              tcp      8081
+```
+So next we set nginx to listen to tcp port `8081`
+
+### Analyse
+
+- `audit2why` - translates SELinux audit messages into a description of why the access was denied (audit2allow -w)
+
+Now we're getting an error `Permission denied` when we're trying to start nginx on port `8081`.
+
+First temporarily disable selinux for nginx
+```shell
+semanage permissive -a httpd_t
+```
+
+Then start nginx and ensure nginx is running
+```shell
+systemctl restart nginx
+systemctl status nginx
+```
+```log
+● nginx.service - nginx - high performance web server
+   Loaded: loaded (/usr/lib/systemd/system/nginx.service; enabled; vendor preset: disabled)
+   Active: active (running) since Tue 2020-08-11 20:50:38 UTC; 4s ago
+...
+```
+
+Analyse audit.log with `audit2why`
+```shell
+audit2why < /var/log/audit/audit.log
+```
+```log
+type=AVC msg=audit(1597263536.671:1016): avc:  denied  { name_bind } for  pid=5773 comm="nginx" src=8081 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:transproxy_port_t:s0 tclass=tcp_socket permissive=0
+
+        Was caused by:
+                Missing type enforcement (TE) allow rule.
+
+                You can use audit2allow to generate a loadable module to allow this access.
+```
+
+### SELinux policy module
+
+Get reason
+```shell
+grep 1597263536.671:1016 /var/log/audit/audit.log | audit2why
+```
+```log
+type=AVC msg=audit(1597263536.671:1016): avc:  denied  { name_bind } for  pid=5773 comm="nginx" src=8081 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:transproxy_port_t:s0 tclass=tcp_socket permissive=0
+
+        Was caused by:
+                Missing type enforcement (TE) allow rule.
+
+                You can use audit2allow to generate a loadable module to allow this access.
+```
+
+Some useful options for `audit2allow`
+```shell
+  -M MODULE_PACKAGE, --module-package=MODULE_PACKAGE
+                        generate a module package - conflicts with -o and -m
+```
+
+Generate a module package
+```shell
+grep 1597263536.671:1016 /var/log/audit/audit.log | audit2allow -M httpd_add --debug
+```
+```log
+******************** IMPORTANT ***********************
+To make this policy package active, execute:
+
+semodule -i httpd_add.pp
+```
+
+Load module
+```shell
+semodule -i httpd_add.pp
+```
+
+Disable permissive mode for `httpd_t`
+```shell
+semanage permissive -d httpd_t
+```
+```log
+libsemanage.semanage_direct_remove_key: Removing last permissive_httpd_t module (no other permissive_httpd_t module exists at another priority).
+```
+
+Now nginx starts w/o errors.
+```shell
+systemctl start nginx
+systemctl status nginx
+```
+```log
+● nginx.service - nginx - high performance web server
+   Loaded: loaded (/usr/lib/systemd/system/nginx.service; enabled; vendor preset: disabled)
+   Active: active (running) since Wed 2020-08-12 20:20:51 UTC; 3s ago
+```
+
+After reboot result is the same!
+
+
+### Update existing type
+
+To test update existing type, port `8085`
+
+Get list of existing allowed types for `httpd_t`
+```shell
+sesearch -s httpd_t -p name_bind -Ad
+```
+```log
+Found 12 semantic av rules:
+   allow httpd_t puppet_port_t : tcp_socket name_bind ; 
+   allow httpd_t jboss_management_port_t : tcp_socket name_bind ; 
+   allow httpd_t jboss_messaging_port_t : tcp_socket name_bind ; 
+   allow httpd_t http_cache_port_t : tcp_socket name_bind ; 
+   allow httpd_t ntop_port_t : tcp_socket name_bind ; 
+   allow httpd_t http_port_t : udp_socket name_bind ; 
+   allow httpd_t http_port_t : tcp_socket name_bind ; 
+   allow httpd_t ephemeral_port_type : tcp_socket name_bind ; 
+   allow httpd_t ephemeral_port_type : udp_socket name_bind ; 
+   allow httpd_t ftp_port_t : tcp_socket name_bind ; 
+   allow httpd_t commplex_main_port_t : tcp_socket name_bind ; 
+   allow httpd_t preupgrade_port_t : tcp_socket name_bind ;
+```
+
+We'll be using `http_port_t` type.
+
+Get allowed ports for `http_port_t`
+```shell
+semanage port --list | grep http_port_t
+```
+```log
+http_port_t                    tcp      80, 81, 443, 488, 8008, 8009, 8443, 9000
+pegasus_http_port_t            tcp      5988
+```
+
+NOTE: Some useful options for `semanage`
+```shell
+  -a, --add             Add a record of the port object type
+  -t TYPE, --type TYPE  SELinux Type for the object
+  -p PROTO, --proto PROTO
+                        Protocol for the specified port (tcp|udp) or internet
+                        protocol version for the specified node (ipv4|ipv6).
+```
+
+Add port 8081 to type `http_port_t`
+```shell
+semanage port --add --type http_port_t --proto tcp 8081 
+```
+```log
+ValueError: Port tcp/8081 already defined
+```
+
+
+### sebool
+
+- `sebool` flag https://wiki.centos.org/TipsAndTricks/SelinuxBooleans
+
+- `audit2allow` - generate SELinux policy allow/dontaudit rules from logs of denied operations
+
+
+Temporarily disable selinux for nginx
+```shell
+semanage permissive -a httpd_t
+```
+
+Google says to use selinux boolean flag `httpd_can_network_connect` and `httpd_can_network_relay`.
 
 Get flag `httpd_can_network_connect` info
 ```shell
@@ -416,6 +387,14 @@ semanage boolean --list | grep httpd_can_network_connect\
 ```
 ```log
 httpd_can_network_connect      (выкл.,выкл.)  Allow httpd to can network connect
+```
+
+Get flag `httpd_can_network_relay` info
+```shell
+semanage boolean --list | grep httpd_can_network_relay\ 
+```
+```log
+httpd_can_network_relay        (выкл.,выкл.)  Allow httpd to can network relay
 ```
 
 What allows the selinux boolean `httpd_can_network_connect`?
@@ -471,13 +450,6 @@ NOTE: It isn't work with `unreserved_port_t` selinux type (domain), ex.: `8088`.
 
 NOTE: It isn't necessary for port `8080` because on port `8080` nginx already works without any manipulations with selinux.
 
-Get port `8080` type:
-```shell
-semanage port --list | grep 8080
-```
-```log
-http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010
-```
 
 List allowed rules for `http_cache_port_t`
 ```shell
