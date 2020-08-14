@@ -51,6 +51,7 @@ https://github.com/mbfx/otus-linux-adm/tree/master/selinux_dns_problems
 
 ### links
 
+- MUST READ! https://defcon.ru/os-security/1264/
 - MUST READ! https://www.nginx.com/blog/using-nginx-plus-with-selinux/
 - Nice article about SELinux and Networking: https://wiki.gentoo.org/wiki/SELinux/Networking
 - RedHat 7 guide https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/selinux_users_and_administrators_guide/sect-security-enhanced_linux-troubleshooting-fixing_problems
@@ -70,6 +71,8 @@ Package `policycoreutils-newrole`:
 - `newrole`
 Package `selinux-policy-mls`:
 - `selinux-policy-mls`
+Package `setroubleshoot-server`:
+- `sealert`
 
 ### contexts
 
@@ -85,7 +88,7 @@ ps auxZ | grep nginx
 system_u:system_r:httpd_t:s0    root     22573  0.0  0.7  41416  3508 ?        Ss   21:42   0:00 nginx: master process /usr/sbin/nginx -c /etc/nginx/nginx.conf
 system_u:system_r:httpd_t:s0    nginx    22774  0.0  1.0  74464  5184 ?        S    21:42   0:00 nginx: worker process
 ```
-nginx selinux type is `httpd_t`. It's a **source** type.
+nginx selinux domain is `httpd_t`. It's a **source** domain.
 
 NOTE: some useful options of `sesearch` utility
 ```shell
@@ -108,7 +111,7 @@ sesearch -s httpd_t -Ad
 Output is supressed because it's very big.
 
 
-Check which context uses tcp port `8080` (why is nginx already working on port 8080 without any selinux configuration changes)
+Check which type uses tcp port `8080` (why is nginx already working on port 8080 without any selinux configuration changes)
 ```shell
 semanage port --list | grep 8080
 ```
@@ -116,7 +119,7 @@ semanage port --list | grep 8080
 http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010
 ```
 
-Check nginx allow bind and connect to ports `http_cache_port_t`
+Ensure nginx allow bind and connect to ports `http_cache_port_t`
 ```shell
 sesearch -s httpd_t -t http_cache_port_t -Ad
 ```
@@ -221,6 +224,60 @@ So next we set nginx to listen to tcp port `8081`
 
 ### Analyse
 
+- `sealert` - analyze and print readable selinux alerts
+
+```shell
+sealert -a /var/log/audit/audit.log
+```
+```log
+100% done
+found 1 alerts in /var/log/audit/audit.log
+--------------------------------------------------------------------------------
+
+SELinux is preventing /usr/sbin/nginx from name_bind access on the tcp_socket port 8081.
+
+*****  Plugin catchall (100. confidence) suggests   **************************
+
+If you believe that nginx should be allowed name_bind access on the port 8081 tcp_socket by default.
+Then you should report this as a bug.
+You can generate a local policy module to allow this access.
+Do
+allow this access for now by executing:
+# ausearch -c 'nginx' --raw | audit2allow -M my-nginx
+# semodule -i my-nginx.pp
+
+
+Additional Information:
+Source Context                system_u:system_r:httpd_t:s0
+Target Context                system_u:object_r:transproxy_port_t:s0
+Target Objects                port 8081 [ tcp_socket ]
+Source                        nginx
+Source Path                   /usr/sbin/nginx
+Port                          8081
+Host                          <Unknown>
+Source RPM Packages           nginx-1.19.1-1.el7.ngx.x86_64
+Target RPM Packages           
+Policy RPM                    selinux-policy-3.13.1-266.el7_8.1.noarch
+Selinux Enabled               True
+Policy Type                   targeted
+Enforcing Mode                Enforcing
+Host Name                     centos-7
+Platform                      Linux centos-7 3.10.0-1127.el7.x86_64 #1 SMP Tue
+                              Mar 31 23:36:51 UTC 2020 x86_64 x86_64
+Alert Count                   1
+First Seen                    2020-08-14 15:35:33 UTC
+Last Seen                     2020-08-14 15:35:33 UTC
+Local ID                      bfc6efca-3350-4034-9f85-b029fd7d224e
+
+Raw Audit Messages
+type=AVC msg=audit(1597419333.68:1080): avc:  denied  { name_bind } for  pid=22521 comm="nginx" src=8081 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:transproxy_port_t:s0 tclass=tcp_socket permissive=0
+
+
+type=SYSCALL msg=audit(1597419333.68:1080): arch=x86_64 syscall=bind success=no exit=EACCES a0=7 a1=555f5f016da0 a2=10 a3=7fffe948eb30 items=0 ppid=1 pid=22521 auid=4294967295 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=4294967295 comm=nginx exe=/usr/sbin/nginx subj=system_u:system_r:httpd_t:s0 key=(null)
+
+Hash: nginx,httpd_t,transproxy_port_t,tcp_socket,name_bind
+```
+
 - `audit2why` - translates SELinux audit messages into a description of why the access was denied (audit2allow -w)
 
 Now we're getting an error `Permission denied` when we're trying to start nginx on port `8081`.
@@ -253,6 +310,18 @@ type=AVC msg=audit(1597263536.671:1016): avc:  denied  { name_bind } for  pid=57
                 Missing type enforcement (TE) allow rule.
 
                 You can use audit2allow to generate a loadable module to allow this access.
+```
+
+### Workaround
+
+Temporarily disable selinux for nginx
+```shell
+semanage permissive -a httpd_t
+```
+
+Disable temporary permission
+```shell
+semanage permissive -d httpd_t
 ```
 
 ### SELinux policy module
@@ -313,12 +382,36 @@ systemctl status nginx
 
 After reboot result is the same!
 
-TODO: authomatization with ansible!
+Other way is to use recommendation from `sealert`:
+```shell
+ausearch -c 'nginx' --raw | audit2allow -M my-nginx
+cat my-nginx.te
+```
+See what the policy will do?
+```conf
+module my-nginx 1.0;
+
+require {
+        type httpd_t;
+        type transproxy_port_t;
+        class tcp_socket name_bind;
+}
+
+#============= httpd_t ==============
+allow httpd_t transproxy_port_t:tcp_socket name_bind;
+```
+
+In's ok!
+```shell
+semodule -i my-nginx.pp
+```
+
+This way is not recommended or must be used with careful. Always see what's doing a generated policy because your service may be realy compromised!
 
 
 ### Update existing type
 
-To test update existing type, port `8085`
+It's also possible to add port `8081` to existing type
 
 Get list of existing allowed types for `httpd_t`
 ```shell
@@ -367,19 +460,16 @@ semanage port --add --type http_port_t --proto tcp 8081
 ```log
 ValueError: Port tcp/8081 already defined
 ```
+OOPS!
+
+So, let's change port to `8085`
+
+
 
 
 ### sebool
 
 - `sebool` flag https://wiki.centos.org/TipsAndTricks/SelinuxBooleans
-
-- `audit2allow` - generate SELinux policy allow/dontaudit rules from logs of denied operations
-
-
-Temporarily disable selinux for nginx
-```shell
-semanage permissive -a httpd_t
-```
 
 Google says to use selinux boolean flag `httpd_can_network_connect` and `httpd_can_network_relay`.
 
