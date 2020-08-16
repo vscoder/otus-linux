@@ -1,3 +1,18 @@
+## 2020-08-17
+
+- Add selinux type configuration
+- Add selinux boolean configuration
+- README refactoring
+- package `setroubleshoot-server` removed from `HW13-selinux/roles/ansible-role-selinux/vars/CentOS-7.yml` because of standard centos 7 box is hangs when reboot if package was installed
+
+## 2020-08-14
+
+- Create molecule scenario `vagrant-8085` from scenario `default`. Set nginx listen port 8085 which has context `system_u:object_r:unreserved_port_t:s0`
+
+## 2020-08-12
+
+- Generate selinux policy module
+
 ## 2020-08-10
 
 - Add role `ansible-role-selinux` to enable selinux and install management and diagnostic utilites

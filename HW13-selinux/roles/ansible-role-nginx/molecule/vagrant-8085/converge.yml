@@ -5,7 +5,8 @@
   vars:
     selinux_mode: enforcing
     #nginx_selinux_mode: permissive
-    nginx_selinux_seboolean: no
+    nginx_selinux_seport: yes
+    nginx_selinux_sebool: no
     nginx_site_listen: 8085
   tasks:
     - name: "Include ansible-role-selinux"
@@ -15,6 +16,8 @@
       include_role:
         name: "ansible-role-nginx"
   post_tasks:
+    - name: Reboot before test
+      reboot:
     - name: Ensure nginx works
       uri:
         url: "http://127.0.0.1:{{ item }}"
