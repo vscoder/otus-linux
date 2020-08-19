@@ -1,0 +1,11 @@
+---
+- name: Test nsupdate from client
+  hosts: client
+  become: true
+  tasks:
+    - name: Run nsupdate
+      cmd: nsupdate -k /etc/named.zonetransfer.key
+      register: nsupdate
+    - name: Check output
+      debug:
+        var: nsupdate
