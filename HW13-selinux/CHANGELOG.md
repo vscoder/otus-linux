@@ -1,3 +1,12 @@
+## 2020-08-20
+
+- Add example environment for the Task 2
+  - `./selinux_dns_problems`
+- Add `./SELINUX_DNS_PROBLEMS.md` with:
+  - The Task
+  - The Goal
+  - The Analyse
+
 ## 2020-08-17
 
 - Add selinux type configuration

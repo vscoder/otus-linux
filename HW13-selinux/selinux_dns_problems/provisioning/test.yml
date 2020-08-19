@@ -4,8 +4,16 @@
   become: true
   tasks:
     - name: Run nsupdate
-      cmd: nsupdate -k /etc/named.zonetransfer.key
+      shell: |
+        cat <<EOF | nsupdate -k /etc/named.zonetransfer.key
+        server 192.168.50.10
+        zone ddns.lab
+        update add www.ddns.lab. 60 A 192.168.50.15
+        send
+        EOF
+
       register: nsupdate
+      failed_when: false
     - name: Check output
       debug:
         var: nsupdate
