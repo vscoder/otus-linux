@@ -139,5 +139,8 @@
         group: named
         mode: 0644
 
-- name: Run tests
+- name: Provide selinux configuration
+  import_playbook: selinux.yml
+
+- name: Run tests after fix
   import_playbook: test.yml

@@ -1,3 +1,12 @@
+## 2020-08-21
+
+- Add `./selinux_dns_problems/provisioning/selinux.yml`. Fix selinux fcontext for `/etc/named/dynamic`
+- Add more tests in `./selinux_dns_problems/provisioning/test.yml`
+- Rename `./roles/ansible-role-nginx/molecule/vagrant-8085` to `./roles/ansible-role-nginx/molecule/default`
+- Fix tests in `./roles/ansible-role-nginx/molecule/default/tests/test_default.py`
+- Update `Makefile`
+- Update documentation
+
 ## 2020-08-20
 
 - Add example environment for the Task 2

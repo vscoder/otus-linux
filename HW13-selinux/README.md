@@ -81,3 +81,102 @@ Selinux contexts are at `/etc/selinux/targeted/contexts/files`
 ### Task 1: nginx
 
 [NGINX.md](./NGINX.md)
+
+#### How to test
+
+Update `./roles/ansible-role-nginx/molecule/vagrant-8085/converge.yml` and set to `yes` one of:
+- `nginx_selinux_seport` - allow nginx to bind to network port using
+  ```shell
+  semanage port -a -t http_port_t -p tcp 8085
+  ```
+- `nginx_selinux_sebool` - use seboolean to allow nginx to bind to port 8085 and many other permissions
+  ```shell
+  setsebool -P nis_enabled 1
+  ```
+
+Don't forget to set other variable to `no`
+
+Then run `make nginx-test`, wait few minutes...
+
+And if you see
+```log
+    TASK [Ensure nginx works] ******************************************************
+    ok: [centos-8] => (item=8082)
+    ok: [centos-7] => (item=8082)
+    ok: [vscoder-centos-7-5] => (item=8082)
+    ok: [centos-8] => (item=8083)
+    ok: [centos-7] => (item=8083)
+    ok: [vscoder-centos-7-5] => (item=8083)
+    ok: [centos-8] => (item=8084)
+    ok: [vscoder-centos-7-5] => (item=8084)
+    ok: [centos-7] => (item=8084)
+```
+at the end of process, then nginx works!
+
+### Task 2: selinux dns problem
+
+[SELINUX_DNS_PROBLEMS.md](./SELINUX_DNS_PROBLEMS.md)
+
+### How to test
+
+Run 
+```shell
+make dns-test
+```
+
+Then wait few minutes...
+
+And if you see
+```log
+TASK [Check output] ************************************************************
+ok: [client] => {
+    "msg": "nsupdate.rc: 0\nnsupdate.stdout: \nnsupdate.stderr: \n"
+}
+
+TASK [Lookup www.ddns.lab.] ****************************************************
+changed: [client]
+
+TASK [Lookup result] ***********************************************************
+ok: [client] => {
+    "msg": "dig.rc: 0\ndig.stdout: \n; <<>> DiG 9.11.4-P2-RedHat-9.11.4-16.P2.el7_8.6 <<>> www.ddns.lab. @192.168.50.10\n;; global options: +cmd\n;; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 3958\n;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 2\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 4096\n;; QUESTION SECTION:\n;www.ddns.lab.\t\t\tIN\tA\n\n;; ANSWER SECTION:\nwww.ddns.lab.\t\t60\tIN\tA\t192.168.50.15\n\n;; AUTHORITY SECTION:\nddns.lab.\t\t3600\tIN\tNS\tns01.dns.lab.\n\n;; ADDITIONAL SECTION:\nns01.dns.lab.\t\t3600\tIN\tA\t192.168.50.10\n\n;; Query time: 0 msec\n;; SERVER: 192.168.50.10#53(192.168.50.10)\n;; WHEN: Fri Aug 21 19:38:39 UTC 2020\n;; MSG SIZE  rcvd: 96\ndig.stderr: \n"
+}
+```
+then it's OK!
+
+NOTE: pretty output of `TASK [Lookup result]`:
+```log
+dig.rc: 0
+dig.stdout: 
+; <<>> DiG 9.11.4-P2-RedHat-9.11.4-16.P2.el7_8.6 <<>> www.ddns.lab. @192.168.50.10
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 3958
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 2
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+;; QUESTION SECTION:
+;www.ddns.lab.                  IN      A
+
+;; ANSWER SECTION:
+www.ddns.lab.           60      IN      A       192.168.50.15
+
+;; AUTHORITY SECTION:
+ddns.lab.               3600    IN      NS      ns01.dns.lab.
+
+;; ADDITIONAL SECTION:
+ns01.dns.lab.           3600    IN      A       192.168.50.10
+
+;; Query time: 0 msec
+;; SERVER: 192.168.50.10#53(192.168.50.10)
+;; WHEN: Fri Aug 21 19:38:39 UTC 2020
+;; MSG SIZE  rcvd: 96
+dig.stderr: 
+```
+
+## Cleanup
+
+Don't forget to do cleanup after tests!
+```shell
+make clean
+```

@@ -36,12 +36,12 @@ def test_nginx_service(host):
 
 
 def test_nginx_port(host):
-    nginx_socket = host.socket("tcp://0.0.0.0:8080")
+    nginx_socket = host.socket("tcp://0.0.0.0:8085")
 
     assert nginx_socket.is_listening
 
 
 def test_curl(host):
-    cmd = host.run("curl -s http://127.0.0.1:8080")
+    cmd = host.run("curl -s http://127.0.0.1:8085")
 
     assert cmd.rc == 0

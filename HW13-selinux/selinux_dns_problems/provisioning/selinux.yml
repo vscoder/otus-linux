@@ -1,0 +1,23 @@
+---
+- name: Test nsupdate from client
+  hosts: ns01
+  become: true
+  tasks:
+    - name: Allow named to manipulate dynamic zone files
+      sefcontext:
+        target: "/etc/named/dynamic"
+        setype: named_zone_t
+        state: present
+      register: setfcontext
+
+    - name: Apply new SELinux file context to /etc/named/dynamic
+      command: restorecon -irv /etc/named/dynamic
+      register: restorecon
+      when: setfcontext.changed
+
+    - debug:
+        var: restorecon
+      when: restorecon is defined
+
+    - name: Reboot to ensure changes are persistent
+      reboot:

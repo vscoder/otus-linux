@@ -137,7 +137,7 @@ client                     : ok=10   changed=1    unreachable=0    failed=0    s
 </details>
 There is an error:
 ```log
-
+update failed: SERVFAIL
 ```
 
 ## Analyse
@@ -363,3 +363,141 @@ There is 3 problems:
 1. > SELinux is preventing /usr/sbin/named from search access on the directory net.
 2. > SELinux is preventing /usr/sbin/named from create access on the file named.ddns.lab.view1.jnl.
 3. > SELinux is preventing /usr/sbin/named from getattr access on the file /proc/sys/net/ipv4/ip_local_port_range.
+
+## The Way
+
+There is strange warnings about `/proc/sys/net` access.
+
+So first resolve the problem with create access on the dynamic zone file `/etc/named/dynamic/named.ddns.lab.view1.jnl`.
+
+### Create access on the file named.ddns.lab.view1.jnl
+
+`sealert` recommends to change zone file context or create selinux policy. But create of selinux policy is bad idea. Selinux policy may allow too many permissions, more than a process requests in fact, therefore our service may be compromised.
+
+Then see what `sealert` recommends aboun changing zone file context.
+
+> If you want to allow named to have create access on the named.ddns.lab.view1.jnl file
+> 
+> Then you need to change the label on named.ddns.lab.view1.jnl
+> 
+> Do
+> `semanage fcontext -a -t FILE_TYPE 'named.ddns.lab.view1.jnl'`
+> 
+> where FILE_TYPE is one of the following: `dnssec_trigger_var_run_t`, `ipa_var_lib_t`, `krb5_host_rcache_t`, `krb5_keytab_t`, `named_cache_t`, `named_log_t`, `named_tmp_t`, `named_var_run_t`, `named_zone_t`.
+> 
+> Then execute:
+> `restorecon -v 'named.ddns.lab.view1.jnl'`
+
+But `named.ddns.lab.view1.jnl` is the dynamic zone name. So we need to update file type of parent directory `/etc/named/dynamic`.
+
+Get current fcontext
+```shell
+ls -laZ /etc/named/dynamic/
+```
+```log
+drw-rwx---. root  named unconfined_u:object_r:etc_t:s0   .
+drw-rwx---. root  named system_u:object_r:etc_t:s0       ..
+-rw-rw----. named named system_u:object_r:etc_t:s0       named.ddns.lab
+-rw-rw----. named named system_u:object_r:etc_t:s0       named.ddns.lab.view1
+```
+
+It is a `unconfined_u:object_r:etc_t:s0`. But the domain `named_zone_t` looks more prefferable. So we need to execute:
+```shell
+semanage fcontext -a -t named_zone_t '/etc/named/dynamic'
+restorecon -v '/etc/named/dynamic'
+```
+
+Let's add that in ansible playbook `./selinux_dns_problems/provisioning/selinux.yml`:
+```yaml
+- name: Allow named to manipulate dynamic zone files
+  sefcontext:
+    target: '/etc/named/dynamic'
+    setype: named_zone_t
+    state: present
+  register: setfcontext
+
+- name: Apply new SELinux file context to /etc/named/dynamic
+  command: restorecon -irv /etc/named/dynamic
+  register: restorecon
+  when: setfcontext.changed
+
+- debug:
+    var: restorecon
+  when: restorecon is defined
+```
+
+Provision vagrant instance ns01 and check result:
+```shell
+ls -laZ /etc/named/dynamic
+```
+```log
+drw-rwx---. root  named unconfined_u:object_r:named_zone_t:s0 .
+drw-rwx---. root  named system_u:object_r:etc_t:s0       ..
+-rw-rw----. named named system_u:object_r:etc_t:s0       named.ddns.lab
+-rw-rw----. named named system_u:object_r:etc_t:s0       named.ddns.lab.view1
+-rw-r--r--. named named system_u:object_r:named_zone_t:s0 named.ddns.lab.view1.jnl
+```
+
+Context is correct now: `unconfined_u:object_r:named_zone_t:s0`.
+
+Zone is updated sucessful
+```log
+PLAY [Test nsupdate from client] ***********************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [client]
+
+TASK [Run nsupdate] ************************************************************
+changed: [client]
+
+TASK [Check output] ************************************************************
+ok: [client] => {
+    "nsupdate": {
+        "changed": true,
+        "cmd": "cat <<EOF | nsupdate -k /etc/named.zonetransfer.key\nserver 192.168.50.10\nzone ddns.lab\nupdate add www.ddns.lab. 60 A 192.168.50.15\nsend\nEOF\n",
+        "delta": "0:00:00.030660",
+        "end": "2020-08-21 18:07:55.746234",
+        "failed": false,
+        "failed_when_result": false,
+        "rc": 0,
+        "start": "2020-08-21 18:07:55.715574",
+        "stderr": "",
+        "stderr_lines": [],
+        "stdout": "",
+        "stdout_lines": []
+    }
+}
+```
+
+Ensure ns01 can resolve www.ddns.lab. Run on `client`:
+```shell
+dig www.ddns.lab. @192.168.50.10
+```
+```log
+; <<>> DiG 9.11.4-P2-RedHat-9.11.4-16.P2.el7_8.6 <<>> www.ddns.lab. @192.168.50.10
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 40949
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 2
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+;; QUESTION SECTION:
+;www.ddns.lab.                  IN      A
+
+;; ANSWER SECTION:
+www.ddns.lab.           60      IN      A       192.168.50.15
+
+;; AUTHORITY SECTION:
+ddns.lab.               3600    IN      NS      ns01.dns.lab.
+
+;; ADDITIONAL SECTION:
+ns01.dns.lab.           3600    IN      A       192.168.50.10
+
+;; Query time: 0 msec
+;; SERVER: 192.168.50.10#53(192.168.50.10)
+;; WHEN: Fri Aug 21 18:53:07 UTC 2020
+;; MSG SIZE  rcvd: 96
+```
+
+It works!

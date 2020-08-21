@@ -403,7 +403,7 @@ seinfo --portcon=8085
 ```
 
 Change port to `8085`:
-- create new molecule scenario [vagrant-8085](./roles/ansible-role-nginx/molecule/vagrant-8085/)
+- create new molecule scenario [vagrant-8085](./roles/ansible-role-nginx/molecule/default/) and later rename it to `default`
 
 
 ### Analyze
