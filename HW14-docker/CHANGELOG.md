@@ -12,3 +12,7 @@
 - Move `./docker/context/site-content/index.html` to `./docker/context/www/default/index.html`
 - Rename `./docker/context/conf.d/site.conf.tmpl` to `./docker/context/conf.d/default.conf.tmpl`
 - Update entrypoint. Use `envsupst` for all config templates in `./docker/context/conf.d/*.tmpl`/ Rename templates to corresponding `.conf` files
+- Rename variables:
+  - `NGINX_SITE_PORT` to `NGINX_DEFAULT_SITE_PORT`
+  - `NGINX_SITE_ROOT` to `NGINX_STATIC_ROOT`
+  - `IMAGE_VERSION` to `IMAGE_TAG`

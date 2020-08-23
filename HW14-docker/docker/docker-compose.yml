@@ -1,11 +1,11 @@
 version: "3.8"
 services:
   nginx:
-    image: nginx-custom:${IMAGE_VERSION}
+    image: nginx-custom:${IMAGE_TAG}
     build:
       context: ./context
       args:
         NGINX_VERSION: 1.18.0-r0
     ports:
-      - "8080:${NGINX_SITE_PORT}"
+      - "8080:${NGINX_DEFAULT_SITE_PORT}"
     env_file: .env
