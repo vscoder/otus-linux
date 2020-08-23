@@ -16,6 +16,11 @@ There is two directories:
 - The 1st is `./context/conf.d`. Content of this directory will be placed to `/etc/nginx/conf.d`
 - The 2nd is `./context/www`. Content of this directory will be placed to `${NGINX_STATIC_ROOT}` directory
 
+To create static site:
+1. Create static site config in `./context/conf.d` with extension `.tmpl`. It's possible to use variables described above.
+2. Set static site root to `${NGINX_SITE_ROOT}/static_site_name`
+3. Place static site content to `./context/www/static_site_name`
+
 ## How to run
 
 Build image
