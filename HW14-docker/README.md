@@ -15,6 +15,20 @@
 3. Answer the question: is it possible to build kernel in a docker container?
 4. Publish custom nginx docker image to [DockerHub](http://hub.docker.com)
 
+---
+
+Задание со * (звездочкой)
+- Создайте кастомные образы nginx и php, объедините их в docker-compose.
+- После запуска nginx должен показывать php info.
+- Все собранные образы должны быть в docker hub
+
+---
+
+The task with * (an asterisk):
+1. Create custom images with nginx and php. Combine them in single docker-compose environment
+2. Nginx must show `php_info();` result
+3. All images must be in docker hub
+
 ## Implementation
 
 First let's answer to the questions:

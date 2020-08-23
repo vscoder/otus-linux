@@ -22,3 +22,4 @@
   IMAGE_TAG=1.0.0
   ```
 - Publish image to docker hub
+- Update `./README.dm`. Add task with an asterisk.
