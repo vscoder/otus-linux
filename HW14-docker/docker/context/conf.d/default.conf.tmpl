@@ -1,8 +1,8 @@
 server {
     listen ${NGINX_SITE_PORT};
-    server_name ${NGINX_SITE_NAME};
+    server_name _;
 
-    root ${NGINX_SITE_ROOT}/${NGINX_SITE_NAME};
+    root ${NGINX_SITE_ROOT}/default;
     
     error_log /proc/self/fd/2;
     access_log /proc/self/fd/1;

@@ -9,7 +9,6 @@ ARG GETTEXT_VERSION=0.20.2-r0
 # nginx site-related variables
 ENV NGINX_SITE_PORT=8080
 ENV NGINX_SITE_ROOT=/data/www
-ENV NGINX_SITE_NAME=site
 
 # Install nginx
 RUN apk update && \
@@ -20,10 +19,10 @@ RUN apk update && \
 # Ensure sites directory exists
 RUN mkdir -p ${NGINX_SITE_ROOT}
 
-# Copy site content
-COPY site-content ${NGINX_SITE_ROOT}/${NGINX_SITE_NAME}
+# Copy www content to ${NGINX_SITE_ROOT}
+COPY www ${NGINX_SITE_ROOT}
 # Copy nginx site config template
-COPY site.conf.tmpl /etc/nginx/conf.d/
+COPY conf.d /etc/nginx/conf.d
 
 # Provide entrypoint
 COPY entrypoint.sh /
