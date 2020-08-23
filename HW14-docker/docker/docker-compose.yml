@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   nginx:
-    image: nginx-custom:${IMAGE_TAG}
+    image: ${IMAGE_NAME}:${IMAGE_TAG}
     build:
       context: ./context
       args:

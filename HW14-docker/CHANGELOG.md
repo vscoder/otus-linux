@@ -16,3 +16,9 @@
   - `NGINX_SITE_PORT` to `NGINX_DEFAULT_SITE_PORT`
   - `NGINX_SITE_ROOT` to `NGINX_STATIC_ROOT`
   - `IMAGE_VERSION` to `IMAGE_TAG`
+- Update image name and tag in `./docker/.env`
+  ```shell
+  IMAGE_NAME=vscoder/nginx
+  IMAGE_TAG=1.0.0
+  ```
+- Publish image to docker hub

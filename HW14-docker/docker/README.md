@@ -1,6 +1,6 @@
 # nginx
 
-Here is presented docker container with nginx
+Here is a docker container with nginx inside
 
 ## How to configure
 
@@ -37,3 +37,40 @@ Stop container
 ```shell
 docker-compose down
 ```
+
+## How to publish
+
+Login to docker hub (accaunt must exists)
+```shell
+docker login
+```
+
+Build an image
+```shell
+docker-compose build
+```
+```log
+...
+
+Successfully built 6e91b733021e
+Successfully tagged vscoder/nginx:1.0.0
+```
+
+Publish nginx image
+```shell
+docker-compose push
+```
+```log
+Pushing nginx (vscoder/nginx:1.0.0)...
+The push refers to repository [docker.io/vscoder/nginx]
+749dcda0e522: Pushed
+7441be22a4b5: Pushed
+dc511cbb5964: Pushed
+b8d208a2f21e: Pushed
+e921a8b0641d: Pushed
+06571e93d764: Pushed
+50644c29ef5a: Pushed
+1.0.0: digest: sha256:9b8ee500c5f403b9c7c47b47ff3350541d0bfe2d5e6b6aa7ccb550e4ebae18e6 size: 1774
+```
+
+https://hub.docker.com/r/vscoder/nginx
