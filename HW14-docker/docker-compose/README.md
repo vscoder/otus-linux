@@ -146,5 +146,5 @@ d94df04fea90: Mounted from library/php
 1.0.0: digest: sha256:d75058f2188f5f26c26f494fbd1105ebd4f601c9fe4415d3317c15b180e26ec3 size: 2618
 ```
 
-- https://hub.docker.com/vscoder/nginx-php
-- https://hub.docker.com/vscoder/php-fpm
+- https://hub.docker.com/r/vscoder/nginx-php
+- https://hub.docker.com/r/vscoder/php-fpm
