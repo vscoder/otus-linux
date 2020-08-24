@@ -10,4 +10,8 @@ server {
     location / {
         index index.html index.htm;
     }
+
+    location /version {
+        return 200 "${IMAGE_TAG}\n";
+    }
 }
