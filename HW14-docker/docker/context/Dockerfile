@@ -16,18 +16,18 @@ RUN apk update && \
     gettext==${GETTEXT_VERSION} \
     nginx==${NGINX_VERSION}
 
-# Ensure sites directory exists
-RUN mkdir -p ${NGINX_STATIC_ROOT}
-
-# Copy www content to ${NGINX_STATIC_ROOT}
-COPY www ${NGINX_STATIC_ROOT}
-# Copy nginx site config template
-COPY conf.d /etc/nginx/conf.d
-
 # Provide entrypoint
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
+
+# Copy nginx site config template
+COPY conf.d /etc/nginx/conf.d
+
+# Ensure sites directory exists
+RUN mkdir -p ${NGINX_STATIC_ROOT}
+# Copy www content to ${NGINX_STATIC_ROOT}
+COPY www ${NGINX_STATIC_ROOT}
 
 EXPOSE ${NGINX_DEFAULT_SITE_PORT}
 

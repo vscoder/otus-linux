@@ -2,6 +2,7 @@
 
 - Fix variable names in `./docker/context/conf.d/default.conf.tmpl`
 - Update image version to `1.0.1`
+- Optimize `./docker/context/Dockerfile`. Update image version to `1.0.2`
 
 ## 2020-08-23
 
