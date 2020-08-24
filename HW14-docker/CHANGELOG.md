@@ -1,3 +1,8 @@
+## 2020-08-04
+
+- Fix variable names in `./docker/context/conf.d/default.conf.tmpl`
+- Update image version to `1.0.1`
+
 ## 2020-08-23
 
 - Start the HomeWork
