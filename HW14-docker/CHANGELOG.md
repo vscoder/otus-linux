@@ -10,6 +10,9 @@
 - Refactoring `./docker-compose/php-fpm/Dockerfile`. Improve readability.
 - Fix `./docker-compose/.env.example`. Provide actual variables.
 - Update documentation
+  - `./docker-compose/README.md`
+  - `./docker/README.md`
+  - `./README.md`
 
 ## 2020-08-23
 

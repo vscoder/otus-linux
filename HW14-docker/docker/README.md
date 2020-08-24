@@ -35,7 +35,7 @@ docker-compose up -d
 
 Check
 ```shell
-curl 127.0.0.1:8085/index.html
+curl 127.0.0.1:8080/index.html
 ```
 
 Stop container

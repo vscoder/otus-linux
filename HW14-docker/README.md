@@ -54,3 +54,45 @@ But if we don't want to install build environment in host OS, it's possible to u
 ### Build and publish nginx image
 
 [NGINX](./docker/README.md)
+
+#### How to check
+
+Up and Check
+```shell
+cd ./docker
+# Up docker-compose environment
+docker-compose up -d
+# Get static site content
+curl 127.0.0.1:8080/index.html
+```
+```log
+It's a default static site ^_^
+```
+
+Clean
+```shell
+docker-compose down
+```
+
+### Nginx and php-fpm
+
+[NGINX-PHP](./docker-compose/README.md)
+
+#### How to check
+
+Up and Check
+```shell
+cd ./docker-compose
+# Up docker-compose environment
+docker-compose up -d
+# Get static site content
+curl 127.0.0.1:8080/phpinfo.php
+```
+```log
+Huge output here. It's better to open in browser http://127.0.0.1:8080/phpinfo.php
+```
+
+Clean
+```shell
+docker-compose down
+```
