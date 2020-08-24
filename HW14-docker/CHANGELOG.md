@@ -4,6 +4,7 @@
 - Update image version to `1.0.1`
 - Optimize `./docker/context/Dockerfile`. Update image version to `1.0.2`
 - Update `./docker/context/conf.d/default.conf.tmpl`. Add location `/version` return `${IMAGE_TAG}` value. Set image version to `1.1.0`
+- Add `./docker-compose` with configuration for docker-cpompose with nginx and php-fpm
 
 ## 2020-08-23
 
