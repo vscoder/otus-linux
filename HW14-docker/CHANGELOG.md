@@ -5,6 +5,11 @@
 - Optimize `./docker/context/Dockerfile`. Update image version to `1.0.2`
 - Update `./docker/context/conf.d/default.conf.tmpl`. Add location `/version` return `${IMAGE_TAG}` value. Set image version to `1.1.0`
 - Add `./docker-compose` with configuration for docker-cpompose with nginx and php-fpm
+- Fix errors in `./docker-compose/nginx/Dockerfile`. Add variable `NGINX_STATIC_ROOT` definition ^_^
+- Fix error in `./docker-compose/nginx/templates/phpinfo.conf.template`. Fix `root` value for `location ~ \.php$`.
+- Refactoring `./docker-compose/php-fpm/Dockerfile`. Improve readability.
+- Fix `./docker-compose/.env.example`. Provide actual variables.
+- Update documentation
 
 ## 2020-08-23
 

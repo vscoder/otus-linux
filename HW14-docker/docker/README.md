@@ -33,6 +33,11 @@ Run container
 docker-compose up -d
 ```
 
+Check
+```shell
+curl 127.0.0.1:8085/index.html
+```
+
 Stop container
 ```shell
 docker-compose down

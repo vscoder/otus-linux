@@ -6,19 +6,39 @@ Here is a docker compose with nginx and php-fpm services
 
 Copy `.env.example` file to `.env` and update variables:
 - container environment variables:
+  - `NGINX_STATIC_ROOT` directory in nginx container with static content
   - `NGINX_DEFAULT_SITE_PORT` port to nginx container listen to (`listen` directive value)
 - compose-related variables
-  - `NGINX_IMAGE_NAME` docker image name
-  - `NGINX_IMAGE_VERSION` docker image tag
+  - `NGINX_IMAGE_NAME` nginx docker image name
+  - `NGINX_IMAGE_VERSION` nginx docker image tag
+  - `PHP_IMAGE_NAME` php-fpm docker image name
+  - `PHP_IMAGE_TAG` php-fpm docker image name
 
-There is two directories:
-- The 1st is `./context/conf.d`. Content of this directory will be placed to `/etc/nginx/conf.d`
-- The 2nd is `./context/www`. Content of this directory will be placed to `${NGINX_STATIC_ROOT}` directory
+This task implementation has the next directory structure:
+```tree
+├── docker-compose.yml
+├── nginx
+│   ├── Dockerfile
+│   ├── templates
+│   │   └── phpinfo.conf.template
+│   └── www
+│       └── index.html
+├── php-fpm
+│   ├── Dockerfile
+│   ├── entrypoint.sh
+│   └── www
+│       └── phpinfo.php
+└── README.md
 
-To create static site:
-1. Create static site config in `./context/conf.d` with extension `.tmpl`. It's possible to use variables described above.
-2. Set static site root to `${NGINX_SITE_ROOT}/static_site_name`
-3. Place static site content to `./context/www/static_site_name`
+5 directories, 8 files
+```
+
+- `docker-compose.yml`: compose file
+- `nginx`: docker context for nginx service
+- `nginx/templates`: directory for nginx config templates (substracted with environment variables values). All templates must have suffix `.template`
+- `nginx/www`: directory for nginx static html files
+- `php-fpm`: docker context for php-fpm service
+- `php-fpm/www`: directory for dynamic php content
 
 ## How to run
 
@@ -27,12 +47,18 @@ Build image
 docker-compose build
 ```
 
-Run container
+Run compose
 ```shell
 docker-compose up -d
 ```
 
-Stop container
+Check
+```shell
+curl 127.0.0.1:8080/phpinfo.php
+```
+or open in browser http://127.0.0.1:8080/phpinfo.php
+
+Stop compose
 ```shell
 docker-compose down
 ```
@@ -49,10 +75,45 @@ Build an image
 docker-compose build
 ```
 ```log
-...
+Building nginx
+Step 1/7 : FROM nginx:1.18.0-alpine
+ ---> 8c1bfa967ebf
+Step 2/7 : LABEL maintainer="Aleksey Koloskov <vsyscoder@gmail.com>"
+ ---> Using cache
+ ---> ca6ce2892bb5
+Step 3/7 : ENV NGINX_STATIC_ROOT=/data/www
+ ---> Using cache
+ ---> 3df3dd395d60
+Step 4/7 : WORKDIR ${NGINX_STATIC_ROOT}
+ ---> Using cache
+ ---> 067714e5b6b3
+Step 5/7 : RUN rm /etc/nginx/conf.d/default.conf
+ ---> Using cache
+ ---> 406061e43cfa
+Step 6/7 : COPY templates /etc/nginx/templates
+ ---> Using cache
+ ---> 0b5d0c24ac87
+Step 7/7 : COPY www ${NGINX_STATIC_ROOT}
+ ---> Using cache
+ ---> 9e28286ca98d
 
-Successfully built 6e91b733021e
-Successfully tagged vscoder/nginx:1.0.0
+Successfully built 9e28286ca98d
+Successfully tagged vscoder/nginx-php:1.0.0
+Building php-fpm
+Step 1/4 : FROM php:7.4.9-fpm-alpine3.12
+ ---> f9f075c5a926
+Step 2/4 : LABEL maintainer="Aleksey Koloskov <vsyscoder@gmail.com>"
+ ---> Using cache
+ ---> 402f5989265a
+Step 3/4 : COPY www /var/www/html
+ ---> Using cache
+ ---> 593ab6e2ced4
+Step 4/4 : WORKDIR /var/www/html
+ ---> Using cache
+ ---> a12b109d3e9a
+
+Successfully built a12b109d3e9a
+Successfully tagged vscoder/php-fpm:1.0.0
 ```
 
 Publish nginx image
@@ -60,16 +121,30 @@ Publish nginx image
 docker-compose push
 ```
 ```log
-Pushing nginx (vscoder/nginx:1.0.0)...
-The push refers to repository [docker.io/vscoder/nginx]
-749dcda0e522: Pushed
-7441be22a4b5: Pushed
-dc511cbb5964: Pushed
-b8d208a2f21e: Pushed
-e921a8b0641d: Pushed
-06571e93d764: Pushed
-50644c29ef5a: Pushed
-1.0.0: digest: sha256:9b8ee500c5f403b9c7c47b47ff3350541d0bfe2d5e6b6aa7ccb550e4ebae18e6 size: 1774
+Pushing nginx (vscoder/nginx-php:1.0.0)...
+The push refers to repository [docker.io/vscoder/nginx-php]
+2b29c204086d: Pushed2a0b9578a3b6: Pushed88de5337d8de: Pushed
+057cebcbe53c: Pushed
+37ea6c8b75fa: Mounted from library/nginx
+14f687b6870a: Mounted from library/nginx
+a638f39e4bbd: Mounted from library/nginx
+4f8672401053: Mounted from library/nginx
+3e207b409db3: Mounted from library/nginx
+1.0.0: digest: sha256:3f240b23d6b5bdd948ec8c07df0a4cff8f6b1c90b571571575f0a003850b86fa size: 2188
+Pushing php-fpm (vscoder/php-fpm:1.0.0)...
+The push refers to repository [docker.io/vscoder/php-fpm]
+0e6501fd3519: Pushed424670d9a7c5: Mounted from library/php
+5efe40cdbc78: Mounted from library/php
+a741fff4cdfc: Mounted from library/php
+44cd3f68f8b1: Mounted from library/php
+5b139208dd54: Mounted from library/php
+76e7b3bdfbef: Mounted from library/php
+81c338ff74a3: Mounted from library/php
+308ef7bef157: Mounted from library/php
+d94df04fea90: Mounted from library/php
+50644c29ef5a: Mounted from vscoder/nginx
+1.0.0: digest: sha256:d75058f2188f5f26c26f494fbd1105ebd4f601c9fe4415d3317c15b180e26ec3 size: 2618
 ```
 
-https://hub.docker.com/r/vscoder/nginx
+- https://hub.docker.com/vscoder/nginx-php
+- https://hub.docker.com/vscoder/php-fpm
