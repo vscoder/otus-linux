@@ -10,7 +10,7 @@ Copy `.env.example` file to `.env` and update variables:
   - `NGINX_DEFAULT_SITE_PORT` port to nginx container listen to (`listen` directive value)
 - compose-related variables
   - `NGINX_IMAGE_NAME` nginx docker image name
-  - `NGINX_IMAGE_VERSION` nginx docker image tag
+  - `NGINX_IMAGE_TAG` nginx docker image tag
   - `PHP_IMAGE_NAME` php-fpm docker image name
   - `PHP_IMAGE_TAG` php-fpm docker image name
 
