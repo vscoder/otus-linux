@@ -1,0 +1,5 @@
+---
+- include_tasks: "install.yml"
+  tags:
+    - prometheus
+    - prometheus_install

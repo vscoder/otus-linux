@@ -1,0 +1,18 @@
+---
+###
+# Steps
+###
+# Do installation steps like create user, group, directory
+prometheus_install: yes
+prometheus_force_download: no
+#prometheus_:
+
+# Prometheus system group name
+prometheus_group: prometheus
+# Prometheus system user name
+prometheus_user: prometheus
+
+# Prometheus database directory
+prometheus_db_dir: /var/db/prometheus
+# Prometheus configuration direcotry
+prometheus_config_dir: /etc/prometheus

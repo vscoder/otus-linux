@@ -1,0 +1,14 @@
+---
+- name: Provision vagrant instance
+  hosts: all
+  vars:
+    #selinux_mode: enforcing
+    selinux_mode: permissive
+    selinux_reboot: yes
+    selinux_utils: yes
+  roles:
+    - name: ansible-role-selinux
+      become: yes
+      when: ansible_facts[‘os_family’] == RedHat
+    - name: ansible-role-prometheus
+      become: yes
