@@ -6,6 +6,7 @@
 selinux_change: yes
 # Set selinux policy and mode
 selinux_policy: targeted
+# Allowed modes are permissive and enforcing
 selinux_mode: permissive
 # Reboot if required
 selinux_reboot: yes

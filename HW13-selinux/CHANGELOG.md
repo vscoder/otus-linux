@@ -1,6 +1,7 @@
 ## 2020-08-30
 
 - Add [The second way](./SELINUX_DNS_PROBLEMS.md#the-second-way) for `Task 2*`
+- Fix `./roles/ansible-role-selinux/README.md`
 
 ## 2020-08-21
 

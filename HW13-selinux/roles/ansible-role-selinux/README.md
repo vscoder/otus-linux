@@ -1,8 +1,7 @@
-ansible-role-nginx
+ansible-role-selinux
 =========
 
-Install nginx and create virtualhost
-Role correct works with SELinux in `enforcement` mode!
+Set selinux mode and install selinux management and diagnostic utils
 
 Requirements
 ------------
@@ -24,15 +23,29 @@ None
 Example Playbook
 ----------------
 
-```
-- name: Install and configure nginx
+For diagnostics
+```yaml
+- name: Install and configure selinux for diagnostic
   hosts: all
   vars:
-    nginx_version: 1.19.1
-    nginx_site_name: example.net
-    nginx_site_listen: 8081
+    selinux_mode: permissive
+    selinux_reboot: yes
+    selinux_utils: yes
   roles:
-    - ansible-role-nginx
+    - ansible-role-selinux
+```
+
+For prod
+```yaml
+- name: Install and configure selinux
+  hosts: all
+  vars:
+    selinux_mode: enforcing
+    # Reboot if selinux is disabled
+    selinux_reboot: yes
+    selinux_utils: no
+  roles:
+    - ansible-role-selinux
 ```
 
 License
