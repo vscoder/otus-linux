@@ -17,10 +17,14 @@
 
 - hosts: ns01 # server ns01 provision
   become: true
+  vars:
+    named_dynamic_path: /var/named/dynamic
+    named_selinux: yes
+    named_reboot: yes
   tasks:
-    - name: copy named.conf
-      copy:
-        src: files/ns01/named.conf
+    - name: Provide named.conf
+      template:
+        src: files/ns01/named.conf.j2
         dest: /etc/named.conf
         owner: root
         group: named
@@ -39,7 +43,7 @@
     - name: copy dynamic zone ddns.lab
       copy:
         src: files/ns01/named.ddns.lab
-        dest: /etc/named/dynamic/
+        dest: "{{ named_dynamic_path }}"
         owner: named
         group: named
         mode: 0660
@@ -47,7 +51,7 @@
     - name: copy dynamic zone ddns.lab.view1
       copy:
         src: files/ns01/named.ddns.lab.view1
-        dest: /etc/named/dynamic/
+        dest: "{{ named_dynamic_path }}"
         owner: named
         group: named
         mode: 0660
@@ -89,20 +93,42 @@
         path: /etc/named
         owner: root
         group: named
-        mode: 0670
+        mode: 0750
 
-    - name: set /etc/named/dynamic permissions
+    - name: set "{{ named_dynamic_path }}" permissions
       file:
-        path: /etc/named/dynamic
+        path: "{{ named_dynamic_path }}"
         owner: root
         group: named
-        mode: 0670
+        mode: 0770
+
+    - block:
+        - name: Allow named to manipulate dynamic zone files
+          sefcontext:
+            target: "{{ named_dynamic_path }}"
+            setype: named_zone_t
+            state: present
+          register: setfcontext
+
+        - name: Apply new SELinux file context to "{{ named_dynamic_path }}"
+          command: restorecon -irv "{{ named_dynamic_path }}"
+          register: restorecon
+          when: setfcontext.changed
+
+        - debug:
+            var: restorecon
+          when: restorecon is defined
+      when: named_selinux | bool
 
     - name: ensure named is running and enabled
       systemd:
         name: named
         state: restarted
         enabled: yes
+
+    - name: Reboot to ensure changes are persistent
+      reboot:
+      when: named_reboot | bool
 
 - hosts: client # first client provision
   become: true
@@ -139,8 +165,8 @@
         group: named
         mode: 0644
 
-- name: Provide selinux configuration
-  import_playbook: selinux.yml
+# - name: Provide selinux configuration
+#   import_playbook: selinux.yml
 
 - name: Run tests after fix
   import_playbook: test.yml

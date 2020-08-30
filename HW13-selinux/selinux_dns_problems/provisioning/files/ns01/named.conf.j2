@@ -75,7 +75,7 @@ view "view1" {
         type master;
         allow-transfer { key "zonetransfer.key"; };
         allow-update { key "zonetransfer.key"; };
-        file "/etc/named/dynamic/named.ddns.lab.view1";
+        file "{{ named_dynamic_path }}/named.ddns.lab.view1";
     };
 
     // labs newdns zone
@@ -119,7 +119,7 @@ view "default" {
         type master;
         allow-transfer { key "zonetransfer.key"; };
         allow-update { key "zonetransfer.key"; };
-        file "/etc/named/dynamic/named.ddns.lab";
+        file "{{ named_dynamic_path }}/named.ddns.lab";
     };
 
     // labs newdns zone
