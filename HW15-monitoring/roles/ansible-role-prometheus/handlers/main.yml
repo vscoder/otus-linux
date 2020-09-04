@@ -1,2 +1,13 @@
 ---
-# handlers file for ansible-role-prometheus
+- name: restart prometheus
+  become: true
+  systemd:
+    daemon_reload: true
+    name: prometheus
+    state: restarted
+
+- name: reload prometheus
+  become: true
+  systemd:
+    name: prometheus
+    state: reloaded
