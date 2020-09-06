@@ -1,2 +1,2 @@
 ---
-# vars file for ansible-role-prometheus
+prometheus_metrics_path: "/{{ ( prometheus_web_external_url + '/metrics' ) | regex_replace('^(.*://)?(.*?)/') }}"

@@ -25,7 +25,7 @@ ExecStart={{ prometheus_binary_install_dir }}/prometheus \
   --web.external-url={{ prometheus_web_external_url }}{% for flag, flag_value in prometheus_config_flags_extra.items() %}\
   --{{ flag }}{% if flag_value %}={{ flag_value }}{% endif %} {% endfor %}
 
-CapabilityBoundingSet=CAP_SET_UID
+#CapabilityBoundingSet=CAP_SET_UID
 LimitNOFILE=65000
 LockPersonality=true
 NoNewPrivileges=true

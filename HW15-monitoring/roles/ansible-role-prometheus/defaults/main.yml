@@ -8,6 +8,7 @@ prometheus_directories_create: yes
 prometheus_install: yes
 # prometheus_force_download: no
 prometheus_selinux: yes
+prometheus_configure: yes
 
 ###
 # User
@@ -53,6 +54,14 @@ prometheus_config_flags_extra: {}
 ###
 # Config
 ###
+prometheus_config_file: prometheus.yml.j2
+prometheus_scrape_configs:
+  - job_name: "prometheus"
+    metrics_path: "{{ prometheus_metrics_path }}"
+    static_configs:
+      - targets:
+          - "{{ ansible_fqdn | default(ansible_host) | default('localhost') }}:9090"
+
 prometheus_config:
   global:
     # How frequently to scrape targets by default.
@@ -76,11 +85,10 @@ prometheus_config:
   # Rule files specifies a list of globs. Rules and alerts are read from
   # all matching files.
   rule_files:
-    # - <filepath_glob>
+    - "{{ prometheus_config_dir }}/rules/*.rules"
 
   # A list of scrape configurations.
-  scrape_configs:
-    # - <scrape_config>
+  scrape_configs: "{{ prometheus_scrape_configs }}"
 
   # Alerting specifies settings related to the Alertmanager.
   alerting:
