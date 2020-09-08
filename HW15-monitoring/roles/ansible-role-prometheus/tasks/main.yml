@@ -6,6 +6,7 @@
     - prometheus_install
     - prometheus_user
     - prometheus_directories
+    - prometheus_configure
     - prometheus_selinux
 
 - name: Gather variables
@@ -17,6 +18,7 @@
     - prometheus_install
     - prometheus_user
     - prometheus_directories
+    - prometheus_configure
     - prometheus_selinux
 
 - name: Provide promitheus user and group
