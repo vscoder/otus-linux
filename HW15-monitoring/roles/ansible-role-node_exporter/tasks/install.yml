@@ -1,22 +1,22 @@
 ---
 - name: "Get checksum list"
   set_fact:
-    __prometheus_checksums: "{{ lookup('url', 'https://github.com/prometheus/node_exporter/releases/download/v' + node_exporter_version + '/sha256sums.txt', wantlist=True) | list }}"
+    __node_exporter_checksum: "{{ lookup('url', 'https://github.com/prometheus/node_exporter/releases/download/v' + node_exporter_version + '/sha256sums.txt', wantlist=True) | list }}"
   run_once: true
 
 - name: "Get checksum for amd64 architecture"
   set_fact:
-    __prometheus_checksum: "{{ item.split(' ')[0] }}"
-  with_items: "{{ __prometheus_checksums }}"
+    __node_exporter_checksum: "{{ item.split(' ')[0] }}"
+  with_items: "{{ __node_exporter_checksums }}"
   when:
     - "('linux-amd64.tar.gz') in item"
 
 - name: download prometheus binary to local folder
   become: false
   get_url:
-    url: "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/prometheus-{{ node_exporter_version }}.linux-amd64.tar.gz"
-    dest: "/tmp/prometheus-{{ node_exporter_version }}.linux-amd64.tar.gz"
-    checksum: "sha256:{{ __prometheus_checksum }}"
+    url: "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
+    dest: "/tmp/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
+    checksum: "sha256:{{ __node_exporter_checksum }}"
   register: _download_archive
   until: _download_archive is succeeded
   retries: 5
@@ -25,47 +25,32 @@
   delegate_to: localhost
   check_mode: false
 
-- name: unpack prometheus binaries
+- name: unpack node_exporter binaries
   become: false
   unarchive:
-    src: "/tmp/prometheus-{{ node_exporter_version }}.linux-amd64.tar.gz"
+    src: "/tmp/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
     dest: "/tmp"
-    creates: "/tmp/prometheus-{{ node_exporter_version }}.linux-amd64/prometheus"
+    creates: "/tmp/node_exporter-{{ node_exporter_version }}.linux-amd64/node_exporter"
   delegate_to: localhost
   check_mode: false
 
-- name: propagate official prometheus and promtool binaries
+- name: propagate official node_exporter binaries
   copy:
-    src: "/tmp/prometheus-{{ node_exporter_version }}.linux-amd64/{{ item }}"
-    dest: "{{ prometheus_binary_install_dir }}/{{ item }}"
+    src: "/tmp/node_exporter-{{ node_exporter_version }}.linux-amd64/node_exporter"
+    dest: "{{ node_exporter_binary_install_dir }}/node_exporter"
     mode: "0755"
     owner: root
     group: root
-  with_items:
-    - prometheus
-    - promtool
+  when: not ansible_check_mode
   notify:
-    - restart prometheus
-
-- name: propagate official console templates
-  copy:
-    src: "/tmp/prometheus-{{ node_exporter_version }}.linux-amd64/{{ item }}/"
-    dest: "{{ prometheus_config_dir }}/{{ item }}/"
-    mode: "0644"
-    owner: root
-    group: root
-  with_items:
-    - console_libraries
-    - consoles
-  notify:
-    - restart prometheus
+    - restart node_exporter
 
 - name: create systemd service unit
   template:
-    src: prometheus.service.j2
-    dest: /etc/systemd/system/prometheus.service
+    src: node_exporter.service.j2
+    dest: /etc/systemd/system/node_exporter.service
     owner: root
     group: root
     mode: "0644"
   notify:
-    - restart prometheus
+    - restart node_exporter

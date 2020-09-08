@@ -1,3 +1,7 @@
+## 2020-09-08
+
+- Add `roles/ansible-role-node_exporter`. Not tested
+
 ## 2020-09-06
 
 - Provide prometheus default config
