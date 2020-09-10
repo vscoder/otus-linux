@@ -1,7 +1,7 @@
 ---
 - name: "Get checksum list"
   set_fact:
-    __node_exporter_checksum: "{{ lookup('url', 'https://github.com/prometheus/node_exporter/releases/download/v' + node_exporter_version + '/sha256sums.txt', wantlist=True) | list }}"
+    __node_exporter_checksums: "{{ lookup('url', 'https://github.com/prometheus/node_exporter/releases/download/v' + node_exporter_version + '/sha256sums.txt', wantlist=True) | list }}"
   run_once: true
 
 - name: "Get checksum for amd64 architecture"
@@ -42,15 +42,5 @@
     owner: root
     group: root
   when: not ansible_check_mode
-  notify:
-    - restart node_exporter
-
-- name: create systemd service unit
-  template:
-    src: node_exporter.service.j2
-    dest: /etc/systemd/system/node_exporter.service
-    owner: root
-    group: root
-    mode: "0644"
   notify:
     - restart node_exporter

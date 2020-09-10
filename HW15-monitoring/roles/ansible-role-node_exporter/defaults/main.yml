@@ -7,8 +7,8 @@ node_exporter_user_create: yes
 node_exporter_directories_create: yes
 node_exporter_install: yes
 # node_exporter_force_download: no
-prometheus_selinux: yes
-prometheus_configure: yes
+node_exporter_selinux: yes
+node_exporter_configure: yes
 
 ###
 # User
@@ -37,6 +37,10 @@ node_exporter_version: 1.0.1
 ###
 # Systemd service
 ###
+# node_exporter service state
+node_exporter_state: started
+# Automatically start node_exporter service
+node_exporter_autostart: yes
 node_exporter_web_listen_address: "0.0.0.0:9100"
 node_exporter_enabled_collectors:
   - systemd

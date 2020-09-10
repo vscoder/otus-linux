@@ -1,3 +1,9 @@
+## 2020-09-10
+
+- Finish `roles/ansible-role-node_exporter`
+- Add task `Provide prometheus.service state` to `roles/ansible-role-prometheus`
+- Run selinux-related tasks before configuration and start service (applied to both prometheus and node_exporter roles)
+
 ## 2020-09-08
 
 - Add `roles/ansible-role-node_exporter`. Not tested

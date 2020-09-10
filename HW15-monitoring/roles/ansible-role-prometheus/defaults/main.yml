@@ -37,6 +37,10 @@ prometheus_version: 2.20.1
 ###
 # Systemd service
 ###
+# prometheus service state
+prometheus_state: started
+# Automatically start prometheus service
+prometheus_autostart: yes
 # Storage retention period
 prometheus_storage_retention: "30d"
 # Storage retention size. Units supported: KB, MB, GB, TB, PB.

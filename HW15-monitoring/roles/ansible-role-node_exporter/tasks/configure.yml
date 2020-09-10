@@ -1,12 +1,28 @@
 ---
-- name: configure prometheus
+- name: Provide node_exporter config
   template:
-    src: "{{ prometheus_config_file }}"
-    dest: "{{ prometheus_config_dir }}/prometheus.yml"
+    src: "{{ node_exporter_config_file }}"
+    dest: "{{ node_exporter_config_dir }}/node_exporter.yml"
     force: true
     owner: root
-    group: prometheus
-    mode: 0640
-    validate: "{{ prometheus_binary_install_dir }}/promtool check config %s"
+    group: node_exporter
+    mode: 0644
+  when: node_exporter_config | bool
   notify:
-    - reload prometheus
+    - reload node_exporter
+
+- name: create systemd service unit
+  template:
+    src: node_exporter.service.j2
+    dest: /etc/systemd/system/node_exporter.service
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - restart node_exporter
+
+- name: Start and enable node_exporter service
+  systemd:
+    name: node_exporter.service
+    enabled: "{{ node_exporter_autostart | bool }}"
+    state: "{{ node_exporter_state }}"

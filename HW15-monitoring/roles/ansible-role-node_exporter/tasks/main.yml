@@ -42,16 +42,16 @@
     - node_exporter
     - node_exporter_install
 
-- name: Provide node_exporter configs
-  import_tasks: "configure.yml"
-  when: node_exporter_configure | bool
-  tags:
-    - node_exporter
-    - node_exporter_configure
-
 - name: Provide node_exporter selinux configuration
   import_tasks: "selinux.yml"
   when: node_exporter_selinux | bool
   tags:
     - node_exporter
     - node_exporter_selinux
+
+- name: Provide node_exporter configs
+  import_tasks: "configure.yml"
+  when: node_exporter_configure | bool
+  tags:
+    - node_exporter
+    - node_exporter_configure
