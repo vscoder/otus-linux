@@ -47,6 +47,10 @@ Then it's need to open http://127.0.0.1:13000 in a browser. Then login as `admin
 
 There is two dashboards: custom with 4 panels and imported from grafana dashboard repo.
 
+Also _prometheus_ and _node_exporter_ are accesible via urls:
+- http://127.0.0.1:19090 - prometheus
+- http://127.0.0.1:19100 - node_exporter
+
 ## How to clean
 
 To destroy vagrant environment run
