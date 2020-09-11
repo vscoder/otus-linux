@@ -32,12 +32,36 @@ Use one of the:
 - prometheus + grafana
 - (*) use some other monitoring system from the lecture
 
-## Prepare
+## How to run
 
-Install requirements into virtual environment
+Install requirements and up vagrant environment
 ```shell
+make all
+```
+It does the next things:
+- create `.venv` with ansible installed
+- install ansible required galaxy roles
+- up vagrant instance
 
+Then it's need to open http://127.0.0.1:13000 in a browser. Then login as `admin` with password `secret`.
+
+There is two dashboards: custom with 4 panels and imported from grafana dashboard repo.
+
+## How to clean
+
+To destroy vagrant environment run
+```shell
+make vagrant_destroy
+```
+or just run the same by hands
+```shell
+vagrant destroy
+```
 
 ## Implementation
 
-There is `prom/` directory with _prometheus + grafana_ implementation
+There was 3 ansible roles created (or copied from one of previous HW):
+- [ansible-role-selinux](roles/ansible-role-selinux)
+- [ansible-role-prometheus](roles/ansible-role-prometheus)
+- [ansible-role-node_exporter](roles/ansible-role-node_exporter)
+

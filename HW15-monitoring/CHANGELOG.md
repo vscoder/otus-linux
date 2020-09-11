@@ -1,3 +1,16 @@
+## 2020-09-12
+
+- Add `requirements.yml` with ansible required galaxy roles
+- Update `provision.yml`: configure grafana
+- Install grafana via galaxy role `cloudalchemy.grafana`
+- Add Makefile targets
+  - `all` - Prepare environment and up vagrant instance
+  - `ansible_requirements` - Install ansible requirements
+  - `vagrant_up` - Up vagrant environment
+  - `vagrant_destroy` - Destroy vagrant environment
+- Add grafana dashboard `dashboards/custom.json`
+- Update documentation
+
 ## 2020-09-11
 
 - Provide `provision.yml` to provision vagrant environment
