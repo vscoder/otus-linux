@@ -59,12 +59,15 @@ prometheus_config_flags_extra: {}
 # Config
 ###
 prometheus_config_file: prometheus.yml.j2
-prometheus_scrape_configs:
+# Scrape config for prometheus itself
+prometheus_scrape_configs_self:
   - job_name: "prometheus"
     metrics_path: "{{ prometheus_metrics_path }}"
     static_configs:
       - targets:
           - "{{ ansible_fqdn | default(ansible_host) | default('localhost') }}:9090"
+# Additional scrape configs
+prometheus_scrape_configs: []
 
 prometheus_config:
   global:
@@ -92,8 +95,7 @@ prometheus_config:
     - "{{ prometheus_config_dir }}/rules/*.rules"
 
   # A list of scrape configurations.
-  scrape_configs: "{{ prometheus_scrape_configs }}"
-
+  scrape_configs: "{{ prometheus_scrape_configs_self + prometheus_scrape_configs }}"
   # Alerting specifies settings related to the Alertmanager.
   alerting:
     alert_relabel_configs:

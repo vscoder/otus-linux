@@ -9,7 +9,12 @@ MACHINES = {
               # VM RAM size (Mb)
               :memory => 512,
               # forwarded ports
-              :forwarded_port => [],
+              :forwarded_port => [
+                # node_exporter
+                { :guest => 9100, :host => 19100 },
+                # prometheus
+                { :guest => 9090, :host => 19090 },
+              ],
               # provision files
               :provision_files => [],
               # provision scripts
@@ -27,7 +32,7 @@ MACHINES = {
 Vagrant.configure("2") do |config|
   MACHINES.each do |boxname, boxconfig|
     # Disable shared folders if not provisioned
-    config.vm.synced_folder ".", "/vagrant", type: "virtualbox", disabled: false
+    config.vm.synced_folder ".", "/vagrant", type: "virtualbox", disabled: true
     # Apply VM config
     config.vm.define boxname do |box|
       # Set VM base box and hostname

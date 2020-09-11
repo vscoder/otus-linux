@@ -1,3 +1,7 @@
+## 2020-09-11
+
+- Provide `provision.yml` to provision vagrant environment
+
 ## 2020-09-10
 
 - Finish `roles/ansible-role-node_exporter`
