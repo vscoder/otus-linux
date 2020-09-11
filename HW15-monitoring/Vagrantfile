@@ -14,6 +14,8 @@ MACHINES = {
                 { :guest => 9100, :host => 19100 },
                 # prometheus
                 { :guest => 9090, :host => 19090 },
+                # grafana
+                { :guest => 3000, :host => 13000 },
               ],
               # provision files
               :provision_files => [],

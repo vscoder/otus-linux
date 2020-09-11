@@ -1,6 +1,7 @@
 MOLECULE_DRIVER?=vagrant
 MOLECULE_VERIFIER?=testinfra
 ANSIBLE_ROLE_NAME?=common
+ANSIBLE?=./.venv/bin/ansible
 
 # Create venv and install requirements
 venv:
@@ -17,3 +18,6 @@ molecule_init_role:
 		--verifier-name $(MOLECULE_VERIFIER) \
 		ansible-role-$(ANSIBLE_ROLE_NAME)
 	@echo "Don't forget to update ./roles/ansible-role-$(ANSIBLE_ROLE_NAME)/meta/main.yml"
+
+ansible_requirements:
+	${ANSIBLE}-galaxy install -r ./requirements.yml --force
