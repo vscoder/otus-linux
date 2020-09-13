@@ -101,16 +101,25 @@ Vagrant.configure("2") do |config|
               # Script's args
               args: script[:args],
               # Set environment variables for script
-              env: {"PROVISIONER" => "vagrant"}
+              env: {
+                "PROVISIONER" => "vagrant",
+                "VAGRANT_HOST" => boxname,
+              }
           ## reload VM
           # config.vagrant.plugins = ["vagrant-reload"]
           # box.vm.provision :reload if script[:reload]
         end
       end
+      # Yes, that's a lot of magic to provision all instances
+      # after the last one becomes up
+      # https://www.vagrantup.com/docs/provisioning/ansible.html#ansible-parallel-execution
+      if boxname.to_s == "hw16-web"
+        box.vm.provision "ansible" do |ansible|
+          ansible.limit = "all"
+          ansible.playbook = "provision.yml"
+          ansible.groups = ANSIBLE_GROUPS
+        end
+      end
     end
-  end
-  config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "provision.yml"
-    ansible.groups = ANSIBLE_GROUPS
   end
 end

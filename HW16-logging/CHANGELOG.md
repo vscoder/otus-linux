@@ -8,3 +8,6 @@
 - Add elasticsearch installation
 - Set elasticsearch listen on 0.0.0.0 (for test purposes) 
 - Add kibana installation
+- Copy `ansible-role-nginx` from HW13
+- Adopt `ansible-role-nginx` to current HW
+- Improve `Vagrantfile` to provision instances via ansible only when the last one becomes up
