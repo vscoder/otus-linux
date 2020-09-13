@@ -17,11 +17,16 @@
     # Elasticsearch
     elasticsearch_version: "7.x"
     elasticsearch_heap_size_min: 1g
-    elasticsearch_heap_size_max: 2g
-    elasticsearch_network_host: localhost
+    elasticsearch_heap_size_max: 1g
+    elasticsearch_network_host: 0.0.0.0
     elasticsearch_http_port: 9200
+    elasticsearch_extra_options: |
+      discovery.seed_hosts:
+        - hw16-log
   roles:
     - role: geerlingguy.java
       become: yes
     - role: geerlingguy.elasticsearch
+      become: yes
+    - role: geerlingguy.kibana
       become: yes
