@@ -11,3 +11,5 @@
 - Copy `ansible-role-nginx` from HW13
 - Adopt `ansible-role-nginx` to current HW
 - Improve `Vagrantfile` to provision instances via ansible only when the last one becomes up
+- Add provate network to vagrant environemnt
+- Install nginx on `hw16-web`

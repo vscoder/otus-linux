@@ -8,6 +8,10 @@ MACHINES = {
               :cpus => 4,
               # VM RAM size (Mb)
               :memory => 4096,
+              # networks
+              :net => [
+                { :ip => "192.168.10.10" },
+              ],
               # forwarded ports
               :forwarded_port => [
                 # elasticsearch
@@ -29,6 +33,10 @@ MACHINES = {
               :cpus => 2,
               # VM RAM size (Mb)
               :memory => 512,
+              # networks
+              :net => [
+                { :ip => "192.168.10.11" },
+              ],
               # forwarded ports
               :forwarded_port => [
                 # web server

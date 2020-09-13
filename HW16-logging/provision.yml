@@ -23,6 +23,8 @@
     elasticsearch_extra_options: |
       discovery.seed_hosts:
         - hw16-log
+      cluster.initial_master_nodes:
+        - hw16-log
     # Kibana
     kibana_version: "7.x"
     kibana_server_host: "0.0.0.0"
@@ -34,4 +36,27 @@
     - role: geerlingguy.elasticsearch
       become: yes
     - role: geerlingguy.kibana
+      become: yes
+
+- name: Provision web-server
+  hosts: web
+  vars:
+    nginx_selinux: yes
+    nginx_selinux_seport: yes
+    nginx_selinux_seport_type: http_port_t
+    nginx_version: 1.19.1
+    nginx_site_name: kibana
+    nginx_site_listen: 80
+    nginx_selinux_upstream_ports:
+      - 5601
+    nginx_site_template_name: ./nginx/kibana.conf.j2
+    nginx_site_remove_default: yes
+  pre_tasks:
+    - name: Get syslog server facts
+      setup:
+      delegate_to: hw16-log
+    - debug:
+        msg: "{{ hostvars[groups['log'][0]].ansible_eth1.ipv4.address }}"
+  roles:
+    - role: ansible-role-nginx
       become: yes

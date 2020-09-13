@@ -1,0 +1,40 @@
+---
+###
+# Common role settings
+###
+# Become root privileges on each task
+nginx_become: yes
+
+###
+# Installation
+###
+# Nginx version to install
+nginx_version: 1.19.1
+
+###
+# SELinux enforcement
+###
+# Provide selinux configuration
+nginx_selinux: yes
+# allow nginx to bind to network port
+nginx_selinux_seport: no
+nginx_selinux_bind_seport_type: http_port_t
+# Allow nginx to connect to upstream ports
+nginx_selinux_connect_seport_type: http_port_t
+nginx_selinux_upstream_ports: []
+
+# Use seboolean
+nginx_selinux_sebool: no
+nginx_selinux_sebool_name: nis_enabled
+
+###
+# Configuration
+###
+# Remove conf.d/default.conf
+nginx_site_remove_default: no
+# Site template config name
+nginx_site_template_name: site.conf.j2
+# Virtualhost server_name
+nginx_site_name: example.com
+# Virtualhost listen port
+nginx_site_listen: 8085
