@@ -13,3 +13,4 @@
 - Improve `Vagrantfile` to provision instances via ansible only when the last one becomes up
 - Add provate network to vagrant environemnt
 - Install nginx on `hw16-web`
+- Add filebeat installation to `provision.yml`. UNFINISHED

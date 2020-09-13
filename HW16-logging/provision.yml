@@ -41,6 +41,7 @@
 - name: Provision web-server
   hosts: web
   vars:
+    # Nginx
     nginx_selinux: yes
     nginx_selinux_seport: yes
     nginx_selinux_seport_type: http_port_t
@@ -51,6 +52,19 @@
       - 5601
     nginx_site_template_name: ./nginx/kibana.conf.j2
     nginx_site_remove_default: yes
+    # Filebeat
+    filebeat_version: 7.x
+    filebeat_create_config: true
+    filebeat_output_elasticsearch_enabled: true
+    filebeat_enable_logging: yes
+    filebeat_log_level: warning
+    filebeat_log_dir: /var/log/filebeat
+    filebeat_log_filename: filebeat.log
+    filebeat_inputs:
+      - type: log
+        enabled: no
+        paths:
+          - "/var/log/*.log"
   pre_tasks:
     - name: Get syslog server facts
       setup:
@@ -60,3 +74,10 @@
   roles:
     - role: ansible-role-nginx
       become: yes
+    - role: geerlingguy.filebeat
+      become: yes
+      vars:
+        filebeat_output_elasticsearch_hosts:
+          - "{{ hostvars[groups.log.0.ansible_eth1.ipv4.address }}:9200"
+  tasks:
+    - name: Configure filebeat system module
