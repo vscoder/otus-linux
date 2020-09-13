@@ -18,11 +18,16 @@
     elasticsearch_version: "7.x"
     elasticsearch_heap_size_min: 1g
     elasticsearch_heap_size_max: 1g
-    elasticsearch_network_host: 0.0.0.0
+    elasticsearch_network_host: "0.0.0.0"
     elasticsearch_http_port: 9200
     elasticsearch_extra_options: |
       discovery.seed_hosts:
         - hw16-log
+    # Kibana
+    kibana_version: "7.x"
+    kibana_server_host: "0.0.0.0"
+    kibana_server_port: 5601
+    kibana_elasticsearch_url: "http://localhost:9200"
   roles:
     - role: geerlingguy.java
       become: yes

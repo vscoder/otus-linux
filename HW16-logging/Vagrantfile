@@ -10,8 +10,10 @@ MACHINES = {
               :memory => 4096,
               # forwarded ports
               :forwarded_port => [
-                # node_exporter
+                # elasticsearch
                 { :guest => 9200, :host => 19200 },
+                # kibana
+                { :guest => 5601, :host => 15601 },
               ],
               # provision files
               :provision_files => [],
