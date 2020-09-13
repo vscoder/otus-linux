@@ -1,0 +1,27 @@
+---
+- name: Provision all vagrant instances
+  hosts: all
+  vars:
+    selinux_mode: enforcing
+    #selinux_mode: permissive
+    selinux_reboot: yes
+    selinux_utils: yes
+  roles:
+    - name: ansible-role-selinux
+      become: yes
+      when: ansible_facts['os_family'] == 'RedHat'
+
+- name: Provision log server
+  hosts: log
+  vars:
+    # Elasticsearch
+    elasticsearch_version: "7.x"
+    elasticsearch_heap_size_min: 1g
+    elasticsearch_heap_size_max: 2g
+    elasticsearch_network_host: localhost
+    elasticsearch_http_port: 9200
+  roles:
+    - role: geerlingguy.java
+      become: yes
+    - role: geerlingguy.elasticsearch
+      become: yes
