@@ -1,3 +1,7 @@
+## 2020-09-13
+
+- Fix Makefile target `vagrant_up`. Replace `source` with `.`
+
 ## 2020-09-12
 
 - Add `requirements.yml` with ansible required galaxy roles

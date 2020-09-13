@@ -28,7 +28,7 @@ molecule_init_role:
 
 # Up vagrant environment
 vagrant_up:
-	source ./.venv/bin/activate \
+	. ./.venv/bin/activate \
 	&& vagrant up
 
 # Destroy vagrant environment
