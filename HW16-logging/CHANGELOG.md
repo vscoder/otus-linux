@@ -1,3 +1,7 @@
+## 2020-09-14
+
+- Provide filebeat configuration (unfiniished)
+
 ## 2020-09-13
 
 - Start HomeWork
