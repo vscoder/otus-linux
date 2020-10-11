@@ -77,8 +77,16 @@
   roles:
     - role: ansible-role-nginx
       become: yes
+      vars:
+        nginx_filebeat: yes
     - role: geerlingguy.filebeat
       become: yes
       vars:
         filebeat_output_elasticsearch_hosts:
           - "{{ hostvars[groups.log.0].ansible_eth1.ipv4.address }}:9200"
+    - role: robertdebock.auditd
+      become: yes
+      vars:
+        auditd_rules:
+          - file: /etc/nginx/
+            keyname: nginx_conf
