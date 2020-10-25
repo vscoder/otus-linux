@@ -6,3 +6,8 @@
   systemd:
     name: nginx.service
     state: restarted
+
+- name: Restart filebeat
+  systemd:
+    name: filebeat.service
+    state: restarted

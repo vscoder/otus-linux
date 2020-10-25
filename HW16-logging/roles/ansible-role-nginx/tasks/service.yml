@@ -4,4 +4,3 @@
     name: nginx
     enabled: yes
     state: started
-  become: "{{ nginx_become }}"

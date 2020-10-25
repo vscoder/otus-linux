@@ -8,13 +8,11 @@
     gpgcheck: yes
     baseurl: "http://nginx.org/packages/mainline/centos/$releasever/$basearch/"
     description: Nginx mainline repository
-  become: "{{ nginx_become }}"
 
 - name: Ensure openssl installed
   yum:
     name: openssl
     state: present
-  become: "{{ nginx_become }}"
 
 - name: Ensure nginx installed
   yum:
@@ -23,4 +21,3 @@
     state: present
     enablerepo: nginx
     disablerepo: "*"
-  become: "{{ nginx_become }}"

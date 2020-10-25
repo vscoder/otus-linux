@@ -1,10 +1,8 @@
 ---
 - name: Check nginx config
   shell: nginx -t
-  become: "{{ nginx_become }}"
 
 - name: Reload nginx
   systemd:
     name: nginx
     state: reloaded
-  become: "{{ nginx_become }}"

@@ -3,7 +3,6 @@
   apt_key:
     url: https://nginx.org/keys/nginx_signing.key
     state: present
-  become: "{{ nginx_become }}"
 
 - name: Add repo
   apt_repository:
@@ -11,10 +10,8 @@
     state: present
     update_cache: yes
     validate_certs: yes
-  become: "{{ nginx_become }}"
 
 - name: Install nginx
   apt:
     name: "nginx={{ nginx_version }}*"
     state: present
-  become: "{{ nginx_become }}"

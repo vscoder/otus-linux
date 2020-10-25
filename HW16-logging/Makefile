@@ -31,6 +31,11 @@ vagrant_up:
 	. ./.venv/bin/activate \
 	&& vagrant up
 
+# Provision vagrant environment
+vagrant_provision:
+	. ./.venv/bin/activate \
+	&& vagrant provision
+
 # Destroy vagrant environment
 vagrant_destroy:
 	vagrant destroy -f

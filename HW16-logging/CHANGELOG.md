@@ -1,3 +1,7 @@
+## 2020-10-11
+
+- Configure auditd to monitor `/etc/nginx` directory changes
+
 ## 2020-09-14
 
 - Provide filebeat configuration (unfiniished)
