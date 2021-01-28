@@ -41,6 +41,8 @@ MACHINES = {
               :forwarded_port => [
                 # web server
                 { :guest => 80, :host => 1080 },
+                # vector api
+                { :guest => 9598, :host => 9598 },
               ],
               # provision files
               :provision_files => [],

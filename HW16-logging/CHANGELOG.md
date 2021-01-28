@@ -1,3 +1,10 @@
+## 2021-01-18
+
+- Install vector.dev on `hw16-web` 
+- Configure vector to get logs from journald and send logs to elasticsearch
+- TODO: fix vector error open /var/lib/vector/journald/checkpoint.txt (use `systemctl status vector -l` to show logs)
+- Set selinux mode to permissive
+
 ## 2020-10-11
 
 - Configure auditd to monitor `/etc/nginx` directory changes

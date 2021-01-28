@@ -14,3 +14,7 @@
 
 - src: robertdebock.auditd
   version: 2.7.6
+
+- src: https://github.com/vscoder/ansible-role-vector.git
+  name: vscoder.vector
+  version: v2.1.1

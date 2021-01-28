@@ -2,8 +2,8 @@
 - name: Provision all vagrant instances
   hosts: all
   vars:
-    selinux_mode: enforcing
-    #selinux_mode: permissive
+    #selinux_mode: enforcing
+    selinux_mode: permissive
     selinux_reboot: yes
     selinux_utils: yes
   roles:
@@ -52,22 +52,96 @@
       - 5601
     nginx_site_template_name: ./nginx/kibana.conf.j2
     nginx_site_remove_default: yes
-    # Filebeat
-    filebeat_version: 7.x
-    filebeat_create_config: false
-    filebeat_output_logstash_enabled: false
-    filebeat_output_elasticsearch_enabled: true
-    filebeat_enable_logging: yes
-    filebeat_log_level: warning
-    filebeat_log_dir: /var/log/filebeat
-    filebeat_log_filename: filebeat.log
-    filebeat_inputs:
-      - type: syslog
-        enabled: yes
-        protocol.unix:
-          path: "/var/log/nginx/syslog.sock"
-          group: nginx
-          mode: "0660"
+    # # Filebeat
+    # filebeat_version: 7.x
+    # filebeat_create_config: false
+    # filebeat_output_logstash_enabled: false
+    # filebeat_output_elasticsearch_enabled: true
+    # filebeat_enable_logging: yes
+    # filebeat_log_level: warning
+    # filebeat_log_dir: /var/log/filebeat
+    # filebeat_log_filename: filebeat.log
+    # filebeat_inputs:
+    #   - type: syslog
+    #     enabled: yes
+    #     protocol.unix:
+    #       path: "/var/log/nginx/syslog.sock"
+    #       group: nginx
+    #       mode: "0660"
+    ###
+    # Vector
+    ###
+    vector_configure_sink_prometheus_exporter_port: 9598
+    vector_configure_data_dir: "/var/lib/vector"
+    vector_configure_api:
+      enabled: yes
+    vector_configure_sources:
+      nginx_access_log:
+        type: file
+        ignore_older: 600
+        include:
+          - "/var/log/nginx/access.log"
+      nginx_metrics_log:
+        type: file
+        ignore_older: 600
+        include:
+          - "/var/log/nginx/metrics.log"
+      host_metrics:
+        type: host_metrics
+        collectors:
+          - cpu
+          - disk
+          - filesystem
+          - load
+          - memory
+          - network
+        scrape_interval_secs: 15
+      internal_metrics:
+        type: internal_metrics
+    vector_configure_transforms:
+      nginx_metrics_parser:
+        type: json_parser
+        inputs:
+          - nginx_metrics_log
+        drop_invalid: false
+        drop_field: true
+        field: message
+      nginx_log_to_metric:
+        type: log_to_metric
+        inputs:
+          - nginx_metrics_parser
+        metrics:
+          - field: status
+            name: response_total
+            namespace: nginx
+            type: counter
+            tags:
+              host: "${HOSTNAME}"
+              status: "{{ '{{' }}status{{ '}}' }}"
+    vector_configure_sinks:
+      prometheus_exporter:
+        type: prometheus_exporter
+        inputs:
+          #- host_metrics
+          #- internal_metrics
+          - nginx_log_to_metric
+        address: 0.0.0.0:{{ vector_configure_sink_prometheus_exporter_port }}
+        default_namespace: service
+      elasticsearch_access_log:
+        type: elasticsearch
+        inputs:
+          - nginx_access_log
+        endpoint: http://{{ hostvars[groups.log.0].ansible_eth1.ipv4.address }}:9200
+        index: nginx-access-log-%F
+        healthcheck: true
+      elasticsearch_metrics_log_parsed:
+        type: elasticsearch
+        inputs:
+          - nginx_metrics_parser
+        endpoint: http://{{ hostvars[groups.log.0].ansible_eth1.ipv4.address }}:9200
+        index: nginx-metrics-log-%F
+        healthcheck: true
+
   pre_tasks:
     - name: Get syslog server facts
       setup:
@@ -78,12 +152,14 @@
     - role: ansible-role-nginx
       become: yes
       vars:
-        nginx_filebeat: yes
-    - role: geerlingguy.filebeat
+        nginx_filebeat: no
+    # - role: geerlingguy.filebeat
+    #   become: yes
+    #   vars:
+    #     filebeat_output_elasticsearch_hosts:
+    #       - "{{ hostvars[groups.log.0].ansible_eth1.ipv4.address }}:9200"
+    - role: vscoder.vector
       become: yes
-      vars:
-        filebeat_output_elasticsearch_hosts:
-          - "{{ hostvars[groups.log.0].ansible_eth1.ipv4.address }}:9200"
     - role: robertdebock.auditd
       become: yes
       vars:
